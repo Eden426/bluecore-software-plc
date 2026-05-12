@@ -1,0 +1,132 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  :root {
+    --bluecore-blue: #06243f;
+    --bluecore-accent-blue: #0b3b63;
+    --bluecore-brown: #5b3a29;
+    --bluecore-accent-brown: #8b5e3c;
+    --bluecore-navy: #0f172a;
+    --bluecore-light: #f2f4f7;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+  }
+
+  body {
+    margin: 0;
+    min-width: 0;
+    font-family: Inter, system-ui, sans-serif;
+    background: #ffffff;
+    color: var(--bluecore-navy);
+  }
+
+  .dark body {
+    background-color: #09090b;
+    color: #fafafa;
+  }
+}
+
+@layer components {
+  .input {
+    width: 100%;
+    border: 1px solid #d8dee9;
+    border-radius: 14px;
+    padding: 14px 16px;
+    outline: none;
+  }
+
+  .input:focus {
+    border-color: var(--bluecore-blue);
+  }
+
+  .dark .input {
+    background-color: #161616;
+    border-color: rgba(255, 255, 255, 0.12);
+    color: #fafafa;
+  }
+
+  .dark .input::placeholder {
+    color: rgba(250, 250, 250, 0.45);
+  }
+
+  .dark .input:focus {
+    border-color: #3b82f6;
+  }
+}
+
+@keyframes services-blob-drift {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  40% {
+    transform: translate(5%, -6%) scale(1.06);
+  }
+  70% {
+    transform: translate(-4%, 4%) scale(0.98);
+  }
+}
+
+@keyframes services-mesh-flow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes portfolio-slow-pan {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(-3%);
+  }
+}
+
+.portfolio-motion {
+  animation: portfolio-slow-pan 12s ease-in-out infinite;
+}
+
+@keyframes stat-suffix-pulse {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-10%) scale(1.08);
+  }
+}
+
+.stat-suffix {
+  animation: stat-suffix-pulse 1.8s ease-in-out infinite;
+}
+
+.services-blob-a {
+  animation: services-blob-drift 24s ease-in-out infinite;
+}
+
+.services-blob-b {
+  animation: services-blob-drift 28s ease-in-out infinite reverse;
+  animation-delay: -8s;
+}
+
+.services-blob-c {
+  animation: services-blob-drift 20s ease-in-out infinite;
+  animation-delay: -14s;
+}
+
+.services-mesh-sheen {
+  background-size: 200% 200%;
+  animation: services-mesh-flow 12s ease-in-out infinite;
+}
