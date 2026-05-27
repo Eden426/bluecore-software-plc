@@ -5,8 +5,10 @@ import Stats from "./components/Stats";
 import AboutPreview from "./components/AboutPreview";
 import Services from "./components/Services";
 import Portfolio from "./components/Portfolio";
+import Testimonials from "./components/Testimonials";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
+import SupportChat from "./components/SupportChat";
 
 export default function App() {
   return (
@@ -19,9 +21,12 @@ export default function App() {
         <AboutPreview />
         <Services />
         <Portfolio />
+        <Testimonials />
         <Contact />
       </main>
       <Footer />
+      {/* Floating AI support chat — rendered outside main so it overlays everything */}
+      <SupportChat />
     </>
   );
 }

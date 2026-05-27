@@ -1,100 +1,156 @@
-import { useState } from "react";
-import { Menu, X, Moon, Sun } from "lucide-react";
+// Navbar.jsx
+import { useEffect, useState } from "react";
 import logo from "../assets/logo.png";
-import { useTheme } from "../context/useTheme";
+import blackLogo from "../assets/black.png";
+
+const navLinks = [
+  { label: "Home", href: "#home" },
+  { label: "About Us", href: "#about" },
+  { label: "Services", href: "#services" },
+  { label: "Portfolio", href: "#portfolio" },
+  { label: "Testimonials", href: "#testimonials" },
+  { label: "Contact", href: "#contact" },
+];
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const { dark, toggle } = useTheme();
+  const [isDark, setIsDark] = useState(false);
 
-  const links = [
-    { href: "#home", label: "Home" },
-    { href: "#about", label: "About Us" },
-    { href: "#services", label: "Services" },
-    { href: "#portfolio", label: "Portfolio" },
-    { href: "#contact", label: "Contact" },
-  ];
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme");
+    const shouldUseDark =
+      savedTheme === "dark" ||
+      (!savedTheme &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches);
+
+    setIsDark(shouldUseDark);
+
+    if (shouldUseDark) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, []);
+
+  const toggleDarkMode = () => {
+    const nextMode = !isDark;
+    setIsDark(nextMode);
+
+    if (nextMode) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  };
 
   return (
-    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-slate-200 dark:bg-[#09090B]/95 dark:border-white/10 dark:text-[#FAFAFA]">
-      <div className="mx-auto flex min-w-0 max-w-7xl items-center justify-between gap-2 px-3 py-3 sm:gap-3 sm:px-5 sm:py-3.5">
-        <a href="#home" className="flex min-w-0 items-center gap-2 sm:gap-3">
-          <span className="flex h-14 w-36 shrink-0 overflow-hidden rounded-2xl border border-slate-200 bg-white dark:border-white/15 dark:bg-[#09090B] sm:h-16 sm:w-44">
-            <img
-              src={logo}
-              alt="Bluecore Software PLC"
-              className="h-full w-full object-contain object-center"
-            />
-          </span>
+    <header className="sticky top-0 z-50 w-full border-b border-slate-200/70 bg-white/80 backdrop-blur-xl dark:border-white/10 dark:bg-[#09090B]/80">
+      <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
+        {/* Logo */}
+        <a
+          href="#home"
+          className="flex items-center rounded-2xl border border-[#0b3051]/20 bg-white/70 px-3 py-2 shadow-sm backdrop-blur-md transition-all duration-300 hover:border-[#8B5E3C]/50 dark:border-white/15 dark:bg-white/[0.04] dark:hover:border-[#8B5E3C]/60"
+        >
+          {/* Light mode logo */}
+          <img
+            src={logo}
+            alt="Bluecore Software PLC"
+            className="block h-16 w-auto dark:hidden"
+          />
+
+          {/* Dark mode logo */}
+          <img
+            src={blackLogo}
+            alt="Bluecore Software PLC"
+            className="hidden h-16 w-auto dark:block"
+          />
         </a>
 
-        <nav className="hidden min-w-0 items-center gap-5 text-base font-semibold text-slate-800 md:flex lg:gap-8 lg:text-lg dark:text-[#FAFAFA]">
-          {links.map((link) => (
+        {/* Desktop links */}
+        <div className="hidden items-center gap-6 lg:flex xl:gap-8">
+          {navLinks.map((link) => (
             <a
-              key={link.href}
+              key={link.label}
               href={link.href}
-              className="hover:text-[#06243f] dark:hover:text-[#8B5E3C]"
+              className="text-base font-bold tracking-[0.01em] text-[#06243f] transition-colors duration-300 hover:text-[#8B5E3C] xl:text-[17px] dark:text-white/85 dark:hover:text-[#F4D7B2]"
             >
               {link.label}
             </a>
           ))}
-        </nav>
+        </div>
 
-        <div className="flex items-center gap-2 sm:gap-3">
+        {/* Desktop actions */}
+        <div className="hidden items-center gap-4 lg:flex">
           <button
             type="button"
-            onClick={toggle}
-            className="w-10 h-10 rounded-xl border border-slate-200 flex items-center justify-center text-[#06243f] hover:bg-slate-50 dark:border-white/15 dark:text-[#FAFAFA] dark:hover:bg-white/5"
-            aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
-            aria-pressed={dark}
+            onClick={toggleDarkMode}
+            className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-[#0b3051]/20 bg-white text-[#0b3051] shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-[#8B5E3C]/60 hover:bg-[#0b3051]/5 hover:text-[#8B5E3C] dark:border-white/10 dark:bg-white/[0.06] dark:text-white dark:hover:text-[#F4D7B2]"
+            aria-label="Toggle dark mode"
           >
-            {dark ? (
-              <Sun className="w-5 h-5" aria-hidden />
-            ) : (
-              <Moon className="w-5 h-5" aria-hidden />
-            )}
+            <span className="text-[28px] leading-none">
+              {isDark ? "☀" : "🌚"}
+            </span>
           </button>
 
           <a
             href="#contact"
-            className="hidden sm:inline-flex min-h-12 items-center justify-center bg-[#8B5E3C] text-white px-5 py-3 rounded-xl font-semibold hover:bg-[#A0694A]"
+            className="inline-flex min-h-11 items-center justify-center rounded-xl bg-[#163b5b] px-6 py-2.5 text-base font-bold text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#06243f]"
           >
-            Let's Talk
+            Get Started
           </a>
-
-          <button
-            type="button"
-            onClick={() => setIsOpen((prev) => !prev)}
-            className="md:hidden w-10 h-10 rounded-lg border border-slate-200 flex items-center justify-center text-[#06243f] dark:border-white/15 dark:text-[#FAFAFA]"
-            aria-label="Toggle navigation menu"
-          >
-            {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </button>
         </div>
-      </div>
 
+        {/* Mobile menu button */}
+        <button
+          type="button"
+          onClick={() => setIsOpen((current) => !current)}
+          className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white text-[#06243f] lg:hidden dark:border-white/10 dark:bg-white/[0.06] dark:text-white"
+          aria-label="Toggle navigation menu"
+          aria-expanded={isOpen}
+        >
+          <span className="text-2xl leading-none">{isOpen ? "×" : "☰"}</span>
+        </button>
+      </nav>
+
+      {/* Mobile menu */}
       {isOpen && (
-        <nav className="md:hidden px-4 sm:px-5 pb-4 border-t border-slate-200 bg-white dark:bg-[#09090B] dark:border-white/10">
-          <div className="flex flex-col gap-1 pt-3">
-            {links.map((link) => (
+        <div className="border-t border-slate-200/70 bg-white/95 px-4 py-4 backdrop-blur-xl lg:hidden dark:border-white/10 dark:bg-[#09090B]/95">
+          <div className="mx-auto flex max-w-7xl flex-col gap-3">
+            {navLinks.map((link) => (
               <a
-                key={link.href}
+                key={link.label}
                 href={link.href}
                 onClick={() => setIsOpen(false)}
-                className="py-2 text-sm font-semibold text-slate-700 hover:text-[#06243f] dark:text-[#FAFAFA] dark:hover:text-[#8B5E3C]"
+                className="rounded-xl px-3 py-3 text-base font-bold text-[#06243f] transition-colors duration-300 hover:bg-[#0b3051]/5 hover:text-[#8B5E3C] dark:text-white/85 dark:hover:bg-white/[0.06] dark:hover:text-[#F4D7B2]"
               >
                 {link.label}
               </a>
             ))}
-            <a
-              href="#contact"
-              onClick={() => setIsOpen(false)}
-              className="mt-2 inline-flex justify-center bg-[#8B5E3C] text-white px-5 py-2.5 rounded-xl font-semibold hover:bg-[#A0694A]"
-            >
-              Let's Talk
-            </a>
+
+            <div className="mt-2 flex items-center gap-3 border-t border-slate-200 pt-4 dark:border-white/10">
+              <button
+                type="button"
+                onClick={toggleDarkMode}
+                className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-[#0b3051]/20 bg-white text-[#0b3051] shadow-sm transition-all duration-300 hover:border-[#8B5E3C]/60 hover:bg-[#0b3051]/5 hover:text-[#8B5E3C] dark:border-white/10 dark:bg-white/[0.06] dark:text-white dark:hover:text-[#F4D7B2]"
+                aria-label="Toggle dark mode"
+              >
+                <span className="text-[28px] leading-none">
+                  {isDark ? "☀" : "☾"}
+                </span>
+              </button>
+
+              <a
+                href="#contact"
+                onClick={() => setIsOpen(false)}
+                className="inline-flex min-h-12 flex-1 items-center justify-center rounded-xl bg-[#163b5b] px-4 py-2 text-base font-bold text-white transition-all duration-300 hover:bg-[#06243f]"
+              >
+                Get Started
+              </a>
+            </div>
           </div>
-        </nav>
+        </div>
       )}
     </header>
   );

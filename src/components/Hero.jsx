@@ -19,94 +19,106 @@ export default function Hero() {
   return (
     <section
       id="home"
-      className="relative overflow-x-clip overflow-y-hidden bg-[#0F172A] text-white dark:bg-[#09090B] dark:text-[#FAFAFA]"
+      className="relative isolate w-full overflow-x-clip overflow-y-hidden bg-transparent text-[#06243f] dark:text-[#FAFAFA]"
     >
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[#06243f]/25 via-transparent to-[#8B5E3C]/10 dark:from-[#06243f]/15 dark:to-transparent" />
+      {/* Natural floating background circles */}
+      <div className="hero-circle hero-circle-1 pointer-events-none absolute" />
+      <div className="hero-circle hero-circle-2 pointer-events-none absolute" />
+      <div className="hero-circle hero-circle-3 pointer-events-none absolute" />
+      <div className="hero-circle hero-circle-4 pointer-events-none absolute" />
+      <div className="hero-circle hero-circle-5 pointer-events-none absolute" />
 
-      <div className="relative z-[1] mx-auto grid min-w-0 max-w-7xl items-center gap-6 px-3 py-8 sm:gap-8 sm:px-5 sm:py-10 md:py-12 lg:grid-cols-2 lg:gap-10 lg:py-14">
-        <div className="order-1 min-w-0 pl-0 sm:pl-2 md:pl-6 lg:pl-10 lg:pr-2">
-          <div className="max-w-xl border-l-4 border-[#8B5E3C] pl-4 sm:pl-6 md:pl-7">
-            <div className="mb-6 flex flex-wrap gap-2 sm:mb-8 sm:gap-3">
+      <div className="relative z-[1] mx-auto grid min-w-0 max-w-[1480px] items-center gap-12 px-4 py-14 sm:px-6 sm:py-16 md:py-20 lg:grid-cols-[0.88fr_1.12fr] lg:gap-16 lg:px-12 lg:py-24 xl:gap-24 xl:px-16 2xl:gap-28 2xl:px-20">
+        {/* Left content */}
+        <div className="order-1 flex min-w-0 items-center lg:-ml-4 lg:pl-0 xl:-ml-8 2xl:-ml-10">
+          <div className="max-w-2xl border-l-4 border-[#8B5E3C] pl-4 sm:pl-6 md:pl-7">
+            {/* Badges */}
+            <div className="mb-6 flex flex-wrap gap-2 sm:mb-7 sm:gap-3">
               {heroBadges.map(({ Icon, label }) => (
                 <span
                   key={label}
                   role="img"
                   aria-label={label}
-                  className="inline-flex rounded-lg border-2 border-[#8B5E3C]/70 bg-[#06243f]/50 p-2 text-[#F4D7B2] shadow-md ring-1 ring-white/15 sm:rounded-xl sm:p-3 dark:border-[#8B5E3C]/80 dark:bg-[#141416] dark:text-[#FAFAFA] dark:ring-white/10"
+                  className="inline-flex rounded-xl border border-[#0b3051]/15 bg-white/55 p-2.5 text-[#0b3051] ring-1 ring-white/70 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-[#8B5E3C]/60 hover:text-[#8B5E3C] sm:p-3 dark:border-white/10 dark:bg-white/[0.06] dark:text-white"
                 >
                   <Icon className="h-6 w-6 sm:h-8 sm:w-8" />
                 </span>
               ))}
             </div>
 
-            <p className="text-xs font-bold uppercase tracking-widest text-[#8B5E3C] sm:text-sm">
+            <p className="text-xs font-bold uppercase tracking-[0.24em] text-[#8B5E3C] sm:text-sm">
               Smart Software. Solid Core.
             </p>
 
-            <h1 className="mt-2 text-balance text-2xl font-black leading-tight sm:mt-3 sm:text-3xl md:mt-4 md:text-4xl lg:text-5xl">
-              Intelligent Software.
-              <br />
-              Built on a <span className="text-[#8B5E3C]">Solid Core.</span>
+            <h1 className="mt-4 font-black leading-tight text-[#06243f] dark:text-white">
+              <span className="block whitespace-nowrap text-[clamp(2.1rem,5vw,3.35rem)]">
+                Intelligent Software.
+              </span>
+              <span className="mt-1 block text-[clamp(2.1rem,5vw,3.35rem)]">
+                Built on
+              </span>
+              <span className="mt-1 block text-[clamp(2.1rem,5vw,3.35rem)] text-[#8B5E3C]">
+                a Solid Core.
+              </span>
             </h1>
 
-            <p className="mt-4 text-sm leading-7 text-slate-300 dark:text-[#FAFAFA]/85 sm:mt-5 sm:text-base sm:leading-8 md:text-lg">
+            <p className="mt-5 max-w-xl text-sm leading-7 text-slate-700 sm:text-base sm:leading-8 md:text-lg dark:text-white/75">
               We build secure, reliable, and scalable software solutions that
               help businesses grow, adapt, and lead in a digital world.
             </p>
 
-            <div className="mt-5 flex flex-col gap-3 sm:mt-6 sm:flex-row sm:flex-wrap sm:gap-4 md:mt-7">
+            {/* CTAs */}
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               <a
-                href="#services"
-                className="inline-flex w-full min-h-11 items-center justify-center rounded-xl bg-[#8B5E3C] px-5 py-3 text-center text-sm font-semibold text-white transition-colors hover:bg-[#A0694A] sm:w-auto sm:min-h-0 sm:px-6"
+                href="#contact"
+                className="group relative inline-flex min-h-12 w-full items-center justify-center overflow-hidden rounded-xl bg-[#163b5b] px-7 py-3 text-center text-sm font-bold text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#06243f] sm:w-auto"
               >
-                Explore Services
+                <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
+                <span className="relative">Get Started</span>
               </a>
+
               <a
-                href="#portfolio"
-                className="inline-flex w-full min-h-11 items-center justify-center rounded-xl border-2 border-white/35 bg-white/[0.06] px-5 py-3 text-center text-sm font-semibold transition-colors hover:border-white/55 hover:bg-white/10 dark:border-white/30 dark:hover:bg-white/[0.1] sm:w-auto sm:min-h-0 sm:px-6"
+                href="#contact"
+                className="inline-flex min-h-12 w-full items-center justify-center rounded-xl border border-[#8B5E3C]/70 bg-white/50 px-7 py-3 text-center text-sm font-bold text-[#8B5E3C] backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:border-[#8B5E3C] hover:bg-[#8B5E3C] hover:text-white sm:w-auto dark:bg-white/[0.05]"
               >
-                View Our Work
+                Contact Us
               </a>
             </div>
           </div>
         </div>
 
-        <div className="order-2 flex min-w-0 justify-center lg:justify-end">
-          <div className="relative w-full min-w-0 max-w-lg lg:max-w-none lg:pl-4">
+        {/* Right image — brown #8b5e3c blend, moved right, no border/card */}
+        <div className="order-2 flex min-w-0 items-center justify-center lg:justify-end xl:translate-x-14 2xl:translate-x-20">
+          <div className="relative w-full max-w-[900px] xl:max-w-[980px] 2xl:max-w-[1040px]">
+            {/* Brown ambient glow so the image harmonizes with the brand */}
             <div
-              className="pointer-events-none absolute inset-0 z-[2] rounded-2xl bg-gradient-to-r from-[#0F172A] from-0% via-transparent via-55% to-transparent dark:from-[#09090B]"
-              aria-hidden
-            />
-            <div
-              className="pointer-events-none absolute inset-0 z-[2] rounded-2xl bg-gradient-to-l from-[#0F172A] from-0% via-transparent via-40% to-transparent to-100% opacity-90 dark:from-[#09090B]"
-              aria-hidden
-            />
-            <div
-              className="pointer-events-none absolute inset-0 z-[2] rounded-2xl bg-gradient-to-t from-[#0F172A] from-0% via-transparent via-50% to-transparent dark:from-[#09090B]"
-              aria-hidden
-            />
-            <div
-              className="pointer-events-none absolute inset-0 z-[2] rounded-2xl opacity-85 dark:hidden"
+              className="pointer-events-none absolute -inset-12 -z-10 rounded-[3.5rem] opacity-90 blur-3xl dark:opacity-60"
               style={{
                 background:
-                  "radial-gradient(ellipse 100% 78% at 92% 88%, rgba(15, 23, 42, 0.75), transparent 52%)",
+                  "radial-gradient(ellipse at center, rgba(139, 94, 60, 0.32), rgba(139, 94, 60, 0.16) 42%, rgba(6, 36, 63, 0.08) 64%, transparent 78%)",
               }}
-              aria-hidden
-            />
-            <div
-              className="pointer-events-none absolute inset-0 z-[2] hidden rounded-2xl opacity-90 dark:block"
-              style={{
-                background:
-                  "radial-gradient(ellipse 100% 78% at 92% 88%, rgb(9 9 11), transparent 52%)",
-              }}
-              aria-hidden
+              aria-hidden="true"
             />
 
-            <div className="relative overflow-hidden rounded-xl sm:rounded-2xl lg:rounded-l-3xl lg:rounded-r-none">
+            <div className="relative overflow-hidden rounded-[2.75rem]">
+              {/* Brown color wash over the image */}
+              <div className="pointer-events-none absolute inset-0 z-10 rounded-[2.75rem] bg-[#8B5E3C]/12 mix-blend-multiply dark:bg-[#8B5E3C]/18 dark:mix-blend-screen" />
+
+              {/* Brown edge blending, no white fade */}
+              <div className="pointer-events-none absolute inset-y-0 left-0 z-20 w-16 rounded-l-[2.75rem] bg-gradient-to-r from-[#8B5E3C]/28 via-[#8B5E3C]/12 to-transparent sm:w-24" />
+              <div className="pointer-events-none absolute inset-y-0 right-0 z-20 w-12 rounded-r-[2.75rem] bg-gradient-to-l from-[#8B5E3C]/20 via-[#8B5E3C]/8 to-transparent sm:w-20" />
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-14 rounded-b-[2.75rem] bg-gradient-to-t from-[#8B5E3C]/24 via-[#8B5E3C]/10 to-transparent sm:h-20" />
+
               <img
                 src={heroLogo}
-                alt="Hero Illustration"
-                className="relative z-0 w-full max-h-[min(34vh,280px)] object-cover object-center opacity-[0.92] sm:max-h-[min(40vh,340px)] md:max-h-[min(44vh,400px)] lg:max-h-[min(48vh,440px)] lg:object-right"
+                alt="Bluecore Software — digital transformation and technology"
+                className="block h-[320px] w-full rounded-[2.75rem] object-cover object-center opacity-[0.97] shadow-[0_22px_70px_rgba(139,94,60,0.16)] sm:h-[380px] md:h-[450px] lg:h-[510px] xl:h-[530px] dark:opacity-[0.92] dark:shadow-[0_22px_70px_rgba(139,94,60,0.18)]"
+                style={{
+                  WebkitMaskImage:
+                    "linear-gradient(90deg, transparent 0%, #000 7%, #000 93%, transparent 100%)",
+                  maskImage:
+                    "linear-gradient(90deg, transparent 0%, #000 7%, #000 93%, transparent 100%)",
+                }}
               />
             </div>
           </div>
