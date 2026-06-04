@@ -1,5 +1,5 @@
 // Navbar.jsx
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import logo from "../assets/logo.png";
 import blackLogo from "../assets/black.png";
 
@@ -16,10 +16,10 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isDark, setIsDark] = useState(true);
 
-  useEffect(() => {
-    // Always make the landing page start in dark mode
+  useLayoutEffect(() => {
+    // Landing page opens in dark mode.
+    // White mode is still available through the toggle button.
     document.documentElement.classList.add("dark");
-    localStorage.setItem("theme", "dark");
     setIsDark(true);
   }, []);
 
