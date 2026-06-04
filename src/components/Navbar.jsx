@@ -14,22 +14,13 @@ const navLinks = [
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const [isDark, setIsDark] = useState(false);
+  const [isDark, setIsDark] = useState(true);
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem("theme");
-
-    // Default landing page theme is dark
-    const shouldUseDark = savedTheme ? savedTheme === "dark" : true;
-
-    setIsDark(shouldUseDark);
-
-    if (shouldUseDark) {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
+    // Always make the landing page start in dark mode
+    document.documentElement.classList.add("dark");
+    localStorage.setItem("theme", "dark");
+    setIsDark(true);
   }, []);
 
   const toggleDarkMode = () => {
@@ -53,14 +44,12 @@ export default function Navbar() {
           href="#home"
           className="flex items-center rounded-2xl border border-[#0b3051]/20 bg-white/70 px-2 py-1.5 shadow-sm backdrop-blur-md transition-all duration-300 hover:border-[#875131]/50 sm:px-3 sm:py-2 dark:border-white/15 dark:bg-white/[0.04] dark:hover:border-[#8B5E3C]/60"
         >
-          {/* Light mode logo */}
           <img
             src={logo}
             alt="Bluecore Software PLC"
             className="block h-11 w-auto dark:hidden sm:h-16"
           />
 
-          {/* Dark mode logo */}
           <img
             src={blackLogo}
             alt="Bluecore Software PLC"
