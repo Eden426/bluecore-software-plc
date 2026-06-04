@@ -85,27 +85,31 @@ const linkClass =
 // ── Component ─────────────────────────────────────────────────────────────────
 export default function Footer() {
   return (
-    <footer className="border-t border-white/10 bg-[#0F172A] text-white dark:border-white/[0.08] dark:bg-[#09090B] dark:text-[#FAFAFA]">
-      <div className="mx-auto min-w-0 max-w-7xl px-3 py-10 sm:px-5 sm:py-14 lg:px-6">
-        <div className="grid gap-10 sm:gap-12 md:grid-cols-2 lg:grid-cols-12 lg:gap-10">
-
+    <footer className="overflow-hidden border-t border-white/10 bg-[#0F172A] text-white dark:border-white/[0.08] dark:bg-[#09090B] dark:text-[#FAFAFA]">
+      <div className="mx-auto min-w-0 max-w-7xl px-3 py-9 sm:px-5 sm:py-14 lg:px-6">
+        <div className="grid grid-cols-4 gap-x-3 gap-y-8 sm:gap-x-6 lg:grid-cols-12 lg:gap-10">
           {/* Brand column */}
-          <div className="min-w-0 lg:col-span-4">
-            <a href="#home" className="inline-block rounded-lg bg-white p-1.5">
+          <div className="col-span-1 min-w-0 lg:col-span-4">
+            <a href="#home" className="inline-block rounded-md bg-white p-1">
               <img
                 src={logo}
                 alt="Bluecore Software PLC"
-                className="h-11 w-auto max-w-[200px] object-contain object-left"
+                className="h-8 w-auto max-w-[82px] object-contain object-left sm:h-12 sm:max-w-[200px]"
               />
             </a>
-            <p className="mt-5 max-w-sm text-pretty text-sm leading-7 text-slate-300 dark:text-[#FAFAFA]/78">
+
+            <h2 className="mt-3 text-[10px] font-bold leading-4 text-white sm:text-sm">
+              Bluecore Software PLC
+            </h2>
+
+            <p className="mt-2 max-w-full text-[9px] leading-4 text-slate-300 dark:text-[#FAFAFA]/78 sm:text-sm sm:leading-7 lg:max-w-sm">
               Bluecore Software PLC builds intelligent software solutions with a
               solid core—design, delivery, and long-term support for businesses
               and institutions.
             </p>
 
             {/* Social icons */}
-            <div className="mt-5 flex items-center gap-3">
+            <div className="mt-3 flex flex-wrap items-center gap-1.5 sm:mt-5 sm:gap-3">
               {socials.map(({ label, href, Icon, color }) => (
                 <a
                   key={label}
@@ -113,20 +117,24 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={label}
-                  className={`flex h-9 w-9 items-center justify-center rounded-lg border border-white/15 text-slate-300 transition-colors ${color} hover:border-white/30 dark:border-white/10`}
+                  className={`flex h-6 w-6 items-center justify-center rounded-md border border-white/15 text-slate-300 transition-colors ${color} hover:border-white/30 sm:h-9 sm:w-9 sm:rounded-lg dark:border-white/10`}
                 >
-                  <Icon className="h-4 w-4" />
+                  <Icon className="h-3 w-3 sm:h-4 sm:w-4" />
                 </a>
               ))}
             </div>
           </div>
 
           {/* Quick links */}
-          <nav className="lg:col-span-2" aria-label="Footer quick links">
-            <h2 className="text-xs font-bold uppercase tracking-widest text-[#8B5E3C]">
+          <nav
+            className="col-span-1 min-w-0 lg:col-span-2"
+            aria-label="Footer quick links"
+          >
+            <h2 className="text-[9px] font-bold uppercase tracking-wider text-[#8B5E3C] sm:text-xs sm:tracking-widest">
               Quick Links
             </h2>
-            <ul className="mt-4 space-y-2.5 text-sm">
+
+            <ul className="mt-3 space-y-2 text-[10px] sm:mt-4 sm:space-y-2.5 sm:text-sm">
               {footerNav.map(({ href, label }) => (
                 <li key={href}>
                   <a href={href} className={linkClass}>
@@ -138,11 +146,12 @@ export default function Footer() {
           </nav>
 
           {/* Services */}
-          <div className="lg:col-span-3">
-            <h2 className="text-xs font-bold uppercase tracking-widest text-[#8B5E3C]">
+          <div className="col-span-1 min-w-0 lg:col-span-3">
+            <h2 className="text-[9px] font-bold uppercase tracking-wider text-[#8B5E3C] sm:text-xs sm:tracking-widest">
               Services
             </h2>
-            <ul className="mt-4 space-y-2.5 text-sm">
+
+            <ul className="mt-3 space-y-2 text-[10px] sm:mt-4 sm:space-y-2.5 sm:text-sm">
               {footerServices.map((item) => (
                 <li key={item}>
                   <a href="#services" className={linkClass}>
@@ -154,64 +163,69 @@ export default function Footer() {
           </div>
 
           {/* Contact */}
-          <div className="lg:col-span-3">
-            <h2 className="text-xs font-bold uppercase tracking-widest text-[#8B5E3C]">
+          <div className="col-span-1 min-w-0 lg:col-span-3">
+            <h2 className="text-[9px] font-bold uppercase tracking-wider text-[#8B5E3C] sm:text-xs sm:tracking-widest">
               Contact
             </h2>
-            <ul className="mt-4 space-y-4 text-sm">
+
+            <ul className="mt-3 space-y-2.5 text-[10px] sm:mt-4 sm:space-y-4 sm:text-sm">
               <li>
                 <a
                   href="https://maps.google.com/?q=Addis+Ababa+Ethiopia"
-                  className={`flex gap-3 ${linkClass}`}
+                  className={`flex items-start gap-1.5 sm:gap-3 ${linkClass}`}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
                   <MapPin
-                    className="mt-0.5 h-4 w-4 shrink-0 text-[#8B5E3C]"
+                    className="mt-0.5 h-3 w-3 shrink-0 text-[#8B5E3C] sm:h-4 sm:w-4"
                     aria-hidden
                   />
-                  <span>Addis Ababa, Ethiopia</span>
+                  <span className="break-words">Addis Ababa</span>
                 </a>
               </li>
+
               <li>
                 <a
                   href="tel:+251978939312"
-                  className={`flex gap-3 ${linkClass}`}
+                  className={`flex items-start gap-1.5 sm:gap-3 ${linkClass}`}
                 >
                   <Phone
-                    className="mt-0.5 h-4 w-4 shrink-0 text-[#8B5E3C]"
+                    className="mt-0.5 h-3 w-3 shrink-0 text-[#8B5E3C] sm:h-4 sm:w-4"
                     aria-hidden
                   />
-                  <span>0978 939 312</span>
+                  <span className="break-words">+251 978 939 312</span>
                 </a>
               </li>
+
               <li>
                 <a
                   href="https://wa.me/251978939312"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`flex gap-3 ${linkClass}`}
+                  className={`flex items-start gap-1.5 sm:gap-3 ${linkClass}`}
                 >
-                  <WhatsAppIcon className="mt-0.5 h-4 w-4 shrink-0 text-[#25D366]" />
-                  <span>WhatsApp us</span>
+                  <WhatsAppIcon className="mt-0.5 h-3 w-3 shrink-0 text-[#25D366] sm:h-4 sm:w-4" />
+                  <span className="break-words">WhatsApp</span>
                 </a>
               </li>
+
               <li>
                 <a
-                  href="mailto:info@bluecoresoft.com"
-                  className={`flex gap-3 break-all ${linkClass}`}
+                  href="mailto:support.bluecoresoft@gmail.com"
+                  className={`flex items-start gap-1.5 sm:gap-3 ${linkClass}`}
                 >
                   <Mail
-                    className="mt-0.5 h-4 w-4 shrink-0 text-[#8B5E3C]"
+                    className="mt-0.5 h-3 w-3 shrink-0 text-[#8B5E3C] sm:h-4 sm:w-4"
                     aria-hidden
                   />
-                  <span>support.bluecoresoft@gmail.com</span>
+                  <span className="break-all">Email</span>
                 </a>
               </li>
             </ul>
+
             <a
               href="#contact"
-              className="mt-6 inline-flex rounded-xl bg-[#8B5E3C] px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#A0694A]"
+              className="mt-4 inline-flex rounded-md bg-[#8B5E3C] px-2 py-1.5 text-[9px] font-semibold text-white transition-colors hover:bg-[#A0694A] sm:mt-6 sm:rounded-xl sm:px-4 sm:py-2.5 sm:text-sm"
             >
               Get in touch
             </a>
@@ -219,13 +233,14 @@ export default function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-8 text-xs text-slate-400 dark:border-white/[0.08] dark:text-[#FAFAFA]/50 sm:flex-row sm:text-sm">
-          <p>
+        <div className="mt-10 flex flex-col items-start justify-between gap-4 border-t border-white/10 pt-6 text-xs text-slate-400 dark:border-white/[0.08] dark:text-[#FAFAFA]/50 sm:mt-12 sm:flex-row sm:items-center sm:pt-8 sm:text-sm">
+          <p className="break-words">
             © {new Date().getFullYear()} Bluecore Software PLC. All rights
             reserved.
           </p>
+
           <nav
-            className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2"
+            className="flex flex-wrap items-center gap-x-6 gap-y-2"
             aria-label="Legal"
           >
             <a href="#contact" className={linkClass}>
