@@ -18,15 +18,15 @@ export default function Navbar() {
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
-    const shouldUseDark =
-      savedTheme === "dark" ||
-      (!savedTheme &&
-        window.matchMedia("(prefers-color-scheme: dark)").matches);
+
+    // Default landing page theme is dark
+    const shouldUseDark = savedTheme ? savedTheme === "dark" : true;
 
     setIsDark(shouldUseDark);
 
     if (shouldUseDark) {
       document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
     } else {
       document.documentElement.classList.remove("dark");
     }
@@ -51,7 +51,7 @@ export default function Navbar() {
         {/* Logo */}
         <a
           href="#home"
-          className="flex items-center rounded-2xl border border-[#0b3051]/20 bg-white/70 px-2 py-1.5 shadow-sm backdrop-blur-md transition-all duration-300 hover:border-[#8B5E3C]/50 sm:px-3 sm:py-2 dark:border-white/15 dark:bg-white/[0.04] dark:hover:border-[#8B5E3C]/60"
+          className="flex items-center rounded-2xl border border-[#0b3051]/20 bg-white/70 px-2 py-1.5 shadow-sm backdrop-blur-md transition-all duration-300 hover:border-[#875131]/50 sm:px-3 sm:py-2 dark:border-white/15 dark:bg-white/[0.04] dark:hover:border-[#8B5E3C]/60"
         >
           {/* Light mode logo */}
           <img
@@ -74,7 +74,7 @@ export default function Navbar() {
             <a
               key={link.label}
               href={link.href}
-              className="text-base font-bold tracking-[0.01em] text-[#06243f] transition-colors duration-300 hover:text-[#8B5E3C] xl:text-[17px] dark:text-white/85 dark:hover:text-[#F4D7B2]"
+              className="text-base font-bold tracking-[0.01em] text-[#06243f] transition-colors duration-300 hover:text-[#875131] xl:text-[17px] dark:text-white/85 dark:hover:text-[#F4D7B2]"
             >
               {link.label}
             </a>
@@ -86,7 +86,7 @@ export default function Navbar() {
           <button
             type="button"
             onClick={toggleDarkMode}
-            className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-[#0b3051]/20 bg-white text-[#0b3051] shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-[#8B5E3C]/60 hover:bg-[#0b3051]/5 hover:text-[#8B5E3C] dark:border-white/10 dark:bg-white/[0.06] dark:text-white dark:hover:text-[#F4D7B2]"
+            className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-[#0b3051]/20 bg-white text-[#0b3051] shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-[#875131]/60 hover:bg-[#0b3051]/5 hover:text-[#875131] dark:border-white/10 dark:bg-white/[0.06] dark:text-white dark:hover:text-[#F4D7B2]"
             aria-label="Toggle dark mode"
           >
             <span className="text-[28px] leading-none">
@@ -96,7 +96,7 @@ export default function Navbar() {
 
           <a
             href="#contact"
-            className="inline-flex min-h-11 items-center justify-center rounded-xl bg-[#163b5b] px-6 py-2.5 text-base font-bold text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#06243f]"
+            className="inline-flex min-h-11 items-center justify-center rounded-xl bg-[#875131] px-6 py-2.5 text-base font-bold text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#6f3f26] dark:bg-[#8B5E3C] dark:hover:bg-[#A0694A]"
           >
             Get Started
           </a>
@@ -107,7 +107,7 @@ export default function Navbar() {
           <a
             href="#contact"
             onClick={() => setIsOpen(false)}
-            className="inline-flex h-10 items-center justify-center rounded-xl bg-[#163b5b] px-3 text-xs font-bold text-white transition-all duration-300 hover:bg-[#06243f] sm:h-11 sm:px-4 sm:text-sm"
+            className="inline-flex h-10 items-center justify-center rounded-xl bg-[#875131] px-3 text-xs font-bold text-white transition-all duration-300 hover:bg-[#6f3f26] sm:h-11 sm:px-4 sm:text-sm dark:bg-[#8B5E3C] dark:hover:bg-[#A0694A]"
           >
             Get Started
           </a>
@@ -115,7 +115,7 @@ export default function Navbar() {
           <button
             type="button"
             onClick={toggleDarkMode}
-            className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[#0b3051]/20 bg-white text-[#0b3051] shadow-sm transition-all duration-300 hover:border-[#8B5E3C]/60 hover:bg-[#0b3051]/5 hover:text-[#8B5E3C] sm:h-11 sm:w-11 dark:border-white/10 dark:bg-white/[0.06] dark:text-white dark:hover:text-[#F4D7B2]"
+            className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[#0b3051]/20 bg-white text-[#0b3051] shadow-sm transition-all duration-300 hover:border-[#875131]/60 hover:bg-[#0b3051]/5 hover:text-[#875131] sm:h-11 sm:w-11 dark:border-white/10 dark:bg-white/[0.06] dark:text-white dark:hover:text-[#F4D7B2]"
             aria-label="Toggle dark mode"
           >
             <span className="text-[24px] leading-none sm:text-[26px]">
@@ -144,7 +144,7 @@ export default function Navbar() {
                 key={link.label}
                 href={link.href}
                 onClick={() => setIsOpen(false)}
-                className="rounded-xl px-3 py-3 text-base font-bold text-[#06243f] transition-colors duration-300 hover:bg-[#0b3051]/5 hover:text-[#8B5E3C] dark:text-white/85 dark:hover:bg-white/[0.06] dark:hover:text-[#F4D7B2]"
+                className="rounded-xl px-3 py-3 text-base font-bold text-[#06243f] transition-colors duration-300 hover:bg-[#0b3051]/5 hover:text-[#875131] dark:text-white/85 dark:hover:bg-white/[0.06] dark:hover:text-[#F4D7B2]"
               >
                 {link.label}
               </a>
