@@ -51,20 +51,20 @@ export default function Navbar() {
         {/* Logo */}
         <a
           href="#home"
-          className="flex items-center rounded-2xl border border-[#0b3051]/20 bg-white/70 px-3 py-2 shadow-sm backdrop-blur-md transition-all duration-300 hover:border-[#8B5E3C]/50 dark:border-white/15 dark:bg-white/[0.04] dark:hover:border-[#8B5E3C]/60"
+          className="flex items-center rounded-2xl border border-[#0b3051]/20 bg-white/70 px-2 py-1.5 shadow-sm backdrop-blur-md transition-all duration-300 hover:border-[#8B5E3C]/50 sm:px-3 sm:py-2 dark:border-white/15 dark:bg-white/[0.04] dark:hover:border-[#8B5E3C]/60"
         >
           {/* Light mode logo */}
           <img
             src={logo}
             alt="Bluecore Software PLC"
-            className="block h-16 w-auto dark:hidden"
+            className="block h-11 w-auto dark:hidden sm:h-16"
           />
 
           {/* Dark mode logo */}
           <img
             src={blackLogo}
             alt="Bluecore Software PLC"
-            className="hidden h-16 w-auto dark:block"
+            className="hidden h-11 w-auto dark:block sm:h-16"
           />
         </a>
 
@@ -102,16 +102,37 @@ export default function Navbar() {
           </a>
         </div>
 
-        {/* Mobile menu button */}
-        <button
-          type="button"
-          onClick={() => setIsOpen((current) => !current)}
-          className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white text-[#06243f] lg:hidden dark:border-white/10 dark:bg-white/[0.06] dark:text-white"
-          aria-label="Toggle navigation menu"
-          aria-expanded={isOpen}
-        >
-          <span className="text-2xl leading-none">{isOpen ? "×" : "☰"}</span>
-        </button>
+        {/* Mobile actions */}
+        <div className="flex items-center gap-2 lg:hidden">
+          <a
+            href="#contact"
+            onClick={() => setIsOpen(false)}
+            className="inline-flex h-10 items-center justify-center rounded-xl bg-[#163b5b] px-3 text-xs font-bold text-white transition-all duration-300 hover:bg-[#06243f] sm:h-11 sm:px-4 sm:text-sm"
+          >
+            Get Started
+          </a>
+
+          <button
+            type="button"
+            onClick={toggleDarkMode}
+            className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[#0b3051]/20 bg-white text-[#0b3051] shadow-sm transition-all duration-300 hover:border-[#8B5E3C]/60 hover:bg-[#0b3051]/5 hover:text-[#8B5E3C] sm:h-11 sm:w-11 dark:border-white/10 dark:bg-white/[0.06] dark:text-white dark:hover:text-[#F4D7B2]"
+            aria-label="Toggle dark mode"
+          >
+            <span className="text-[24px] leading-none sm:text-[26px]">
+              {isDark ? "☀" : "☾"}
+            </span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setIsOpen((current) => !current)}
+            className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-[#06243f] sm:h-11 sm:w-11 dark:border-white/10 dark:bg-white/[0.06] dark:text-white"
+            aria-label="Toggle navigation menu"
+            aria-expanded={isOpen}
+          >
+            <span className="text-2xl leading-none">{isOpen ? "×" : "☰"}</span>
+          </button>
+        </div>
       </nav>
 
       {/* Mobile menu */}
@@ -128,27 +149,6 @@ export default function Navbar() {
                 {link.label}
               </a>
             ))}
-
-            <div className="mt-2 flex items-center gap-3 border-t border-slate-200 pt-4 dark:border-white/10">
-              <button
-                type="button"
-                onClick={toggleDarkMode}
-                className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-[#0b3051]/20 bg-white text-[#0b3051] shadow-sm transition-all duration-300 hover:border-[#8B5E3C]/60 hover:bg-[#0b3051]/5 hover:text-[#8B5E3C] dark:border-white/10 dark:bg-white/[0.06] dark:text-white dark:hover:text-[#F4D7B2]"
-                aria-label="Toggle dark mode"
-              >
-                <span className="text-[28px] leading-none">
-                  {isDark ? "☀" : "☾"}
-                </span>
-              </button>
-
-              <a
-                href="#contact"
-                onClick={() => setIsOpen(false)}
-                className="inline-flex min-h-12 flex-1 items-center justify-center rounded-xl bg-[#163b5b] px-4 py-2 text-base font-bold text-white transition-all duration-300 hover:bg-[#06243f]"
-              >
-                Get Started
-              </a>
-            </div>
           </div>
         </div>
       )}

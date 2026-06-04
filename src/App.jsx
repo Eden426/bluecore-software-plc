@@ -1,3 +1,4 @@
+import Preloader from "./components/Preloader";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import AboutSection from "./components/AboutSection";
@@ -13,6 +14,8 @@ import SupportChat from "./components/SupportChat";
 export default function App() {
   return (
     <>
+      <Preloader />
+      
       <Navbar />
       <main className="min-h-screen min-w-0 overflow-x-clip bg-white text-[#0f172a] dark:bg-[#09090B] dark:text-[#FAFAFA]">
         <Hero />
