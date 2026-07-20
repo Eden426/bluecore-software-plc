@@ -114,9 +114,9 @@ export default function Preloader() {
         <h1
           className="relative z-10 mt-6 flex items-end justify-center text-7xl leading-none tracking-[-0.13em] sm:mt-8 sm:text-9xl md:text-[10rem] lg:text-[11rem]"
           style={{
-            fontFamily: "'Times New Roman', Georgia, serif",
-            fontWeight: 300,
-            transform: "scaleX(1.22)",
+            fontFamily: "'Lobster Two', cursive",
+            fontWeight: 400,
+            transform: "scaleX(1.38)",
           }}
           aria-label="BLUECORE"
         >
