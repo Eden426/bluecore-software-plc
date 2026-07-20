@@ -83,9 +83,9 @@ export default function BentoServiceCard({ service, gridClass, index }) {
       }}
       onMouseMove={onMove}
       onMouseLeave={onLeave}
-      className={`group relative flex min-h-0 min-w-0 flex-col overflow-hidden rounded-2xl border border-white/55 bg-white/60 p-4 shadow-[0_8px_40px_rgba(6,36,63,0.08)] backdrop-blur-2xl transition-[box-shadow,border-color] duration-300 sm:rounded-[1.35rem] sm:p-6 hover:border-[#06243f]/25 hover:shadow-[0_22px_48px_rgba(6,36,63,0.14)] dark:border-white/[0.1] dark:bg-white/[0.06] dark:shadow-[0_8px_40px_rgba(0,0,0,0.35)] dark:hover:border-[#8B5E3C]/35 dark:hover:shadow-[0_24px_60px_rgba(0,0,0,0.5)] ${gridClass} ${
+      className={`group relative flex min-h-0 min-w-0 flex-col overflow-hidden rounded-2xl border border-[#DCE5EF] bg-white p-4 shadow-[0_8px_24px_rgba(15,23,42,0.06)] backdrop-blur-sm transition-[box-shadow,border-color] duration-300 sm:rounded-[1.35rem] sm:p-6 hover:border-[#103759]/30 hover:shadow-[0_18px_42px_rgba(15,23,42,0.10)] dark:border-white/[0.1] dark:bg-[#161616] dark:shadow-[0_8px_32px_rgba(0,0,0,0.28)] dark:backdrop-blur-none dark:hover:border-white/20 dark:hover:shadow-[0_16px_38px_rgba(0,0,0,0.36)] ${gridClass} ${
         hero
-          ? "sm:ring-1 sm:ring-[#06243f]/20 sm:ring-offset-2 sm:ring-offset-transparent dark:sm:ring-[#8B5E3C]/30 dark:sm:ring-offset-0 lg:p-9"
+          ? "sm:ring-1 sm:ring-[#103759]/20 sm:ring-offset-2 sm:ring-offset-transparent dark:sm:ring-[#8B5E3C]/30 dark:sm:ring-offset-0 lg:p-9"
           : "lg:p-7"
       }`}
     >
@@ -93,31 +93,22 @@ export default function BentoServiceCard({ service, gridClass, index }) {
         className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100 dark:hidden"
         style={{
           background:
-            "radial-gradient(520px circle at var(--spot-x) var(--spot-y), rgba(6, 36, 63, 0.16), transparent 42%), radial-gradient(380px circle at var(--spot-x) var(--spot-y), rgba(139, 94, 60, 0.12), transparent 50%)",
+            "radial-gradient(460px circle at var(--spot-x) var(--spot-y), rgba(68, 96, 170, 0.09), transparent 45%)",
         }}
         aria-hidden
       />
-      <div
-        className="pointer-events-none absolute inset-0 hidden opacity-0 transition-opacity duration-300 group-hover:opacity-100 dark:block"
-        style={{
-          background:
-            "radial-gradient(520px circle at var(--spot-x) var(--spot-y), rgba(6, 36, 63, 0.35), transparent 45%), radial-gradient(400px circle at var(--spot-x) var(--spot-y), rgba(139, 94, 60, 0.18), transparent 52%)",
-        }}
-        aria-hidden
-      />
-
       {hero && (
         <>
           <div
-            className="pointer-events-none absolute -right-20 -top-24 h-72 w-72 rounded-full bg-gradient-to-br from-[#06243f]/40 via-[#0b3b63]/25 to-[#8B5E3C]/20 blur-3xl dark:from-[#06243f]/35 dark:via-[#0b3b63]/25 dark:to-[#8B5E3C]/15"
+            className="pointer-events-none absolute -right-20 -top-24 h-72 w-72 rounded-full bg-gradient-to-br from-[#103759]/14 via-[#4460AA]/10 to-transparent blur-3xl dark:hidden"
             aria-hidden
           />
           <div
-            className="services-mesh-sheen pointer-events-none absolute inset-0 rounded-[1.35rem] opacity-45 dark:opacity-30"
+            className="services-mesh-sheen pointer-events-none absolute inset-0 rounded-[1.35rem] opacity-[0.16] dark:hidden"
             aria-hidden
             style={{
               background:
-                "linear-gradient(118deg, rgba(6,36,63,0.28) 0%, rgba(11,59,99,0.18) 35%, rgba(139,94,60,0.2) 72%, rgba(244,215,178,0.12) 100%)",
+                "linear-gradient(118deg, rgba(16,55,89,0.14) 0%, rgba(68,96,170,0.09) 52%, rgba(234,243,255,0.08) 100%)",
             }}
           />
         </>
@@ -125,7 +116,7 @@ export default function BentoServiceCard({ service, gridClass, index }) {
 
       <div className="relative z-[1] flex min-w-0 flex-1 flex-col break-words [transform:translateZ(12px)]">
         <div
-          className={`inline-flex shrink-0 items-center justify-center rounded-xl border-2 border-[#06243f]/45 bg-white/90 text-[#06243f] shadow-sm dark:border-[#8B5E3C]/55 dark:bg-[#141416] dark:text-[#FAFAFA] ${
+          className={`inline-flex shrink-0 items-center justify-center rounded-xl border border-[#103759]/20 bg-[#EAF3FF] text-[#06243F] shadow-sm transition-colors group-hover:border-[#103759]/35 dark:border-2 dark:border-[#8B5E3C]/55 dark:bg-[#141416] dark:text-[#FAFAFA] ${
             hero ? "h-[4.25rem] w-[4.25rem] sm:h-[4.75rem] sm:w-[4.75rem]" : "h-14 w-14"
           }`}
         >
@@ -135,7 +126,7 @@ export default function BentoServiceCard({ service, gridClass, index }) {
         </div>
 
         <h3
-          className={`mt-3 font-black leading-tight text-[#0f172a] dark:text-[#FAFAFA] sm:mt-4 ${
+          className={`mt-3 font-black leading-tight text-[#06243F] dark:text-[#FAFAFA] sm:mt-4 ${
             hero
               ? "text-lg text-balance sm:text-xl md:text-2xl"
               : "text-base text-balance sm:text-lg md:text-xl"
@@ -144,23 +135,23 @@ export default function BentoServiceCard({ service, gridClass, index }) {
           {title}
         </h3>
         {hero && heroTagline ? (
-          <p className="mt-2 text-sm font-semibold uppercase tracking-wide text-[#06243f] dark:text-[#c4a882]">
+          <p className="mt-2 text-sm font-semibold uppercase tracking-wide text-[#103759] dark:text-[#c4a882]">
             {heroTagline}
           </p>
         ) : null}
         <p
-          className={`mt-2 flex-1 leading-relaxed text-slate-600 dark:text-[#FAFAFA]/82 ${
+          className={`mt-2 flex-1 leading-relaxed text-[#475569] dark:text-[#FAFAFA]/82 ${
             hero ? "text-base md:text-lg" : "text-sm md:text-base"
           }`}
         >
           {text}
         </p>
         {hero && heroExtended ? (
-          <p className="mt-3 border-t border-[#06243f]/10 pt-3 text-sm leading-relaxed text-slate-600 text-pretty dark:border-white/10 dark:text-[#FAFAFA]/78 sm:mt-4 sm:pt-4 md:text-base">
+          <p className="mt-3 border-t border-[#DCE5EF] pt-3 text-sm leading-relaxed text-[#475569] text-pretty dark:border-white/10 dark:text-[#FAFAFA]/78 sm:mt-4 sm:pt-4 md:text-base">
             {heroExtended}
           </p>
         ) : null}
-        <p className="mt-4 max-h-0 overflow-hidden text-sm leading-snug text-slate-500 opacity-0 transition-all duration-300 group-hover:max-h-24 group-hover:opacity-100 dark:text-[#FAFAFA]/65">
+        <p className="mt-4 max-h-0 overflow-hidden text-sm leading-snug text-[#64748B] opacity-0 transition-all duration-300 group-hover:max-h-24 group-hover:opacity-100 dark:text-[#FAFAFA]/65">
           {detail}
         </p>
       </div>

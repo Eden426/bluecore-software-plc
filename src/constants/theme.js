@@ -1,1 +1,2 @@
-export const THEME_STORAGE_KEY = "ecc-theme";
+export const THEME_STORAGE_KEY = "bluecore-theme";
+export const THEMES = { LIGHT: "light", DARK: "dark" };

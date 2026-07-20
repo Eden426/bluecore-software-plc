@@ -1,4 +1,4 @@
-import heroLogo from "../assets/image.png";
+import heroLogo from "../assets/hero.webp";
 import {
   IconAI,
   IconCloudOps,
@@ -19,94 +19,114 @@ export default function Hero() {
   return (
     <section
       id="home"
-      className="relative overflow-x-clip overflow-y-hidden bg-[#0F172A] text-white dark:bg-[#09090B] dark:text-[#FAFAFA]"
+      className="hero-light-surface relative isolate w-full overflow-x-clip overflow-y-hidden text-[#06243F] dark:text-[#FAFAFA]"
     >
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[#06243f]/25 via-transparent to-[#8B5E3C]/10 dark:from-[#06243f]/15 dark:to-transparent" />
+      {/* Natural floating background circles */}
+      <div className="hero-circle hero-circle-1 pointer-events-none absolute" />
+      <div className="hero-circle hero-circle-2 pointer-events-none absolute" />
+      <div className="hero-circle hero-circle-3 pointer-events-none absolute" />
+      <div className="hero-circle hero-circle-4 pointer-events-none absolute" />
+      <div className="hero-circle hero-circle-5 pointer-events-none absolute" />
 
-      <div className="relative z-[1] mx-auto grid min-w-0 max-w-7xl items-center gap-6 px-3 py-8 sm:gap-8 sm:px-5 sm:py-10 md:py-12 lg:grid-cols-2 lg:gap-10 lg:py-14">
-        <div className="order-1 min-w-0 pl-0 sm:pl-2 md:pl-6 lg:pl-10 lg:pr-2">
-          <div className="max-w-xl border-l-4 border-[#8B5E3C] pl-4 sm:pl-6 md:pl-7">
-            <div className="mb-6 flex flex-wrap gap-2 sm:mb-8 sm:gap-3">
+      <div className="relative z-[1] mx-auto grid min-w-0 max-w-[1480px] grid-cols-[minmax(0,1.08fr)_minmax(120px,0.72fr)] items-center gap-5 px-3 py-10 sm:grid-cols-[0.95fr_1.05fr] sm:gap-6 sm:px-6 sm:py-16 md:gap-10 md:py-20 lg:grid-cols-[0.88fr_1.12fr] lg:gap-16 lg:px-12 lg:py-24 xl:gap-24 xl:px-16 2xl:gap-28 2xl:px-20">
+        {/* Left content */}
+        <div className="order-1 flex min-w-0 items-center lg:-ml-4 lg:pl-0 xl:-ml-8 2xl:-ml-10">
+          <div className="max-w-2xl border-l-2 border-[#103759] pl-2 sm:border-l-4 sm:pl-6 md:pl-7 dark:border-[#8B5E3C]">
+            {/* Badges */}
+            <div className="mb-3 flex flex-wrap gap-1.5 sm:mb-7 sm:gap-3">
               {heroBadges.map(({ Icon, label }) => (
                 <span
                   key={label}
                   role="img"
                   aria-label={label}
-                  className="inline-flex rounded-lg border-2 border-[#8B5E3C]/70 bg-[#06243f]/50 p-2 text-[#F4D7B2] shadow-md ring-1 ring-white/15 sm:rounded-xl sm:p-3 dark:border-[#8B5E3C]/80 dark:bg-[#141416] dark:text-[#FAFAFA] dark:ring-white/10"
+                  className="inline-flex rounded-lg border border-[#103759]/20 bg-[#EAF3FF] p-1.5 text-[#06243F] shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#103759] hover:text-[#103759] sm:rounded-xl sm:p-3 dark:border-white/10 dark:bg-white/[0.06] dark:text-white dark:shadow-none dark:ring-1 dark:ring-white/70 dark:backdrop-blur-md dark:hover:border-[#8B5E3C]/60 dark:hover:text-[#8B5E3C]"
                 >
-                  <Icon className="h-6 w-6 sm:h-8 sm:w-8" />
+                  <Icon className="h-4 w-4 sm:h-8 sm:w-8" />
                 </span>
               ))}
             </div>
 
-            <p className="text-xs font-bold uppercase tracking-widest text-[#8B5E3C] sm:text-sm">
+            <p className="text-xs font-bold uppercase tracking-[0.13em] text-[#103759] sm:text-sm sm:tracking-[0.24em] dark:text-[#8B5E3C]">
               Smart Software. Solid Core.
             </p>
 
-            <h1 className="mt-2 text-balance text-2xl font-black leading-tight sm:mt-3 sm:text-3xl md:mt-4 md:text-4xl lg:text-5xl">
-              Intelligent Software.
-              <br />
-              Built on a <span className="text-[#8B5E3C]">Solid Core.</span>
+            <h1 className="mt-2 font-black leading-tight text-[#06243f] dark:text-white sm:mt-4">
+              <span className="block text-[clamp(0.9rem,4vw,3.35rem)] sm:whitespace-nowrap sm:text-[clamp(2.1rem,5vw,3.35rem)]">
+                Intelligent Software.
+              </span>
+              <span className="mt-1 block text-[clamp(0.9rem,4vw,3.35rem)] sm:text-[clamp(2.1rem,5vw,3.35rem)]">
+                Built on
+              </span>
+              <span className="mt-1 block text-[clamp(0.9rem,4vw,3.35rem)] text-[#6B442A] sm:text-[clamp(2.1rem,5vw,3.35rem)] dark:text-[#8B5E3C]">
+                a Solid Core.
+              </span>
             </h1>
 
-            <p className="mt-4 text-sm leading-7 text-slate-300 dark:text-[#FAFAFA]/85 sm:mt-5 sm:text-base sm:leading-8 md:text-lg">
+            <p className="mt-3 max-w-xl text-xs leading-5 text-[#475569] sm:mt-5 sm:text-base sm:leading-8 md:text-lg dark:text-white/75">
               We build secure, reliable, and scalable software solutions that
               help businesses grow, adapt, and lead in a digital world.
             </p>
 
-            <div className="mt-5 flex flex-col gap-3 sm:mt-6 sm:flex-row sm:flex-wrap sm:gap-4 md:mt-7">
+            {/* CTA */}
+            <div className="mt-4 flex pl-1 sm:mt-8 sm:pl-8 md:pl-12">
               <a
-                href="#services"
-                className="inline-flex w-full min-h-11 items-center justify-center rounded-xl bg-[#8B5E3C] px-5 py-3 text-center text-sm font-semibold text-white transition-colors hover:bg-[#A0694A] sm:w-auto sm:min-h-0 sm:px-6"
+                href="#contact"
+                className="inline-flex min-h-8 min-w-[95px] items-center justify-center rounded-lg bg-[#103759] px-4 py-2 text-center text-[10px] font-bold text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#0A3A84] active:bg-[#082F6B] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1976D2] focus-visible:ring-offset-2 sm:min-h-12 sm:min-w-[220px] sm:rounded-xl sm:px-12 sm:py-3 sm:text-sm dark:bg-[#8B5E3C] dark:hover:bg-[#A0694A]"
               >
-                Explore Services
-              </a>
-              <a
-                href="#portfolio"
-                className="inline-flex w-full min-h-11 items-center justify-center rounded-xl border-2 border-white/35 bg-white/[0.06] px-5 py-3 text-center text-sm font-semibold transition-colors hover:border-white/55 hover:bg-white/10 dark:border-white/30 dark:hover:bg-white/[0.1] sm:w-auto sm:min-h-0 sm:px-6"
-              >
-                View Our Work
+                Contact Us
               </a>
             </div>
           </div>
         </div>
 
-        <div className="order-2 flex min-w-0 justify-center lg:justify-end">
-          <div className="relative w-full min-w-0 max-w-lg lg:max-w-none lg:pl-4">
+        {/* Right image — proportional on phone and still beside text */}
+        <div className="order-2 flex min-w-0 items-center justify-end xl:translate-x-14 2xl:translate-x-20">
+          <div className="relative w-full max-w-[155px] sm:max-w-[520px] md:max-w-[720px] lg:max-w-[900px] xl:max-w-[980px] 2xl:max-w-[1040px]">
+            {/* Light-mode blue ambient glow */}
             <div
-              className="pointer-events-none absolute inset-0 z-[2] rounded-2xl bg-gradient-to-r from-[#0F172A] from-0% via-transparent via-55% to-transparent dark:from-[#09090B]"
-              aria-hidden
-            />
-            <div
-              className="pointer-events-none absolute inset-0 z-[2] rounded-2xl bg-gradient-to-l from-[#0F172A] from-0% via-transparent via-40% to-transparent to-100% opacity-90 dark:from-[#09090B]"
-              aria-hidden
-            />
-            <div
-              className="pointer-events-none absolute inset-0 z-[2] rounded-2xl bg-gradient-to-t from-[#0F172A] from-0% via-transparent via-50% to-transparent dark:from-[#09090B]"
-              aria-hidden
-            />
-            <div
-              className="pointer-events-none absolute inset-0 z-[2] rounded-2xl opacity-85 dark:hidden"
+              className="pointer-events-none absolute -inset-3 -z-10 rounded-[1.5rem] opacity-70 blur-xl sm:-inset-12 sm:rounded-[3.5rem] sm:opacity-80 sm:blur-3xl dark:hidden"
               style={{
                 background:
-                  "radial-gradient(ellipse 100% 78% at 92% 88%, rgba(15, 23, 42, 0.75), transparent 52%)",
+                  "radial-gradient(ellipse at center, rgba(16, 55, 89, 0.14), rgba(16, 55, 89, 0.06) 48%, transparent 76%)",
               }}
-              aria-hidden
+              aria-hidden="true"
             />
             <div
-              className="pointer-events-none absolute inset-0 z-[2] hidden rounded-2xl opacity-90 dark:block"
+              className="pointer-events-none absolute -inset-3 -z-10 hidden rounded-[1.5rem] opacity-60 blur-xl sm:-inset-12 sm:rounded-[3.5rem] sm:blur-3xl dark:block"
               style={{
                 background:
-                  "radial-gradient(ellipse 100% 78% at 92% 88%, rgb(9 9 11), transparent 52%)",
+                  "radial-gradient(ellipse at center, rgba(56, 37, 23, 0.28), rgba(56, 37, 23, 0.14) 42%, rgba(6, 36, 63, 0.08) 64%, transparent 78%)",
               }}
-              aria-hidden
+              aria-hidden="true"
             />
 
-            <div className="relative overflow-hidden rounded-xl sm:rounded-2xl lg:rounded-l-3xl lg:rounded-r-none">
+            <div className="relative aspect-[3/4] overflow-hidden rounded-[1.35rem] sm:aspect-auto sm:h-[380px] sm:rounded-[2.75rem] md:h-[450px] lg:h-[510px] xl:h-[530px]">
+              {/* Subtle light-mode blue wash; dark treatment is unchanged */}
+              <div className="pointer-events-none absolute inset-0 z-10 rounded-[1.35rem] bg-[#103759]/[0.04] sm:rounded-[2.75rem] dark:bg-[#8B5E3C]/18 dark:mix-blend-screen" />
+
+              {/* Soft black vignette blends the photo without a bright edge. */}
+              <div
+                className="pointer-events-none absolute inset-0 z-[15] rounded-[1.35rem] sm:rounded-[2.75rem] dark:hidden"
+                style={{
+                  background:
+                    "radial-gradient(circle at center, transparent 62%, rgba(0, 0, 0, 0.18) 100%)",
+                }}
+                aria-hidden="true"
+              />
+
+              {/* Edge blending remains a dark-mode-only treatment. */}
+              <div className="pointer-events-none absolute inset-y-0 left-0 z-20 hidden w-6 rounded-l-[1.35rem] bg-gradient-to-r from-[#875131]/28 via-[#875131]/12 to-transparent sm:w-24 sm:rounded-l-[2.75rem] dark:block" />
+              <div className="pointer-events-none absolute inset-y-0 right-0 z-20 hidden w-6 rounded-r-[1.35rem] bg-gradient-to-l from-[#875131]/20 via-[#875131]/8 to-transparent sm:w-20 sm:rounded-r-[2.75rem] dark:block" />
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 hidden h-8 rounded-b-[1.35rem] bg-gradient-to-t from-[#875131]/24 via-[#875131]/10 to-transparent sm:h-20 sm:rounded-b-[2.75rem] dark:block" />
+
               <img
                 src={heroLogo}
-                alt="Hero Illustration"
-                className="relative z-0 w-full max-h-[min(34vh,280px)] object-cover object-center opacity-[0.92] sm:max-h-[min(40vh,340px)] md:max-h-[min(44vh,400px)] lg:max-h-[min(48vh,440px)] lg:object-right"
+                width="1122"
+                height="1402"
+                decoding="async"
+                fetchPriority="high"
+                alt="Bluecore Software — digital transformation and technology"
+                className="hero-image-mask h-full w-full rounded-[1.35rem] object-cover object-center opacity-[0.97] shadow-[0_20px_55px_rgba(15,23,42,0.13)] sm:rounded-[2.75rem] dark:opacity-[0.92] dark:shadow-[0_22px_70px_rgba(139,94,60,0.18)]"
               />
             </div>
           </div>
