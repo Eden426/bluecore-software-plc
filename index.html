@@ -1,20 +1,45 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="dark" style="color-scheme: dark">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/png" sizes="any" href="/favicon.png" />
     <link rel="shortcut icon" href="/favicon.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Bluecore Software PLC designs and supports practical software, web applications, system integrations, AI solutions, and digitization services in Addis Ababa, Ethiopia." />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://bluecore-software-plc.vercel.app/" />
+    <meta name="theme-color" content="#09090b" />
+    <meta property="og:title" content="Bluecore Software PLC" />
+    <meta property="og:description" content="Practical software, web applications, integrations, AI solutions, and digitization services." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://bluecore-software-plc.vercel.app/" />
+    <meta property="og:image" content="https://bluecore-software-plc.vercel.app/social-preview.svg" />
+    <meta property="og:image:type" content="image/svg+xml" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Bluecore Software PLC — Smart Software. Solid Core." />
+    <meta property="og:site_name" content="Bluecore Software PLC" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Bluecore Software PLC" />
+    <meta name="twitter:description" content="Practical software, web applications, integrations, AI solutions, and digitization services." />
+    <meta name="twitter:image" content="https://bluecore-software-plc.vercel.app/social-preview.svg" />
+    <meta name="twitter:image:alt" content="Bluecore Software PLC — Smart Software. Solid Core." />
     <title>BlueCore Software PLC</title>
     <script>
+      let theme = "dark";
       try {
-        if (localStorage.getItem("ecc-theme") === "dark") {
-          document.documentElement.classList.add("dark");
-        }
+        const saved = localStorage.getItem("bluecore-theme");
+        theme = saved === "dark" || saved === "light" ? saved : "dark";
       } catch (_) {}
+      document.documentElement.classList.toggle("dark", theme === "dark");
+      document.documentElement.style.colorScheme = theme;
+      document.querySelector('meta[name="theme-color"]').content =
+        theme === "dark" ? "#09090b" : "#ffffff";
     </script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"Bluecore Software PLC","url":"https://bluecore-software-plc.vercel.app/","email":"support.bluecoresoft@gmail.com","telephone":"+251978939312","address":{"@type":"PostalAddress","addressLocality":"Addis Ababa","addressCountry":"ET"}}</script>
   </head>
   <body>
     <div id="root"></div>
