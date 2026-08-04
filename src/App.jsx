@@ -14,7 +14,7 @@ import NotFoundPage from "./components/NotFoundPage";
 import Preloader from "./components/Preloader";
 
 const legalPages = new Set(["/privacy", "/terms", "/support"]);
-const siteUrl = "https://bluecore-software-plc.vercel.app";
+const siteUrl = "https://blue-core.tech";
 const routeMetadata = {
   "/": {
     title: "Bluecore Software PLC",
