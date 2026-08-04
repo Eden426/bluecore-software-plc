@@ -17,6 +17,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@sparticuz/chromium": "^149.0.0",
     "@tailwindcss/postcss": "^4.2.4",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
@@ -28,6 +29,7 @@
     "globals": "^17.5.0",
     "postcss": "^8.5.14",
     "puppeteer": "^25.4.0",
+    "puppeteer-core": "^25.4.0",
     "tailwindcss": "^4.2.4",
     "vite": "^8.0.10"
   }
