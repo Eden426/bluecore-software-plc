@@ -1,4 +1,4 @@
-import heroLogo from "../assets/image.png";
+import heroLogo from "../assets/image.jpg";
 import {
   IconAI,
   IconCloudOps,
@@ -106,6 +106,10 @@ export default function Hero() {
               <img
                 src={heroLogo}
                 alt="Hero Illustration"
+                width={1200}
+                height={800}
+                fetchPriority="high"
+                decoding="async"
                 className="relative z-0 w-full max-h-[min(34vh,280px)] object-cover object-center opacity-[0.92] sm:max-h-[min(40vh,340px)] md:max-h-[min(44vh,400px)] lg:max-h-[min(48vh,440px)] lg:object-right"
               />
             </div>

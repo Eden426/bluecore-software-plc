@@ -30,6 +30,9 @@ export default function Footer() {
               <img
                 src={logo}
                 alt="Bluecore Software PLC"
+                width={600}
+                height={200}
+                loading="lazy"
                 className="h-11 w-auto max-w-[200px] object-contain object-left"
               />
             </a>

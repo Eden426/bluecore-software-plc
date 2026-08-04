@@ -23,6 +23,8 @@ export default function Navbar() {
             <img
               src={logo}
               alt="Bluecore Software PLC"
+              width={600}
+              height={200}
               className="h-full w-full object-contain object-center"
             />
           </span>
@@ -67,6 +69,8 @@ export default function Navbar() {
             onClick={() => setIsOpen((prev) => !prev)}
             className="md:hidden w-10 h-10 rounded-lg border border-slate-200 flex items-center justify-center text-[#06243f] dark:border-white/15 dark:text-[#FAFAFA]"
             aria-label="Toggle navigation menu"
+            aria-expanded={isOpen}
+            aria-controls="mobile-nav-menu"
           >
             {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
@@ -74,7 +78,10 @@ export default function Navbar() {
       </div>
 
       {isOpen && (
-        <nav className="md:hidden px-4 sm:px-5 pb-4 border-t border-slate-200 bg-white dark:bg-[#09090B] dark:border-white/10">
+        <nav
+          id="mobile-nav-menu"
+          className="md:hidden px-4 sm:px-5 pb-4 border-t border-slate-200 bg-white dark:bg-[#09090B] dark:border-white/10"
+        >
           <div className="flex flex-col gap-1 pt-3">
             {links.map((link) => (
               <a

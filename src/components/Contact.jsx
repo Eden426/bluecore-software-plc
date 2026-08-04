@@ -1,6 +1,46 @@
+import { useState } from "react";
 import { Mail, Phone, MapPin, Clock } from "lucide-react";
 
+const initialForm = { name: "", email: "", company: "", message: "", website: "" };
+
 export default function Contact() {
+  const [form, setForm] = useState(initialForm);
+  const [status, setStatus] = useState("idle"); // idle | sending | success | error
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setStatus("sending");
+    setErrorMessage("");
+
+    const fallbackError = "Something went wrong. Please try again, or email us directly.";
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+
+      const data = await res.json().catch(() => null);
+
+      if (!res.ok || !data?.ok) {
+        throw new Error(data?.error || fallbackError);
+      }
+
+      setStatus("success");
+      setForm(initialForm);
+    } catch {
+      setStatus("error");
+      setErrorMessage(fallbackError);
+    }
+  };
+
   return (
     <section
       id="contact"
@@ -41,18 +81,102 @@ export default function Contact() {
           </div>
         </div>
 
-        <form className="min-w-0 rounded-2xl border border-slate-200 bg-white p-4 shadow-xl sm:rounded-3xl sm:p-7 dark:bg-[#161616] dark:border-white/10">
+        <form
+          onSubmit={handleSubmit}
+          className="min-w-0 rounded-2xl border border-slate-200 bg-white p-4 shadow-xl sm:rounded-3xl sm:p-7 dark:bg-[#161616] dark:border-white/10"
+        >
           <div className="grid gap-4 sm:gap-5">
-            <input className="input" placeholder="Full Name" />
-            <input className="input" placeholder="Email Address" />
-            <input className="input" placeholder="Company / Organization" />
-            <textarea className="input min-h-36" placeholder="Your Message" />
+            <div>
+              <label htmlFor="contact-name" className="sr-only">
+                Full Name
+              </label>
+              <input
+                id="contact-name"
+                name="name"
+                className="input"
+                placeholder="Full Name"
+                value={form.name}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div>
+              <label htmlFor="contact-email" className="sr-only">
+                Email Address
+              </label>
+              <input
+                id="contact-email"
+                name="email"
+                type="email"
+                className="input"
+                placeholder="Email Address"
+                value={form.email}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div>
+              <label htmlFor="contact-company" className="sr-only">
+                Company / Organization
+              </label>
+              <input
+                id="contact-company"
+                name="company"
+                className="input"
+                placeholder="Company / Organization"
+                value={form.company}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div>
+              <label htmlFor="contact-message" className="sr-only">
+                Your Message
+              </label>
+              <textarea
+                id="contact-message"
+                name="message"
+                className="input min-h-36"
+                placeholder="Your Message"
+                value={form.message}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            {/* Honeypot: hidden from real visitors, catches basic bots. */}
+            <div className="absolute left-[-9999px]" aria-hidden="true">
+              <label htmlFor="contact-website">Website</label>
+              <input
+                id="contact-website"
+                name="website"
+                tabIndex={-1}
+                autoComplete="off"
+                value={form.website}
+                onChange={handleChange}
+              />
+            </div>
+
             <button
               type="submit"
-              className="min-h-11 w-full rounded-xl bg-[#8B5E3C] py-3 text-sm font-bold text-white hover:bg-[#A0694A] sm:text-base"
+              disabled={status === "sending"}
+              className="min-h-11 w-full rounded-xl bg-[#8B5E3C] py-3 text-sm font-bold text-white hover:bg-[#A0694A] disabled:cursor-not-allowed disabled:opacity-60 sm:text-base"
             >
-              Send Message
+              {status === "sending" ? "Sending…" : "Send Message"}
             </button>
+
+            {status === "success" && (
+              <p role="status" className="text-sm font-semibold text-green-700 dark:text-green-400">
+                Thanks — your message has been sent. We'll get back to you soon.
+              </p>
+            )}
+            {status === "error" && (
+              <p role="alert" className="text-sm font-semibold text-red-600 dark:text-red-400">
+                {errorMessage}
+              </p>
+            )}
           </div>
         </form>
       </div>

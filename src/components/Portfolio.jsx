@@ -1,7 +1,7 @@
 import { portfolio } from "../data/portfolio";
-import business from "../assets/business.png";
-import mobile from "../assets/mobile.png";
-import computer from "../assets/computer.png";
+import business from "../assets/business.jpg";
+import mobile from "../assets/mobile.jpg";
+import computer from "../assets/computer.jpg";
 
 const portfolioImages = {
   "Web App": business,
@@ -44,6 +44,10 @@ export default function Portfolio() {
                 <img
                   src={portfolioImages[item.type]}
                   alt={item.title}
+                  width={900}
+                  height={450}
+                  loading="lazy"
+                  decoding="async"
                   className="h-full w-full object-cover"
                 />
               </div>
