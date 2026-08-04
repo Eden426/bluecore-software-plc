@@ -1,0 +1,39 @@
+# Bluecore Software PLC
+
+> Bluecore Software PLC is a software company that designs, builds, and supports secure, reliable, and scalable software solutions for businesses, organizations, and institutions. Based in Addis Ababa, Ethiopia, serving clients worldwide.
+
+Bluecore's positioning: "Intelligent Software. Built on a Solid Core." The company covers the full lifecycle from strategy and design through development, integration, launch, and long-term support — with a particular focus on AI-driven digital transformation for organizations modernizing legacy, manual, or paper-based processes.
+
+## Services
+
+- **System Integration** — connecting tools, data, and workflows into one engine. Best for government offices, factories, and service businesses.
+- **Web Application Development** — modern web platforms for portals, internal systems, and customer dashboards.
+- **AI Solutions** — practical AI assistants and automations that reduce repetitive work, for support teams, admins, and content-heavy departments.
+- **Custom Software Development** — tailored systems for complex operations with unique business rules.
+- **AI & Digital Transformation** — turning manual processes into connected, intelligent digital operations, including roadmaps, governance, training, and iteration so adoption sticks. A strong fit for organizations modernizing legacy systems.
+- **Cloud & DevOps** — reliable cloud deployment, automation, and scalable infrastructure for uptime, release speed, and growth.
+- **Digitization Support** — moving organizations from manual paperwork to digital workflows (service offices, HR, administrative processes).
+- **Software Design & Consulting** — planning, architecture, and UI/UX direction before development begins.
+- **Security & Quality Assurance** — robust testing and secure delivery for regulated industries and mission-critical platforms.
+
+## Portfolio
+
+- **Business Management Platform** (Web App) — a secure dashboard for managing operations, reporting, and internal workflows.
+- **Mobile Booking Application** (Mobile App) — a customer-focused mobile app for booking and service management.
+- **Digital Office Workflow** (Digitization) — a paper-to-digital transformation system for office service delivery.
+
+## Contact
+
+- Office: Addis Ababa, Ethiopia
+- Phone: +251 911 234 567
+- Email: info@bluecoresoft.com
+- Hours: Mon–Fri, 9:00 AM–5:00 PM
+- Contact form and full details: https://blue-core.tech/#contact
+
+## Site
+
+- Homepage (all sections live on one page): https://blue-core.tech/
+- About: https://blue-core.tech/#about
+- Services: https://blue-core.tech/#services
+- Portfolio: https://blue-core.tech/#portfolio
+- Contact: https://blue-core.tech/#contact
