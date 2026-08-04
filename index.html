@@ -6,7 +6,15 @@
     <link rel="icon" type="image/png" sizes="any" href="/favicon.png" />
     <link rel="shortcut icon" href="/favicon.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lobster+Two:wght@400&display=swap"
+      rel="stylesheet"
+    />
+    <meta name="theme-color" content="#09090b" />
 
     <title>Bluecore Software PLC | Custom Software, AI &amp; Digital Transformation</title>
     <meta
@@ -53,8 +61,8 @@
         "url": "https://blue-core.tech/",
         "logo": "https://blue-core.tech/favicon.png",
         "description": "Bluecore Software PLC builds secure, reliable, and scalable software solutions — system integration, web application development, AI solutions, custom software, cloud & DevOps, digitization support, and software design & consulting.",
-        "email": "info@bluecoresoft.com",
-        "telephone": "+251911234567",
+        "email": "support.bluecoresoft@gmail.com",
+        "telephone": "+251978939312",
         "address": {
           "@type": "PostalAddress",
           "addressLocality": "Addis Ababa",
@@ -77,11 +85,15 @@
     </script>
 
     <script>
+      let theme = "dark";
       try {
-        if (localStorage.getItem("ecc-theme") === "dark") {
-          document.documentElement.classList.add("dark");
-        }
+        const saved = localStorage.getItem("bluecore-theme");
+        theme = saved === "dark" || saved === "light" ? saved : "dark";
       } catch (_) {}
+      document.documentElement.classList.toggle("dark", theme === "dark");
+      document.documentElement.style.colorScheme = theme;
+      document.querySelector('meta[name="theme-color"]').content =
+        theme === "dark" ? "#09090b" : "#ffffff";
     </script>
   </head>
   <body>

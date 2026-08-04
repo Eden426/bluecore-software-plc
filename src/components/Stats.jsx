@@ -1,10 +1,10 @@
 import { Briefcase, Users, ShieldCheck, Clock } from "lucide-react";
 
 const stats = [
-  { icon: Briefcase, value: "50+", label: "Projects Delivered" },
-  { icon: Users, value: "30+", label: "Happy Clients" },
-  { icon: ShieldCheck, value: "98%", label: "Client Satisfaction" },
-  { icon: Clock, value: "10+", label: "Years of Experience" },
+  { icon: Briefcase, value: "Custom", label: "Software Solutions" },
+  { icon: Users, value: "Practical", label: "Team Collaboration" },
+  { icon: ShieldCheck, value: "Secure", label: "Delivery Focus" },
+  { icon: Clock, value: "Ongoing", label: "Technical Support" },
 ];
 
 const splitValue = (value) => {

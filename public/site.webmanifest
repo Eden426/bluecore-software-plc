@@ -1,0 +1,17 @@
+{
+  "name": "Bluecore Software PLC",
+  "short_name": "Bluecore",
+  "description": "Practical software, integrations, AI solutions, and digitization services.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#09090b",
+  "theme_color": "#09090b",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "any",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
