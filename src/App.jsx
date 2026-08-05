@@ -1,3 +1,4 @@
+// Navbar.jsx
 import { useEffect } from "react";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
@@ -58,10 +59,41 @@ function useRouteMetadata(path) {
   }, [path]);
 }
 
+// The app is client-rendered only: createRoot() (see main.jsx) fully replaces
+// the prerendered DOM on mount rather than hydrating it. The browser's native
+// one-time scroll-to-hash (e.g. loading /#portfolio directly) fires against
+// the prerendered markup, then gets discarded the moment React replaces the
+// tree - the new elements share the same ids, but the browser doesn't re-run
+// its fragment scroll for them. Same-page nav clicks (href="/#contact" while
+// already on "/") have the same gap: no listener re-applies the scroll on
+// hashchange. This effect covers both: it scrolls to the current hash once on
+// mount (after the client render has settled) and again on every hashchange.
+function useHashScroll(isLegalPage) {
+  useEffect(() => {
+    if (isLegalPage) return undefined;
+
+    // "instant" (not "smooth"): this page has heavy concurrent layout
+    // activity on mount (staggered Framer Motion reveals, animated
+    // background blobs), which reliably interrupts a smooth scroll fired
+    // from an effect - it starts moving, then gets cut off a few pixels in.
+    // An instant jump also matches the browser's own (non-JS) fragment-scroll
+    // behavior, which this is standing in for.
+    const scrollToHash = () => {
+      if (!window.location.hash) return;
+      document.querySelector(window.location.hash)?.scrollIntoView({ behavior: "instant" });
+    };
+
+    scrollToHash();
+    window.addEventListener("hashchange", scrollToHash);
+    return () => window.removeEventListener("hashchange", scrollToHash);
+  }, [isLegalPage]);
+}
+
 export default function App() {
   const path = window.location.pathname.replace(/\/$/, "") || "/";
   const isLegalPage = legalPages.has(path);
   useRouteMetadata(path);
+  useHashScroll(isLegalPage);
 
   return (
     <>
