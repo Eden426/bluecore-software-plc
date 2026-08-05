@@ -1,5 +1,5 @@
-// Navbar.jsx
 import { useEffect } from "react";
+import { Analytics } from "@vercel/analytics/react";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import Stats from "./components/Stats";
@@ -112,6 +112,7 @@ export default function App() {
       </main>
       <Footer />
       <SupportChat />
+      <Analytics />
     </>
   );
 }
