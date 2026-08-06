@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import Stats from "./components/Stats";
@@ -113,6 +114,7 @@ export default function App() {
       <Footer />
       <SupportChat />
       <Analytics />
+      <SpeedInsights />
     </>
   );
 }
