@@ -237,7 +237,7 @@ export default function Footer() {
 
               <li>
                 <a
-                  href="mailto:support.bluecoresoft@gmail.com"
+                  href="mailto:team@blue-core.tech"
                   className={`flex items-start gap-1.5 sm:gap-3 ${linkClass}`}
                 >
                   <Mail
