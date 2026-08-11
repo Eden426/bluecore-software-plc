@@ -37,7 +37,7 @@ export default function LegalPage({ page }) {
       <div className="mt-8 space-y-5 text-base leading-8 text-slate-700 dark:text-white/80">
         {item.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
       </div>
-      {page === "support" && <div className="mt-8 rounded-2xl bg-slate-100 p-5 dark:bg-white/[0.06]"><p><a className="font-bold text-[#154187] underline dark:text-[#93C5FD]" href="tel:+251978939312">+251 978 939 312</a></p><p className="mt-2"><a className="font-bold text-[#154187] underline dark:text-[#93C5FD]" href="mailto:support.bluecoresoft@gmail.com">support.bluecoresoft@gmail.com</a></p></div>}
+      {page === "support" && <div className="mt-8 rounded-2xl bg-slate-100 p-5 dark:bg-white/[0.06]"><p><a className="font-bold text-[#154187] underline dark:text-[#93C5FD]" href="tel:+251978939312">+251 978 939 312</a></p><p className="mt-2"><a className="font-bold text-[#154187] underline dark:text-[#93C5FD]" href="mailto:team@blue-core.tech">team@blue-core.tech</a></p></div>}
       <a className="mt-10 inline-flex font-bold text-[#154187] underline dark:text-[#93C5FD]" href="/">Return to the website</a>
     </article>
   );

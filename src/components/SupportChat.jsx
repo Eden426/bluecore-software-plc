@@ -20,7 +20,7 @@ const FAQS = [
   {
     keywords: ["contact", "reach", "phone", "call", "email", "address"],
     answer:
-      "You can contact us by phone at +251 978 939 312 or by email at support.bluecoresoft@gmail.com.",
+      "You can contact us by phone at +251 978 939 312 or by email at team@blue-core.tech.",
   },
   {
     keywords: [
@@ -36,17 +36,17 @@ const FAQS = [
   {
     keywords: ["demo", "request demo", "trial", "try"],
     answer:
-      "You can request a demo by calling +251 978 939 312 or emailing support.bluecoresoft@gmail.com.",
+      "You can request a demo by calling +251 978 939 312 or emailing team@blue-core.tech.",
   },
   {
     keywords: ["support", "help", "assistance", "issue", "problem"],
     answer:
-      "Support is available via phone, WhatsApp, Telegram, or email.\nPhone: +251 978 939 312\nEmail: support.bluecoresoft@gmail.com",
+      "Support is available via phone, WhatsApp, Telegram, or email.\nPhone: +251 978 939 312\nEmail: team@blue-core.tech",
   },
   {
     keywords: ["price", "pricing", "cost", "quote", "how much"],
     answer:
-      "Pricing depends on your project needs. Contact us at +251 978 939 312 or support.bluecoresoft@gmail.com to discuss a quote.",
+      "Pricing depends on your project needs. Contact us at +251 978 939 312 or team@blue-core.tech to discuss a quote.",
   },
   {
     keywords: ["location", "where", "addis", "ethiopia", "office"],
@@ -91,9 +91,9 @@ const EXTENDED_FAQS = [
   { keywords: ["price", "pricing", "cost", "quote", "budget", "how much", "payment"], answer: "Project pricing depends on scope, features, integrations, security needs, and delivery schedule. Share your requirements through the contact form for a tailored estimate." },
   { keywords: ["custom", "customize", "tailored", "special requirement"], answer: "Yes. Custom software is one of our core services. We shape workflows, business rules, integrations, and user experience around your organization rather than forcing a generic template." },
   { keywords: ["training", "documentation", "onboarding", "teach staff"], answer: "Training, documentation, and adoption planning can be included according to the project. Mention the number of users and the support your team needs when requesting a proposal." },
-  { keywords: ["support", "maintenance", "bug", "issue", "problem", "after launch", "post launch"], answer: "Bluecore provides long-term support and can help with technical issues, maintenance, and post-launch improvements. Contact +251 978 939 312 or support.bluecoresoft@gmail.com and describe the system and issue." },
+  { keywords: ["support", "maintenance", "bug", "issue", "problem", "after launch", "post launch"], answer: "Bluecore provides long-term support and can help with technical issues, maintenance, and post-launch improvements. Contact +251 978 939 312 or team@blue-core.tech and describe the system and issue." },
   { keywords: ["remote", "international", "outside ethiopia", "other country"], answer: "Bluecore is based in Addis Ababa and can discuss projects with organizations outside the immediate area. Contact the team so delivery, communication, and support arrangements can be confirmed." },
-  { keywords: ["job", "jobs", "career", "careers", "internship", "vacancy", "hiring"], answer: "Thank you for your interest in Bluecore. This page does not currently list vacancies. Please email support.bluecoresoft@gmail.com with a concise introduction and relevant details." },
+  { keywords: ["job", "jobs", "career", "careers", "internship", "vacancy", "hiring"], answer: "Thank you for your interest in Bluecore. This page does not currently list vacancies. Please email team@blue-core.tech with a concise introduction and relevant details." },
   { keywords: ["whatsapp", "telegram", "social media"], answer: "Bluecore is available through the WhatsApp and Telegram links in the footer. For detailed project or support records, email and the contact form are also good options." },
   { keywords: ["stupid", "idiot", "useless", "angry", "bad service"], answer: "I am sorry this has been frustrating. I will remain respectful and help where I can. Please describe what went wrong, or contact the team directly at +251 978 939 312 for personal assistance." },
 ];
@@ -106,7 +106,7 @@ const QUICK_ACTIONS = [
   { label: "Request Demo", message: "I'd like to request a demo." },
   { label: "Get Support", message: "How can I get support?" },
   { label: "Call Now", href: "tel:+251978939312" },
-  { label: "Email Us", href: "mailto:support.bluecoresoft@gmail.com" },
+  { label: "Email Us", href: "mailto:team@blue-core.tech" },
 ];
 
 function normalizeMessage(text) {
@@ -139,7 +139,7 @@ function getReply(text) {
   }
 
   if (bestMatch) return bestMatch.answer;
-  return "Thank you for reaching out. I do not want to guess and give you incorrect information. Please tell me whether your question is about services, pricing, timelines, support, or starting a project. You can also contact the team at +251 978 939 312 or support.bluecoresoft@gmail.com.";
+  return "Thank you for reaching out. I do not want to guess and give you incorrect information. Please tell me whether your question is about services, pricing, timelines, support, or starting a project. You can also contact the team at +251 978 939 312 or team@blue-core.tech.";
 }
 
 function TypingDots() {

@@ -7,7 +7,7 @@ const getEmailConfig = () => ({
   templateId: import.meta.env.VITE_EMAILJS_TEMPLATE_ID?.trim(),
   publicKey: import.meta.env.VITE_EMAILJS_PUBLIC_KEY?.trim(),
 });
-const contactEmail = import.meta.env.VITE_CONTACT_EMAIL || "support.bluecoresoft@gmail.com";
+const contactEmail = import.meta.env.VITE_CONTACT_EMAIL || "team@blue-core.tech";
 const initialForm = { name: "", email: "", company: "", message: "", website: "" };
 
 function validate(form) {
@@ -95,7 +95,7 @@ export default function Contact() {
           <div className="mt-8 space-y-5">
             <ContactItem icon={MapPin} title="Office" text="Addis Ababa, Ethiopia" href="https://maps.google.com/?q=Addis+Ababa+Ethiopia" external />
             <ContactItem icon={Phone} title="Phone" text="+251 978 939 312" href="tel:+251978939312" />
-            <ContactItem icon={Mail} title="Email" text="support.bluecoresoft@gmail.com" href="mailto:support.bluecoresoft@gmail.com" />
+            <ContactItem icon={Mail} title="Email" text="team@blue-core.tech" href="mailto:team@blue-core.tech" />
             <ContactItem icon={Clock} title="Working Hours" text="Monday–Friday, 9:00 AM–5:00 PM" />
           </div>
         </div>
