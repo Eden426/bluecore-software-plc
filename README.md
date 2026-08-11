@@ -1,16 +1,32 @@
-# React + Vite
+# Bluecore Software PLC
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Marketing website for Bluecore Software PLC — live at **[blue-core.tech](https://blue-core.tech)**.
 
-Currently, two official plugins are available:
+A single-page site built with React 19, Vite, and Tailwind CSS v4. It's prerendered at build time so search engines and AI crawlers see full page content, not an empty shell.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Tech stack
 
-## React Compiler
+- **React 19 + Vite** — client-rendered SPA, no router (single page, anchor navigation)
+- **Tailwind CSS v4** — utility styling, dark mode via a `.dark` class
+- **Framer Motion** — scroll/interaction animations
+- **EmailJS** — contact form submission (no backend server)
+- **Vitest + Testing Library** — unit/component tests
+- **Vercel Analytics & Speed Insights** — traffic and Core Web Vitals
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Commands
 
-## Expanding the ESLint configuration
+```bash
+npm run dev       # start the Vite dev server
+npm run build      # production build to dist/, then prerenders dist/index.html
+npm run preview    # preview the production build
+npm run lint       # eslint over the whole repo
+npm test           # run the vitest suite
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Deployment
+
+Every push to `main` runs through GitHub Actions (`.github/workflows/deploy.yml`): a `validate` job (lint, test, build) runs on every PR and push, and a `deploy` job builds and deploys to Vercel production once `validate` passes. See `CLAUDE.md` for the full architecture writeup, including why the build has a Puppeteer-based prerender step and how it stays compatible with both local development and CI.
+
+## Contributing
+
+Work happens on feature branches merged via pull request — CI (`validate`) must pass before merging to `main`.
