@@ -13,8 +13,25 @@ import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 import SupportChat from "./components/SupportChat";
 import LegalPage from "./components/LegalPage";
+import ServiceDetail from "./components/ServiceDetail";
+import PortfolioDetail from "./components/PortfolioDetail";
+import BlogIndex from "./components/BlogIndex";
+import BlogPost from "./components/BlogPost";
 import NotFoundPage from "./components/NotFoundPage";
 import Preloader from "./components/Preloader";
+import JsonLd from "./components/JsonLd";
+import { services } from "./data/services";
+import { portfolio } from "./data/portfolio";
+import { portfolioImages } from "./data/portfolioImages";
+import { team } from "./data/team";
+import { blog } from "./data/blog";
+import {
+  buildGraph,
+  buildOrganization,
+  buildPortfolioListGraph,
+  buildServiceListGraph,
+  buildWebsite,
+} from "./lib/structuredData";
 
 const legalPages = new Set(["/privacy", "/terms", "/support"]);
 const siteUrl = "https://blue-core.tech";
@@ -35,15 +52,69 @@ const routeMetadata = {
     title: "Support | Bluecore Software PLC",
     description: "Contact Bluecore Software PLC for product, project, and website support.",
   },
+  "/blog": {
+    title: "Blog | Bluecore Software PLC",
+    description: "Practical notes from the Bluecore team on software, AI adoption, and digital transformation.",
+  },
 };
+
+// Resolves a pathname to the page it should render, plus the title/description
+// that page needs. Static routes come from routeMetadata above; detail pages
+// (a single service, portfolio project, or blog post) are looked up by slug
+// from the same data files that drive their section on the homepage, so a
+// new entry there becomes a real route automatically.
+function resolveRoute(path) {
+  if (legalPages.has(path)) {
+    return { view: "legal", page: path.slice(1), metadata: routeMetadata[path] };
+  }
+  if (path === "/") {
+    return { view: "home", metadata: routeMetadata["/"] };
+  }
+  if (path === "/blog") {
+    return { view: "blog-index", metadata: routeMetadata["/blog"] };
+  }
+  if (path.startsWith("/services/")) {
+    const slug = path.slice("/services/".length);
+    const service = services.find((item) => item.slug === slug);
+    if (service) {
+      return {
+        view: "service-detail",
+        service,
+        metadata: { title: `${service.title} | Bluecore Software PLC`, description: service.overview?.[0] ?? service.text },
+      };
+    }
+  }
+  if (path.startsWith("/portfolio/")) {
+    const slug = path.slice("/portfolio/".length);
+    const item = portfolio.find((entry) => entry.slug === slug);
+    if (item) {
+      return {
+        view: "portfolio-detail",
+        item,
+        metadata: { title: `${item.title} | Bluecore Software PLC`, description: item.overview?.[0] ?? item.text },
+      };
+    }
+  }
+  if (path.startsWith("/blog/")) {
+    const slug = path.slice("/blog/".length);
+    const post = blog.find((entry) => entry.slug === slug);
+    if (post) {
+      return {
+        view: "blog-post",
+        post,
+        metadata: { title: `${post.title} | Bluecore Software PLC`, description: post.description },
+      };
+    }
+  }
+  return { view: "not-found", metadata: null };
+}
 
 function setMeta(selector, content) {
   document.querySelector(selector)?.setAttribute("content", content);
 }
 
-function useRouteMetadata(path) {
+function useRouteMetadata(path, metadata) {
   useEffect(() => {
-    const metadata = routeMetadata[path];
     const title = metadata?.title ?? "Page Not Found | Bluecore Software PLC";
     const description = metadata?.description ?? "The requested Bluecore Software PLC page could not be found.";
     const canonicalPath = metadata ? path : "/";
@@ -58,7 +129,7 @@ function useRouteMetadata(path) {
     setMeta('meta[property="og:url"]', canonicalUrl);
     setMeta('meta[name="twitter:title"]', title);
     setMeta('meta[name="twitter:description"]', description);
-  }, [path]);
+  }, [path, metadata]);
 }
 
 // The app is client-rendered only: createRoot() (see main.jsx) fully replaces
@@ -70,9 +141,9 @@ function useRouteMetadata(path) {
 // already on "/") have the same gap: no listener re-applies the scroll on
 // hashchange. This effect covers both: it scrolls to the current hash once on
 // mount (after the client render has settled) and again on every hashchange.
-function useHashScroll(isLegalPage) {
+function useHashScroll(isHomePage) {
   useEffect(() => {
-    if (isLegalPage) return undefined;
+    if (!isHomePage) return undefined;
 
     // "instant" (not "smooth"): this page has heavy concurrent layout
     // activity on mount (staggered Framer Motion reveals, animated
@@ -88,28 +159,48 @@ function useHashScroll(isLegalPage) {
     scrollToHash();
     window.addEventListener("hashchange", scrollToHash);
     return () => window.removeEventListener("hashchange", scrollToHash);
-  }, [isLegalPage]);
+  }, [isHomePage]);
 }
 
 export default function App() {
   const path = window.location.pathname.replace(/\/$/, "") || "/";
-  const isLegalPage = legalPages.has(path);
-  useRouteMetadata(path);
-  useHashScroll(isLegalPage);
+  const route = resolveRoute(path);
+  useRouteMetadata(path, route.metadata);
+  useHashScroll(route.view === "home");
 
   return (
     <>
       <Preloader />
       <a className="skip-link" href="#main-content">Skip to main content</a>
+      {/* Organization/WebSite schema, plus the full Service and portfolio
+          Project catalog, apply site-wide so any page (not only the
+          homepage) carries a complete, machine-readable description of what
+          Bluecore does. */}
+      <JsonLd
+        data={buildGraph([
+          buildOrganization(team),
+          buildWebsite(),
+          buildServiceListGraph(services),
+          buildPortfolioListGraph(portfolio),
+        ])}
+      />
       <Navbar />
       <main id="main-content" tabIndex="-1" className="min-h-screen min-w-0 overflow-x-clip bg-white text-[#0F172A] transition-colors duration-300 dark:bg-[#09090B] dark:text-[#FAFAFA]">
-        {isLegalPage ? (
-          <LegalPage page={path.slice(1)} />
-        ) : path === "/" ? (
+        {route.view === "legal" ? (
+          <LegalPage page={route.page} />
+        ) : route.view === "home" ? (
           <>
             <Hero /><AboutPreview /><Stats /><Services />
             <Team /><Portfolio /><Testimonials /><Contact />
           </>
+        ) : route.view === "service-detail" ? (
+          <ServiceDetail service={route.service} />
+        ) : route.view === "portfolio-detail" ? (
+          <PortfolioDetail item={route.item} image={portfolioImages[route.item.type]} />
+        ) : route.view === "blog-index" ? (
+          <BlogIndex />
+        ) : route.view === "blog-post" ? (
+          <BlogPost post={route.post} />
         ) : <NotFoundPage />}
       </main>
       <Footer />

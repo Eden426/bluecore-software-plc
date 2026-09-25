@@ -1,5 +1,6 @@
 import { motion, useReducedMotion, useSpring } from "framer-motion";
 import { useCallback, useRef, useState } from "react";
+import { serviceIcons } from "../data/serviceIcons";
 
 const bentoItemReducedVariants = {
   hidden: { opacity: 0, y: 10 },
@@ -66,8 +67,8 @@ export default function BentoServiceCard({ service, gridClass, index }) {
     rotateY.set(0);
   }, [rotateX, rotateY]);
 
-  const { icon: ServiceIcon, title, text, detail, hero, heroTagline, heroExtended } =
-    service;
+  const { title, text, detail, hero, heroTagline, heroExtended, slug } = service;
+  const ServiceIcon = serviceIcons[slug];
 
   return (
     <motion.article
@@ -154,6 +155,14 @@ export default function BentoServiceCard({ service, gridClass, index }) {
         <p className="mt-4 max-h-0 overflow-hidden text-sm leading-snug text-[#64748B] opacity-0 transition-all duration-300 group-hover:max-h-24 group-hover:opacity-100 dark:text-[#FAFAFA]/65">
           {detail}
         </p>
+        {slug ? (
+          <a
+            href={`/services/${slug}`}
+            className="relative z-[2] mt-4 inline-flex w-fit items-center gap-1 text-sm font-bold text-[#103759] underline decoration-transparent underline-offset-4 transition-colors hover:decoration-current dark:text-[#93C5FD]"
+          >
+            Learn more
+          </a>
+        ) : null}
       </div>
     </motion.article>
   );

@@ -1,0 +1,14 @@
+/* TEAM */
+Founder & Managing Director: Dani
+General Manager: Amenti
+Lead Architect: Amanuel
+AI and Machine Learning Engineer: Eden
+Location: Addis Ababa, Ethiopia
+
+/* SITE */
+Last update: 2026/09/25
+Language: English
+Doctype: HTML5
+Standards: HTML5, WCAG
+Components: React, Vite, Tailwind CSS
+Software: Vite, Vercel
