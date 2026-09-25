@@ -53,37 +53,13 @@
     />
     <meta name="twitter:image" content="https://blue-core.tech/og-image.jpg" />
 
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "Organization",
-        "name": "Bluecore Software PLC",
-        "url": "https://blue-core.tech/",
-        "logo": "https://blue-core.tech/favicon.png",
-        "description": "Bluecore Software PLC builds secure, reliable, and scalable software solutions — system integration, web application development, AI solutions, custom software, cloud & DevOps, digitization support, and software design & consulting.",
-        "email": "team@blue-core.tech",
-        "telephone": "+251978939312",
-        "address": {
-          "@type": "PostalAddress",
-          "addressLocality": "Addis Ababa",
-          "addressCountry": "ET"
-        },
-        "areaServed": "Worldwide",
-        "sameAs": [],
-        "makesOffer": [
-          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "System Integration" } },
-          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Web Application Development" } },
-          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "AI Solutions" } },
-          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Custom Software Development" } },
-          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "AI & Digital Transformation" } },
-          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Cloud & DevOps" } },
-          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Digitization Support" } },
-          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Software Design & Consulting" } },
-          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Security & Quality Assurance" } }
-        ]
-      }
-    </script>
-
+    <!--
+      Organization/WebSite/Service/Project JSON-LD is rendered by <JsonLd> in
+      App.jsx, generated at runtime from src/data/{services,portfolio,team}.js
+      so it can't drift out of sync with the page content the way a hand-
+      maintained static block here would. It's captured by the prerender step
+      (scripts/prerender.mjs) the same as the rest of the page.
+    -->
     <script>
       let theme = "dark";
       try {

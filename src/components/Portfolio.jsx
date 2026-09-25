@@ -1,29 +1,7 @@
 import { ArrowUpRight } from "lucide-react";
 
 import { portfolio } from "../data/portfolio";
-import business from "../assets/business.webp";
-import mobile from "../assets/mobile.webp";
-import computer from "../assets/computer.webp";
-import erpSolutions from "../assets/portfolio/erp-solutions.svg";
-import garageOs from "../assets/portfolio/garage-os.svg";
-import hardwareIot from "../assets/portfolio/hardware-iot.svg";
-import queueManagement from "../assets/portfolio/queue-management.svg";
-import appointmentScheduling from "../assets/portfolio/appointment-scheduling.svg";
-import ecommerce from "../assets/portfolio/ecommerce.svg";
-import paymentGateway from "../assets/portfolio/payment-gateway.svg";
-
-const portfolioImages = {
-  "Web App": business,
-  "Mobile App": mobile,
-  Digitization: computer,
-  "ERP Platform": erpSolutions,
-  "Garage Management": garageOs,
-  "IoT / Hardware": hardwareIot,
-  "Queue Management": queueManagement,
-  "Appointment Scheduling": appointmentScheduling,
-  "E-Commerce": ecommerce,
-  "Payment Integration": paymentGateway,
-};
+import { portfolioImages } from "../data/portfolioImages";
 
 export default function Portfolio() {
   const slidingPortfolio = [...portfolio, ...portfolio];
@@ -74,7 +52,7 @@ export default function Portfolio() {
       >
         <div className="portfolio-marquee-track flex w-max gap-5 pr-5 sm:gap-6 sm:pr-6">
           {slidingPortfolio.map((item, index) => {
-            const image = portfolioImages[item.type] ?? business;
+            const image = portfolioImages[item.type] ?? portfolioImages["Web App"];
             const isDuplicate = index >= portfolio.length;
 
             return (
@@ -116,15 +94,26 @@ export default function Portfolio() {
                     {item.text}
                   </p>
 
-                  <a
-                    href="#contact"
-                    tabIndex={isDuplicate ? -1 : 0}
-                    aria-label={`Discuss a project similar to ${item.title}`}
-                    className="mt-4 inline-flex w-fit items-center gap-2 rounded-md text-sm font-bold text-[#103759] transition-colors duration-200 hover:text-[#0A3A84] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1976D2] focus-visible:ring-offset-2 dark:text-[#93C5FD] dark:hover:text-[#D6B48D]"
-                  >
-                    Discuss a Similar Project
-                    <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
-                  </a>
+                  <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2">
+                    {item.slug ? (
+                      <a
+                        href={`/portfolio/${item.slug}`}
+                        tabIndex={isDuplicate ? -1 : 0}
+                        className="inline-flex w-fit items-center gap-1 text-sm font-bold text-[#103759] underline decoration-transparent underline-offset-4 transition-colors hover:decoration-current dark:text-[#93C5FD]"
+                      >
+                        View Details
+                      </a>
+                    ) : null}
+                    <a
+                      href="#contact"
+                      tabIndex={isDuplicate ? -1 : 0}
+                      aria-label={`Discuss a project similar to ${item.title}`}
+                      className="inline-flex w-fit items-center gap-2 rounded-md text-sm font-bold text-[#103759] transition-colors duration-200 hover:text-[#0A3A84] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1976D2] focus-visible:ring-offset-2 dark:text-[#93C5FD] dark:hover:text-[#D6B48D]"
+                    >
+                      Discuss a Similar Project
+                      <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+                    </a>
+                  </div>
                 </div>
               </article>
             );

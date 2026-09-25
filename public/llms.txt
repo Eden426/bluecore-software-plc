@@ -6,21 +6,50 @@ Bluecore's positioning: "Intelligent Software. Built on a Solid Core." The compa
 
 ## Services
 
-- **System Integration** — connecting tools, data, and workflows into one engine. Best for government offices, factories, and service businesses.
-- **Web Application Development** — modern web platforms for portals, internal systems, and customer dashboards.
-- **AI Solutions** — practical AI assistants and automations that reduce repetitive work, for support teams, admins, and content-heavy departments.
-- **Custom Software Development** — tailored systems for complex operations with unique business rules.
-- **AI & Digital Transformation** — turning manual processes into connected, intelligent digital operations, including roadmaps, governance, training, and iteration so adoption sticks. A strong fit for organizations modernizing legacy systems.
-- **Cloud & DevOps** — reliable cloud deployment, automation, and scalable infrastructure for uptime, release speed, and growth.
-- **Digitization Support** — moving organizations from manual paperwork to digital workflows (service offices, HR, administrative processes).
-- **Software Design & Consulting** — planning, architecture, and UI/UX direction before development begins.
-- **Security & Quality Assurance** — robust testing and secure delivery for regulated industries and mission-critical platforms.
+Each service has its own page at the URL listed, with a longer description of what's included.
+
+- **System Integration** (/services/system-integration) — connecting tools, data, and workflows into one engine. Best for government offices, factories, and service businesses.
+- **Web Application Development** (/services/web-application-development) — modern web platforms for portals, internal systems, and customer dashboards.
+- **AI Solutions** (/services/ai-solutions) — practical AI assistants and automations that reduce repetitive work, for support teams, admins, and content-heavy departments.
+- **Custom Software Development** (/services/custom-software-development) — tailored systems for complex operations with unique business rules.
+- **AI & Digital Transformation** (/services/ai-digital-transformation) — turning manual processes into connected, intelligent digital operations, including roadmaps, governance, training, and iteration so adoption sticks. A strong fit for organizations modernizing legacy systems.
+- **Cloud & DevOps** (/services/cloud-and-devops) — reliable cloud deployment, automation, and scalable infrastructure for uptime, release speed, and growth.
+- **Digitization Support** (/services/digitization-support) — moving organizations from manual paperwork to digital workflows (service offices, HR, administrative processes).
+- **Software Design & Consulting** (/services/software-design-and-consulting) — planning, architecture, and UI/UX direction before development begins.
+- **Security & Quality Assurance** (/services/security-and-quality-assurance) — robust testing and secure delivery for regulated industries and mission-critical platforms.
 
 ## Portfolio
 
-- **Business Management Platform** (Web App) — a secure dashboard for managing operations, reporting, and internal workflows.
-- **Mobile Booking Application** (Mobile App) — a customer-focused mobile app for booking and service management.
-- **Digital Office Workflow** (Digitization) — a paper-to-digital transformation system for office service delivery.
+These are illustrative concept projects that demonstrate Bluecore's approach — not named client case studies. Each has its own page with more detail.
+
+- **Business Management Platform** (/portfolio/business-management-platform, Web App) — a secure dashboard for managing operations, reporting, and internal workflows.
+- **Mobile Booking Application** (/portfolio/mobile-booking-application, Mobile App) — a customer-focused mobile app for booking and service management.
+- **Digital Office Workflow** (/portfolio/digital-office-workflow, Digitization) — a paper-to-digital transformation system for office service delivery.
+- **BlueCore ERP Solutions** (/portfolio/bluecore-erp-solutions, ERP Platform) — a unified ERP system connecting finance, inventory, HR, and reporting.
+- **BlueCore Garage OS** (/portfolio/bluecore-garage-os, Garage Management) — a service-management platform for auto garages.
+- **Hardware and IoT Solutions** (/portfolio/hardware-and-iot-solutions, IoT / Hardware) — connected sensor and device systems for monitoring and automation.
+- **Queue Management System** (/portfolio/queue-management-system, Queue Management) — digital ticketing that shortens wait times at service counters.
+- **Appointment & Scheduling System** (/portfolio/appointment-and-scheduling-system, Appointment Scheduling) — real-time booking and availability management.
+- **E-Commerce Platform** (/portfolio/e-commerce-platform, E-Commerce) — an online storefront with catalog, cart, and checkout.
+- **Payment Gateway Integration** (/portfolio/payment-gateway-integration, Payment Integration) — secure payment processing for cards, mobile money, and bank transfers.
+
+## Team
+
+- **Dani** — Founder & Managing Director
+- **Amenti** — General Manager
+- **Amanuel** — Lead Architect
+- **Eden** — AI and Machine Learning Engineer
+- Plus an on-demand engineering pool and an on-demand marketing & support pool that scale up for high-volume or time-sensitive work.
+- Full profiles: https://blue-core.tech/#team
+
+## Blog
+
+Practical, general-audience articles on software, AI adoption, and digital transformation — not company news.
+
+- Signs Your Organization Is Ready to Go Paperless — /blog/signs-your-organization-is-ready-to-go-paperless
+- Choosing Between an Internal Tool and a Customer Portal — /blog/choosing-between-an-internal-tool-and-a-customer-portal
+- Practical AI Automation, Without the Hype — /blog/practical-ai-automation-without-the-hype
+- Full index: https://blue-core.tech/blog
 
 ## Contact
 
@@ -35,5 +64,7 @@ Bluecore's positioning: "Intelligent Software. Built on a Solid Core." The compa
 - Homepage (all sections live on one page): https://blue-core.tech/
 - About: https://blue-core.tech/#about
 - Services: https://blue-core.tech/#services
+- Team: https://blue-core.tech/#team
 - Portfolio: https://blue-core.tech/#portfolio
+- Blog: https://blue-core.tech/blog
 - Contact: https://blue-core.tech/#contact
