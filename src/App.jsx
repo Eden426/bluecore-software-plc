@@ -6,6 +6,7 @@ import Hero from "./components/Hero";
 import Stats from "./components/Stats";
 import AboutPreview from "./components/AboutPreview";
 import Services from "./components/Services";
+import Team from "./components/Team";
 import Portfolio from "./components/Portfolio";
 import Testimonials from "./components/Testimonials";
 import Contact from "./components/Contact";
@@ -107,7 +108,7 @@ export default function App() {
         ) : path === "/" ? (
           <>
             <Hero /><AboutPreview /><Stats /><Services />
-            <Portfolio /><Testimonials /><Contact />
+            <Team /><Portfolio /><Testimonials /><Contact />
           </>
         ) : <NotFoundPage />}
       </main>

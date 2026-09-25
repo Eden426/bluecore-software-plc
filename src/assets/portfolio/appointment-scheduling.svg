@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 800" role="img" aria-label="Illustration of a calendar with highlighted time slots and a booking confirmation card">
+  <defs>
+    <linearGradient id="apptBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#050B16" />
+      <stop offset="55%" stop-color="#0A1B33" />
+      <stop offset="100%" stop-color="#0F2647" />
+    </linearGradient>
+    <radialGradient id="apptGlowBlue" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#2563EB" stop-opacity="0.34" />
+      <stop offset="100%" stop-color="#2563EB" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="apptGlowGold" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#D6A15B" stop-opacity="0.24" />
+      <stop offset="100%" stop-color="#D6A15B" stop-opacity="0" />
+    </radialGradient>
+    <filter id="apptBlur" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="18" />
+    </filter>
+    <pattern id="apptDots" width="34" height="34" patternUnits="userSpaceOnUse">
+      <circle cx="1.4" cy="1.4" r="1.4" fill="#4C7BC8" fill-opacity="0.16" />
+    </pattern>
+  </defs>
+
+  <rect width="1600" height="800" fill="url(#apptBg)" />
+  <rect width="1600" height="800" fill="url(#apptDots)" />
+  <circle cx="340" cy="200" r="260" fill="url(#apptGlowBlue)" filter="url(#apptBlur)" />
+  <circle cx="1260" cy="620" r="230" fill="url(#apptGlowGold)" filter="url(#apptBlur)" />
+
+  <g transform="translate(120,110)">
+    <polygon points="46,0 92,26 92,78 46,104 0,78 0,26" fill="#0B1E36" stroke="#3B82F6" stroke-width="2.5" />
+    <text x="46" y="66" text-anchor="middle" font-family="Arial, sans-serif" font-weight="800" font-size="42" fill="#93C5FD">bc</text>
+  </g>
+
+  <!-- calendar panel (left) -->
+  <g transform="translate(300,190)">
+    <rect width="480" height="420" rx="22" fill="#0D1F2C" stroke="#2E5C9A" stroke-width="2.5" />
+    <rect width="480" height="80" rx="22" fill="#12293F" />
+    <text x="28" y="50" font-family="Arial, sans-serif" font-weight="700" font-size="26" fill="#F4D7B2">May 2026</text>
+    <circle cx="424" cy="40" r="18" fill="#3B82F6" fill-opacity="0.35" />
+
+    <g font-family="Arial, sans-serif" font-size="15" fill="#7FA8D6">
+      <text x="52" y="112" text-anchor="middle">S</text>
+      <text x="122" y="112" text-anchor="middle">M</text>
+      <text x="192" y="112" text-anchor="middle">T</text>
+      <text x="262" y="112" text-anchor="middle">W</text>
+      <text x="332" y="112" text-anchor="middle">T</text>
+      <text x="402" y="112" text-anchor="middle">F</text>
+      <text x="440" y="112" text-anchor="middle">S</text>
+    </g>
+
+    <g font-family="Arial, sans-serif" font-size="17" fill="#D6D9E3">
+      <circle cx="192" cy="168" r="22" fill="#123049" />
+      <text x="192" y="174" text-anchor="middle" fill="#D6D9E3">10</text>
+      <circle cx="262" cy="168" r="22" fill="#123049" />
+      <text x="262" y="174" text-anchor="middle" fill="#D6D9E3">11</text>
+      <circle cx="332" cy="168" r="24" fill="#3B82F6" />
+      <text x="332" y="175" text-anchor="middle" fill="#0B1E36" font-weight="800">12</text>
+      <circle cx="402" cy="168" r="22" fill="#123049" />
+      <text x="402" y="174" text-anchor="middle" fill="#D6D9E3">13</text>
+    </g>
+
+    <!-- available time slots -->
+    <rect x="40" y="228" width="400" height="46" rx="10" fill="#123049" />
+    <text x="60" y="257" font-family="Arial, sans-serif" font-size="17" fill="#93C5FD">9:00 AM</text>
+    <rect x="330" y="238" width="90" height="26" rx="8" fill="#2E7D46" fill-opacity="0.8" />
+
+    <rect x="40" y="284" width="400" height="46" rx="10" fill="#123049" />
+    <text x="60" y="313" font-family="Arial, sans-serif" font-size="17" fill="#93C5FD">11:30 AM</text>
+    <rect x="330" y="294" width="90" height="26" rx="8" fill="#8B5E3C" fill-opacity="0.8" />
+
+    <rect x="40" y="340" width="400" height="46" rx="10" fill="#123049" stroke="#D6A15B" stroke-width="2" />
+    <text x="60" y="369" font-family="Arial, sans-serif" font-size="17" fill="#F4D7B2">2:00 PM</text>
+    <rect x="330" y="350" width="90" height="26" rx="8" fill="#D6A15B" fill-opacity="0.9" />
+  </g>
+
+  <!-- booking confirmation card (right) -->
+  <g transform="translate(880,260)">
+    <rect width="360" height="260" rx="22" fill="#0D1F2C" stroke="#2E5C9A" stroke-width="2.5" />
+    <circle cx="60" cy="60" r="28" fill="#2E7D46" fill-opacity="0.85" />
+    <path d="M46,60 L56,70 L76,46" stroke="#0D1F2C" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+    <text x="106" y="52" font-family="Arial, sans-serif" font-weight="700" font-size="20" fill="#F4D7B2">Booking Confirmed</text>
+    <text x="106" y="76" font-family="Arial, sans-serif" font-size="15" fill="#7FA8D6">May 12, 2:00 PM</text>
+
+    <rect x="28" y="112" width="304" height="1" fill="#274870" />
+    <rect x="28" y="140" width="220" height="12" rx="4" fill="#D6D9E3" />
+    <rect x="28" y="164" width="160" height="10" rx="3" fill="#5B9BF0" />
+    <rect x="28" y="200" width="304" height="46" rx="10" fill="#3B82F6" fill-opacity="0.9" />
+    <text x="180" y="229" text-anchor="middle" font-family="Arial, sans-serif" font-weight="700" font-size="16" fill="#0B1E36">Add to Calendar</text>
+  </g>
+</svg>

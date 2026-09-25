@@ -47,6 +47,7 @@ const footerNav = [
   { href: "/#home", label: "Home" },
   { href: "/#about", label: "About Us" },
   { href: "/#services", label: "Services" },
+  { href: "/#team", label: "Team" },
   { href: "/#portfolio", label: "Portfolio" },
   { href: "/#contact", label: "Contact" },
 ];
@@ -262,7 +263,7 @@ export default function Footer() {
         <div className="mt-10 flex flex-col items-start justify-between gap-4 border-t border-white/10 pt-6 text-xs text-slate-400 dark:border-white/[0.08] dark:text-[#FAFAFA]/50 sm:mt-12 sm:flex-row sm:items-center sm:pt-8 sm:text-sm">
           <p className="break-words">
             © {new Date().getFullYear()} Bluecore Software PLC. All rights
-            reserved.
+            reserved. Business License No. AACATB/14/672/50471350/2018.
           </p>
 
           <nav

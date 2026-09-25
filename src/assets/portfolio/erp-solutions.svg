@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 800" role="img" aria-label="Illustration of an ERP dashboard connecting finance, inventory, HR, and reporting modules">
+  <defs>
+    <linearGradient id="erpBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#050B16" />
+      <stop offset="55%" stop-color="#0A1B33" />
+      <stop offset="100%" stop-color="#0F2647" />
+    </linearGradient>
+    <radialGradient id="erpGlowBlue" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#2563EB" stop-opacity="0.35" />
+      <stop offset="100%" stop-color="#2563EB" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="erpGlowGold" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#D6A15B" stop-opacity="0.28" />
+      <stop offset="100%" stop-color="#D6A15B" stop-opacity="0" />
+    </radialGradient>
+    <filter id="erpBlur" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="18" />
+    </filter>
+    <pattern id="erpDots" width="34" height="34" patternUnits="userSpaceOnUse">
+      <circle cx="1.4" cy="1.4" r="1.4" fill="#4C7BC8" fill-opacity="0.16" />
+    </pattern>
+  </defs>
+
+  <rect width="1600" height="800" fill="url(#erpBg)" />
+  <rect width="1600" height="800" fill="url(#erpDots)" />
+  <circle cx="1180" cy="180" r="260" fill="url(#erpGlowBlue)" filter="url(#erpBlur)" />
+  <circle cx="300" cy="640" r="240" fill="url(#erpGlowGold)" filter="url(#erpBlur)" />
+
+  <!-- brand hex badge -->
+  <g transform="translate(120,110)">
+    <polygon points="46,0 92,26 92,78 46,104 0,78 0,26" fill="#0B1E36" stroke="#3B82F6" stroke-width="2.5" />
+    <text x="46" y="66" text-anchor="middle" font-family="Arial, sans-serif" font-weight="800" font-size="42" fill="#93C5FD">bc</text>
+  </g>
+
+  <!-- connecting lines from hub to modules -->
+  <g stroke="#5B9BF0" stroke-width="2.5" stroke-opacity="0.55" fill="none">
+    <path d="M800,400 L520,220" />
+    <path d="M800,400 L1120,210" />
+    <path d="M800,400 L520,580" />
+    <path d="M800,400 L1120,600" />
+  </g>
+  <g fill="#8FC1FF">
+    <circle cx="520" cy="220" r="5" />
+    <circle cx="1120" cy="210" r="5" />
+    <circle cx="520" cy="580" r="5" />
+    <circle cx="1120" cy="600" r="5" />
+  </g>
+
+  <!-- central ERP hub -->
+  <g transform="translate(800,400)">
+    <circle r="86" fill="#0F2646" stroke="#3B82F6" stroke-width="3" />
+    <circle r="86" fill="url(#erpGlowBlue)" />
+    <rect x="-46" y="-40" width="92" height="14" rx="4" fill="#93C5FD" />
+    <rect x="-46" y="-16" width="66" height="10" rx="3" fill="#5B9BF0" fill-opacity="0.75" />
+    <rect x="-46" y="4" width="80" height="10" rx="3" fill="#5B9BF0" fill-opacity="0.55" />
+    <rect x="-46" y="24" width="52" height="10" rx="3" fill="#5B9BF0" fill-opacity="0.4" />
+  </g>
+
+  <!-- Finance module (top-left) -->
+  <g transform="translate(400,140)">
+    <rect width="240" height="150" rx="18" fill="#0D1F3A" stroke="#2E5C9A" stroke-width="2" />
+    <circle cx="40" cy="40" r="20" fill="#D6A15B" fill-opacity="0.85" />
+    <text x="40" y="48" text-anchor="middle" font-family="Arial, sans-serif" font-weight="700" font-size="20" fill="#0D1F3A">$</text>
+    <rect x="76" y="28" width="130" height="12" rx="4" fill="#D6D9E3" />
+    <rect x="76" y="48" width="90" height="10" rx="3" fill="#5B9BF0" />
+    <rect x="24" y="90" width="192" height="8" rx="3" fill="#274870" />
+    <rect x="24" y="108" width="150" height="8" rx="3" fill="#274870" />
+    <rect x="24" y="126" width="170" height="8" rx="3" fill="#274870" />
+  </g>
+
+  <!-- Inventory module (top-right) -->
+  <g transform="translate(980,130)">
+    <rect width="240" height="150" rx="18" fill="#0D1F3A" stroke="#2E5C9A" stroke-width="2" />
+    <rect x="24" y="24" width="34" height="34" rx="6" fill="#3B82F6" fill-opacity="0.85" />
+    <rect x="34" y="34" width="14" height="14" fill="#0D1F3A" />
+    <rect x="76" y="28" width="130" height="12" rx="4" fill="#D6D9E3" />
+    <rect x="76" y="48" width="90" height="10" rx="3" fill="#5B9BF0" />
+    <rect x="24" y="90" width="192" height="8" rx="3" fill="#274870" />
+    <rect x="24" y="108" width="130" height="8" rx="3" fill="#274870" />
+    <rect x="24" y="126" width="160" height="8" rx="3" fill="#274870" />
+  </g>
+
+  <!-- HR module (bottom-left) -->
+  <g transform="translate(400,510)">
+    <rect width="240" height="150" rx="18" fill="#0D1F3A" stroke="#2E5C9A" stroke-width="2" />
+    <circle cx="40" cy="40" r="20" fill="#5B9BF0" fill-opacity="0.85" />
+    <circle cx="34" cy="34" r="6" fill="#0D1F3A" />
+    <path d="M22,50 Q40,36 58,50" stroke="#0D1F3A" stroke-width="4" fill="none" />
+    <rect x="76" y="28" width="130" height="12" rx="4" fill="#D6D9E3" />
+    <rect x="76" y="48" width="90" height="10" rx="3" fill="#5B9BF0" />
+    <rect x="24" y="90" width="192" height="8" rx="3" fill="#274870" />
+    <rect x="24" y="108" width="150" height="8" rx="3" fill="#274870" />
+    <rect x="24" y="126" width="120" height="8" rx="3" fill="#274870" />
+  </g>
+
+  <!-- Reports module (bottom-right) -->
+  <g transform="translate(980,520)">
+    <rect width="240" height="150" rx="18" fill="#0D1F3A" stroke="#2E5C9A" stroke-width="2" />
+    <rect x="24" y="24" width="130" height="12" rx="4" fill="#D6D9E3" />
+    <g fill="#3B82F6">
+      <rect x="24" y="70" width="16" height="60" rx="3" />
+      <rect x="48" y="50" width="16" height="80" rx="3" />
+      <rect x="72" y="90" width="16" height="40" rx="3" />
+      <rect x="96" y="34" width="16" height="96" rx="3" fill="#D6A15B" />
+    </g>
+    <rect x="140" y="70" width="76" height="8" rx="3" fill="#274870" />
+    <rect x="140" y="88" width="60" height="8" rx="3" fill="#274870" />
+    <rect x="140" y="106" width="66" height="8" rx="3" fill="#274870" />
+  </g>
+</svg>

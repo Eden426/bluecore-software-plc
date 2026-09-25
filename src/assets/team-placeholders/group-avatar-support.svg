@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Generic icon representing a group of marketing and customer support specialists">
+  <circle cx="100" cy="100" r="100" fill="#3F2D1F" />
+
+  <!-- back-left silhouette -->
+  <g fill="#ffffff" fill-opacity="0.55">
+    <circle cx="58" cy="84" r="26" />
+    <path d="M14,168 C14,130 34,110 58,110 C82,110 102,130 102,168 Z" />
+  </g>
+
+  <!-- back-right silhouette -->
+  <g fill="#ffffff" fill-opacity="0.55">
+    <circle cx="142" cy="84" r="26" />
+    <path d="M98,168 C98,130 118,110 142,110 C166,110 186,130 186,168 Z" />
+  </g>
+
+  <!-- front-center silhouette -->
+  <g fill="#ffffff" fill-opacity="0.94">
+    <circle cx="100" cy="78" r="32" />
+    <path d="M40,176 C40,128 66,102 100,102 C134,102 160,128 160,176 Z" />
+  </g>
+
+  <!-- speech-bubble accent, signals communication/support -->
+  <g transform="translate(140,44)">
+    <circle r="26" fill="#D6A15B" />
+    <path d="M-11,-2 h22 a5,5 0 0 1 5,5 v6 a5,5 0 0 1 -5,5 h-12 l-8,7 v-7 h-2 a5,5 0 0 1 -5,-5 v-6 a5,5 0 0 1 5,-5 Z" fill="#3F2D1F" />
+  </g>
+</svg>

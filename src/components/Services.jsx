@@ -8,16 +8,21 @@ function buildBentoOrder(list) {
   return hero ? [hero, ...rest] : [...list];
 }
 
+// A hand-placed mosaic on lg screens: two row-spanning "feature" tiles
+// (hero + Cloud & DevOps) break up the rhythm with real height variation,
+// not just width, and every row still sums to the full 12-column grid with
+// no repeated width pattern — the closing tile runs wide instead of
+// matching its neighbors, so nothing reads as a uniform grid row.
 const BENTO_SPANS = [
-  "min-w-0 md:col-span-2 lg:col-span-5 lg:row-span-2 min-h-[260px] md:min-h-[280px] lg:min-h-[300px]",
-  "min-w-0 md:col-span-1 lg:col-span-4 min-h-[180px] md:min-h-[200px]",
-  "min-w-0 md:col-span-1 lg:col-span-3 min-h-[180px] md:min-h-[200px]",
-  "min-w-0 md:col-span-1 lg:col-span-4 min-h-[180px] md:min-h-[200px]",
-  "min-w-0 md:col-span-1 lg:col-span-3 min-h-[180px] md:min-h-[200px]",
-  "min-w-0 md:col-span-1 lg:col-span-3 min-h-[160px] md:min-h-[180px]",
-  "min-w-0 md:col-span-1 lg:col-span-3 min-h-[160px] md:min-h-[180px]",
-  "min-w-0 md:col-span-1 lg:col-span-3 min-h-[160px] md:min-h-[180px]",
-  "min-w-0 md:col-span-1 lg:col-span-3 min-h-[160px] md:min-h-[180px]",
+  "min-w-0 md:col-span-2 lg:col-span-5 lg:row-span-2 min-h-[240px] md:min-h-[260px] lg:min-h-[280px]",
+  "min-w-0 md:col-span-1 lg:col-span-4 min-h-[170px] md:min-h-[190px]",
+  "min-w-0 md:col-span-1 lg:col-span-3 min-h-[170px] md:min-h-[190px]",
+  "min-w-0 md:col-span-1 lg:col-span-4 min-h-[170px] md:min-h-[190px]",
+  "min-w-0 md:col-span-1 lg:col-span-3 min-h-[170px] md:min-h-[190px]",
+  "min-w-0 md:col-span-1 lg:col-span-3 lg:row-span-2 min-h-[160px] md:min-h-[180px] lg:min-h-[200px]",
+  "min-w-0 md:col-span-1 lg:col-span-5 min-h-[160px] md:min-h-[180px]",
+  "min-w-0 md:col-span-1 lg:col-span-4 min-h-[160px] md:min-h-[180px]",
+  "min-w-0 md:col-span-2 lg:col-span-9 min-h-[140px] md:min-h-[160px]",
 ];
 
 export default function Services() {
