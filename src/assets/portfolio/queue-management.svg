@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 800" role="img" aria-label="Illustration of a digital queue ticket display with a now-serving counter and waiting line">
+  <defs>
+    <linearGradient id="queueBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#050B16" />
+      <stop offset="55%" stop-color="#0A1B33" />
+      <stop offset="100%" stop-color="#0F2647" />
+    </linearGradient>
+    <radialGradient id="queueGlowBlue" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#2563EB" stop-opacity="0.34" />
+      <stop offset="100%" stop-color="#2563EB" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="queueGlowGold" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#D6A15B" stop-opacity="0.26" />
+      <stop offset="100%" stop-color="#D6A15B" stop-opacity="0" />
+    </radialGradient>
+    <filter id="queueBlur" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="18" />
+    </filter>
+    <pattern id="queueDots" width="34" height="34" patternUnits="userSpaceOnUse">
+      <circle cx="1.4" cy="1.4" r="1.4" fill="#4C7BC8" fill-opacity="0.16" />
+    </pattern>
+  </defs>
+
+  <rect width="1600" height="800" fill="url(#queueBg)" />
+  <rect width="1600" height="800" fill="url(#queueDots)" />
+  <circle cx="1220" cy="200" r="260" fill="url(#queueGlowBlue)" filter="url(#queueBlur)" />
+  <circle cx="320" cy="640" r="240" fill="url(#queueGlowGold)" filter="url(#queueBlur)" />
+
+  <g transform="translate(120,110)">
+    <polygon points="46,0 92,26 92,78 46,104 0,78 0,26" fill="#0B1E36" stroke="#3B82F6" stroke-width="2.5" />
+    <text x="46" y="66" text-anchor="middle" font-family="Arial, sans-serif" font-weight="800" font-size="42" fill="#93C5FD">bc</text>
+  </g>
+
+  <!-- waiting line of people (left) -->
+  <g transform="translate(200,470)" fill="#123049" stroke="#2E5C9A" stroke-width="2">
+    <g transform="translate(0,40)">
+      <circle cx="34" cy="0" r="26" fill="#5B9BF0" fill-opacity="0.85" stroke="none" />
+      <path d="M-6,74 C-6,40 16,24 34,24 C52,24 74,40 74,74 Z" fill="#123049" />
+    </g>
+    <g transform="translate(84,50)">
+      <circle cx="34" cy="0" r="26" fill="#8B5E3C" fill-opacity="0.85" stroke="none" />
+      <path d="M-6,74 C-6,40 16,24 34,24 C52,24 74,40 74,74 Z" fill="#123049" />
+    </g>
+    <g transform="translate(168,44)">
+      <circle cx="34" cy="0" r="26" fill="#D6A15B" fill-opacity="0.85" stroke="none" />
+      <path d="M-6,74 C-6,40 16,24 34,24 C52,24 74,40 74,74 Z" fill="#123049" />
+    </g>
+  </g>
+  <g fill="#7FA8D6" font-family="Arial, sans-serif" font-size="20" font-weight="700">
+    <text x="330" y="700">Waiting</text>
+  </g>
+
+  <!-- now serving display panel (center-right) -->
+  <g transform="translate(760,180)">
+    <rect width="560" height="420" rx="24" fill="#0D1F2C" stroke="#3B82F6" stroke-width="2.5" />
+    <rect x="0" y="0" width="560" height="70" rx="24" fill="#12293F" />
+    <rect x="28" y="26" width="180" height="18" rx="5" fill="#93C5FD" />
+    <circle cx="500" cy="35" r="16" fill="#2E7D46" fill-opacity="0.85" />
+
+    <text x="280" y="150" text-anchor="middle" font-family="Arial, sans-serif" font-size="26" fill="#7FA8D6">Now Serving</text>
+    <rect x="140" y="176" width="280" height="120" rx="18" fill="#123049" stroke="#D6A15B" stroke-width="3" />
+    <text x="280" y="262" text-anchor="middle" font-family="Arial, sans-serif" font-weight="800" font-size="72" fill="#F4D7B2">A12</text>
+
+    <rect x="28" y="332" width="230" height="56" rx="12" fill="#12293F" />
+    <text x="52" y="366" font-family="Arial, sans-serif" font-size="18" fill="#D6D9E3">Counter</text>
+    <text x="200" y="366" text-anchor="end" font-family="Arial, sans-serif" font-weight="800" font-size="20" fill="#93C5FD">03</text>
+
+    <rect x="302" y="332" width="230" height="56" rx="12" fill="#12293F" />
+    <text x="326" y="366" font-family="Arial, sans-serif" font-size="18" fill="#D6D9E3">Avg. wait</text>
+    <text x="504" y="366" text-anchor="end" font-family="Arial, sans-serif" font-weight="800" font-size="20" fill="#8FE0B0">4 min</text>
+  </g>
+</svg>

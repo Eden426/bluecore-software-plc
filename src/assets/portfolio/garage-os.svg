@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 800" role="img" aria-label="Illustration of a garage service-management dashboard with a vehicle and booking schedule">
+  <defs>
+    <linearGradient id="garageBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#070C14" />
+      <stop offset="55%" stop-color="#0E1E30" />
+      <stop offset="100%" stop-color="#1B2A2A" />
+    </linearGradient>
+    <radialGradient id="garageGlowGold" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#D6A15B" stop-opacity="0.32" />
+      <stop offset="100%" stop-color="#D6A15B" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="garageGlowBlue" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#2563EB" stop-opacity="0.3" />
+      <stop offset="100%" stop-color="#2563EB" stop-opacity="0" />
+    </radialGradient>
+    <filter id="garageBlur" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="18" />
+    </filter>
+    <pattern id="garageDots" width="34" height="34" patternUnits="userSpaceOnUse">
+      <circle cx="1.4" cy="1.4" r="1.4" fill="#8B5E3C" fill-opacity="0.18" />
+    </pattern>
+  </defs>
+
+  <rect width="1600" height="800" fill="url(#garageBg)" />
+  <rect width="1600" height="800" fill="url(#garageDots)" />
+  <circle cx="380" cy="200" r="250" fill="url(#garageGlowGold)" filter="url(#garageBlur)" />
+  <circle cx="1260" cy="620" r="240" fill="url(#garageGlowBlue)" filter="url(#garageBlur)" />
+
+  <!-- brand hex badge -->
+  <g transform="translate(120,110)">
+    <polygon points="46,0 92,26 92,78 46,104 0,78 0,26" fill="#0B1E36" stroke="#D6A15B" stroke-width="2.5" />
+    <text x="46" y="66" text-anchor="middle" font-family="Arial, sans-serif" font-weight="800" font-size="42" fill="#F4D7B2">bc</text>
+  </g>
+
+  <!-- vehicle silhouette (left) -->
+  <g transform="translate(200,430)">
+    <ellipse cx="220" cy="205" rx="230" ry="18" fill="#000000" fill-opacity="0.35" />
+    <path d="M20,150 Q40,70 140,60 L300,60 Q380,68 420,150 L420,175 Q420,195 400,195 L360,195 Q356,150 310,150 Q264,150 260,195 L180,195 Q176,150 130,150 Q84,150 80,195 L40,195 Q20,195 20,175 Z"
+      fill="#12293F" stroke="#D6A15B" stroke-width="3" />
+    <rect x="120" y="78" width="180" height="55" rx="10" fill="#0B1E36" stroke="#D6A15B" stroke-width="2" />
+    <line x1="210" y1="78" x2="210" y2="133" stroke="#D6A15B" stroke-width="2" />
+    <circle cx="130" cy="195" r="38" fill="#0B1420" stroke="#D6A15B" stroke-width="4" />
+    <circle cx="130" cy="195" r="14" fill="#D6A15B" />
+    <circle cx="310" cy="195" r="38" fill="#0B1420" stroke="#D6A15B" stroke-width="4" />
+    <circle cx="310" cy="195" r="14" fill="#D6A15B" />
+  </g>
+
+  <!-- wrench icon accent -->
+  <g transform="translate(430,300) rotate(45)">
+    <rect x="-14" y="-90" width="28" height="150" rx="10" fill="#D6A15B" fill-opacity="0.85" />
+    <circle cx="0" cy="-95" r="34" fill="none" stroke="#D6A15B" stroke-width="16" />
+  </g>
+
+  <!-- service dashboard panel (right) -->
+  <g transform="translate(880,140)">
+    <rect width="520" height="480" rx="24" fill="#0D1F2C" stroke="#2E5C9A" stroke-width="2.5" />
+    <rect x="0" y="0" width="520" height="70" rx="24" fill="#12293F" />
+    <rect x="28" y="26" width="150" height="18" rx="5" fill="#F4D7B2" />
+    <circle cx="470" cy="35" r="16" fill="#3B82F6" fill-opacity="0.8" />
+
+    <!-- schedule rows -->
+    <g>
+      <rect x="28" y="104" width="464" height="76" rx="14" fill="#123049" stroke="#D6A15B" stroke-width="1.5" />
+      <circle cx="66" cy="142" r="20" fill="#D6A15B" fill-opacity="0.9" />
+      <rect x="102" y="122" width="200" height="12" rx="4" fill="#F4D7B2" />
+      <rect x="102" y="142" width="140" height="10" rx="3" fill="#7FA8D6" />
+      <rect x="392" y="128" width="76" height="28" rx="8" fill="#2E7D46" fill-opacity="0.85" />
+    </g>
+    <g>
+      <rect x="28" y="196" width="464" height="76" rx="14" fill="#123049" stroke-opacity="0" />
+      <circle cx="66" cy="234" r="20" fill="#3B82F6" fill-opacity="0.85" />
+      <rect x="102" y="214" width="180" height="12" rx="4" fill="#D6D9E3" />
+      <rect x="102" y="234" width="150" height="10" rx="3" fill="#7FA8D6" />
+      <rect x="392" y="220" width="76" height="28" rx="8" fill="#8B5E3C" fill-opacity="0.85" />
+    </g>
+    <g>
+      <rect x="28" y="288" width="464" height="76" rx="14" fill="#123049" stroke-opacity="0" />
+      <circle cx="66" cy="326" r="20" fill="#D6A15B" fill-opacity="0.9" />
+      <rect x="102" y="306" width="210" height="12" rx="4" fill="#D6D9E3" />
+      <rect x="102" y="326" width="120" height="10" rx="3" fill="#7FA8D6" />
+      <rect x="392" y="312" width="76" height="28" rx="8" fill="#2E7D46" fill-opacity="0.85" />
+    </g>
+
+    <!-- footer stat strip -->
+    <rect x="28" y="392" width="150" height="64" rx="12" fill="#12293F" />
+    <text x="103" y="424" text-anchor="middle" font-family="Arial, sans-serif" font-weight="800" font-size="22" fill="#F4D7B2">12</text>
+    <text x="103" y="444" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#7FA8D6">Today</text>
+
+    <rect x="186" y="392" width="150" height="64" rx="12" fill="#12293F" />
+    <text x="261" y="424" text-anchor="middle" font-family="Arial, sans-serif" font-weight="800" font-size="22" fill="#93C5FD">86%</text>
+    <text x="261" y="444" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#7FA8D6">On-time</text>
+
+    <rect x="344" y="392" width="148" height="64" rx="12" fill="#12293F" />
+    <text x="418" y="424" text-anchor="middle" font-family="Arial, sans-serif" font-weight="800" font-size="22" fill="#8FE0B0">4.9</text>
+    <text x="418" y="444" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#7FA8D6">Rating</text>
+  </g>
+</svg>

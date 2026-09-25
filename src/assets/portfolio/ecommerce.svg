@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 800" role="img" aria-label="Illustration of an e-commerce storefront with a product grid and shopping cart">
+  <defs>
+    <linearGradient id="ecomBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#050B16" />
+      <stop offset="55%" stop-color="#0A1B33" />
+      <stop offset="100%" stop-color="#0F2647" />
+    </linearGradient>
+    <radialGradient id="ecomGlowGold" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#D6A15B" stop-opacity="0.3" />
+      <stop offset="100%" stop-color="#D6A15B" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="ecomGlowBlue" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#2563EB" stop-opacity="0.28" />
+      <stop offset="100%" stop-color="#2563EB" stop-opacity="0" />
+    </radialGradient>
+    <filter id="ecomBlur" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="18" />
+    </filter>
+    <pattern id="ecomDots" width="34" height="34" patternUnits="userSpaceOnUse">
+      <circle cx="1.4" cy="1.4" r="1.4" fill="#4C7BC8" fill-opacity="0.16" />
+    </pattern>
+  </defs>
+
+  <rect width="1600" height="800" fill="url(#ecomBg)" />
+  <rect width="1600" height="800" fill="url(#ecomDots)" />
+  <circle cx="1240" cy="200" r="260" fill="url(#ecomGlowGold)" filter="url(#ecomBlur)" />
+  <circle cx="300" cy="640" r="230" fill="url(#ecomGlowBlue)" filter="url(#ecomBlur)" />
+
+  <g transform="translate(120,110)">
+    <polygon points="46,0 92,26 92,78 46,104 0,78 0,26" fill="#0B1E36" stroke="#D6A15B" stroke-width="2.5" />
+    <text x="46" y="66" text-anchor="middle" font-family="Arial, sans-serif" font-weight="800" font-size="42" fill="#F4D7B2">bc</text>
+  </g>
+
+  <!-- storefront panel with product grid -->
+  <g transform="translate(380,160)">
+    <rect width="640" height="470" rx="22" fill="#0D1F2C" stroke="#2E5C9A" stroke-width="2.5" />
+    <rect width="640" height="70" rx="22" fill="#12293F" />
+    <rect x="28" y="26" width="150" height="18" rx="5" fill="#F4D7B2" />
+    <rect x="480" y="24" width="132" height="24" rx="8" fill="#0D1F2C" stroke="#3B82F6" stroke-width="1.5" />
+
+    <!-- product cards -->
+    <g>
+      <rect x="28" y="100" width="180" height="150" rx="14" fill="#123049" />
+      <rect x="44" y="116" width="148" height="90" rx="10" fill="#1D3B5C" />
+      <circle cx="118" cy="161" r="30" fill="#5B9BF0" fill-opacity="0.4" />
+      <rect x="44" y="216" width="110" height="10" rx="3" fill="#D6D9E3" />
+      <rect x="44" y="232" width="60" height="10" rx="3" fill="#D6A15B" />
+    </g>
+    <g>
+      <rect x="230" y="100" width="180" height="150" rx="14" fill="#123049" />
+      <rect x="246" y="116" width="148" height="90" rx="10" fill="#1D3B5C" />
+      <rect x="292" y="136" width="56" height="56" rx="8" fill="#D6A15B" fill-opacity="0.5" />
+      <rect x="246" y="216" width="110" height="10" rx="3" fill="#D6D9E3" />
+      <rect x="246" y="232" width="60" height="10" rx="3" fill="#D6A15B" />
+    </g>
+    <g>
+      <rect x="432" y="100" width="180" height="150" rx="14" fill="#123049" />
+      <rect x="448" y="116" width="148" height="90" rx="10" fill="#1D3B5C" />
+      <polygon points="522,136 552,196 492,196" fill="#3ED6B8" fill-opacity="0.5" />
+      <rect x="448" y="216" width="110" height="10" rx="3" fill="#D6D9E3" />
+      <rect x="448" y="232" width="60" height="10" rx="3" fill="#D6A15B" />
+    </g>
+
+    <g>
+      <rect x="28" y="272" width="180" height="150" rx="14" fill="#123049" />
+      <rect x="44" y="288" width="148" height="90" rx="10" fill="#1D3B5C" />
+      <circle cx="118" cy="333" r="30" fill="#3B82F6" fill-opacity="0.4" />
+      <rect x="44" y="388" width="110" height="10" rx="3" fill="#D6D9E3" />
+      <rect x="44" y="404" width="60" height="10" rx="3" fill="#D6A15B" />
+    </g>
+    <g>
+      <rect x="230" y="272" width="180" height="150" rx="14" fill="#123049" />
+      <rect x="246" y="288" width="148" height="90" rx="10" fill="#1D3B5C" />
+      <rect x="292" y="308" width="56" height="56" rx="8" fill="#5B9BF0" fill-opacity="0.5" />
+      <rect x="246" y="388" width="110" height="10" rx="3" fill="#D6D9E3" />
+      <rect x="246" y="404" width="60" height="10" rx="3" fill="#D6A15B" />
+    </g>
+    <g>
+      <rect x="432" y="272" width="180" height="150" rx="14" fill="#123049" />
+      <rect x="448" y="288" width="148" height="90" rx="10" fill="#1D3B5C" />
+      <polygon points="522,308 552,368 492,368" fill="#D6A15B" fill-opacity="0.5" />
+      <rect x="448" y="388" width="110" height="10" rx="3" fill="#D6D9E3" />
+      <rect x="448" y="404" width="60" height="10" rx="3" fill="#D6A15B" />
+    </g>
+  </g>
+
+  <!-- floating shopping cart badge -->
+  <g transform="translate(1070,540)">
+    <circle r="72" fill="#0D1F2C" stroke="#D6A15B" stroke-width="3" />
+    <g fill="none" stroke="#F4D7B2" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M-30,-24 h10 l10,44 h36 l12,-30 h-52" />
+    </g>
+    <circle cx="-14" cy="30" r="7" fill="#F4D7B2" />
+    <circle cx="24" cy="30" r="7" fill="#F4D7B2" />
+    <circle cx="34" cy="-38" r="16" fill="#2E7D46" />
+    <text x="34" y="-32" text-anchor="middle" font-family="Arial, sans-serif" font-weight="800" font-size="16" fill="#ffffff">3</text>
+  </g>
+</svg>

@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 800" role="img" aria-label="Illustration of a payment card connecting through a secure gateway to a bank with a confirmed transaction">
+  <defs>
+    <linearGradient id="payBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#050B16" />
+      <stop offset="55%" stop-color="#0A1B33" />
+      <stop offset="100%" stop-color="#0F2647" />
+    </linearGradient>
+    <radialGradient id="payGlowBlue" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#2563EB" stop-opacity="0.34" />
+      <stop offset="100%" stop-color="#2563EB" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="payGlowTeal" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#3ED6B8" stop-opacity="0.22" />
+      <stop offset="100%" stop-color="#3ED6B8" stop-opacity="0" />
+    </radialGradient>
+    <filter id="payBlur" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="18" />
+    </filter>
+    <pattern id="payDots" width="34" height="34" patternUnits="userSpaceOnUse">
+      <circle cx="1.4" cy="1.4" r="1.4" fill="#4C7BC8" fill-opacity="0.16" />
+    </pattern>
+  </defs>
+
+  <rect width="1600" height="800" fill="url(#payBg)" />
+  <rect width="1600" height="800" fill="url(#payDots)" />
+  <circle cx="360" cy="200" r="260" fill="url(#payGlowBlue)" filter="url(#payBlur)" />
+  <circle cx="1260" cy="620" r="230" fill="url(#payGlowTeal)" filter="url(#payBlur)" />
+
+  <g transform="translate(120,110)">
+    <polygon points="46,0 92,26 92,78 46,104 0,78 0,26" fill="#0B1E36" stroke="#3ED6B8" stroke-width="2.5" />
+    <text x="46" y="66" text-anchor="middle" font-family="Arial, sans-serif" font-weight="800" font-size="42" fill="#9BEFDB">bc</text>
+  </g>
+
+  <!-- payment card (left) -->
+  <g transform="translate(260,320) rotate(-8)">
+    <rect width="340" height="210" rx="24" fill="#12293F" stroke="#3B82F6" stroke-width="3" />
+    <rect x="30" y="40" width="60" height="42" rx="8" fill="#D6A15B" />
+    <rect x="30" y="120" width="220" height="16" rx="5" fill="#D6D9E3" fill-opacity="0.85" />
+    <rect x="30" y="150" width="120" height="12" rx="4" fill="#7FA8D6" />
+    <circle cx="284" cy="52" r="20" fill="#3ED6B8" fill-opacity="0.7" />
+    <circle cx="304" cy="52" r="20" fill="#3B82F6" fill-opacity="0.5" />
+  </g>
+
+  <!-- connecting dashed transaction path -->
+  <path d="M560,380 C700,300 900,500 1040,410" stroke="#5B9BF0" stroke-width="3" stroke-dasharray="8 10" fill="none" />
+  <circle cx="800" cy="404" r="7" fill="#3ED6B8" />
+
+  <!-- secure gateway lock badge -->
+  <g transform="translate(800,300)">
+    <circle r="60" fill="#0D1F2C" stroke="#3ED6B8" stroke-width="3" />
+    <rect x="-24" y="-6" width="48" height="38" rx="8" fill="#3ED6B8" fill-opacity="0.85" />
+    <path d="M-16,-6 v-14 a16,16 0 0 1 32,0 v14" fill="none" stroke="#3ED6B8" stroke-width="6" />
+  </g>
+
+  <!-- bank / confirmation panel (right) -->
+  <g transform="translate(1000,220)">
+    <rect width="380" height="360" rx="22" fill="#0D1F2C" stroke="#2E5C9A" stroke-width="2.5" />
+    <rect width="380" height="66" rx="22" fill="#12293F" />
+    <rect x="26" y="24" width="150" height="18" rx="5" fill="#93C5FD" />
+    <circle cx="336" cy="33" r="16" fill="#2E7D46" fill-opacity="0.85" />
+
+    <g transform="translate(26,90)">
+      <rect width="328" height="76" rx="14" fill="#123049" />
+      <text x="18" y="30" font-family="Arial, sans-serif" font-size="15" fill="#7FA8D6">Amount</text>
+      <text x="18" y="58" font-family="Arial, sans-serif" font-weight="800" font-size="26" fill="#F4D7B2">$1,245.00</text>
+    </g>
+
+    <g transform="translate(26,182)">
+      <rect width="328" height="60" rx="14" fill="#123049" />
+      <text x="18" y="36" font-family="Arial, sans-serif" font-size="16" fill="#D6D9E3">Card Payment</text>
+      <circle cx="290" cy="30" r="14" fill="#3B82F6" fill-opacity="0.8" />
+    </g>
+    <g transform="translate(26,254)">
+      <rect width="328" height="60" rx="14" fill="#123049" />
+      <text x="18" y="36" font-family="Arial, sans-serif" font-size="16" fill="#D6D9E3">Mobile Money</text>
+      <circle cx="290" cy="30" r="14" fill="#3ED6B8" fill-opacity="0.8" />
+    </g>
+
+    <rect x="26" y="324" width="328" height="10" rx="4" fill="#274870" />
+
+    <g transform="translate(146,300)">
+      <circle r="0" />
+    </g>
+  </g>
+
+  <!-- success check floating badge -->
+  <g transform="translate(1230,208)">
+    <circle r="30" fill="#2E7D46" stroke="#0D1F2C" stroke-width="3" />
+    <path d="M-12,0 L-3,10 L14,-12" stroke="#ffffff" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+  </g>
+</svg>
