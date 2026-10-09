@@ -49,6 +49,7 @@ const footerNav = [
   { href: "/#services", label: "Services" },
   { href: "/#team", label: "Team" },
   { href: "/#portfolio", label: "Portfolio" },
+  { href: "/blog", label: "Blog" },
   { href: "/#contact", label: "Contact" },
 ];
 
