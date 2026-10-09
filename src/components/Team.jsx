@@ -78,7 +78,24 @@ export default function Team() {
                     {member.role}
                   </p>
                   <p className="mt-3 text-sm leading-7 text-[#475569] dark:text-[#FAFAFA]/78">
-                    {member.bio}
+                    {member.link && member.bio.includes(member.link.label)
+                      ? member.bio.split(member.link.label).flatMap((part, idx, arr) =>
+                          idx < arr.length - 1
+                            ? [
+                                part,
+                                <a
+                                  key={idx}
+                                  href={member.link.href}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="font-semibold text-[#103759] underline underline-offset-2 hover:text-[#8B5E3C] dark:text-[#93C5FD]"
+                                >
+                                  {member.link.label}
+                                </a>,
+                              ]
+                            : [part],
+                        )
+                      : member.bio}
                   </p>
                 </div>
               </motion.article>
