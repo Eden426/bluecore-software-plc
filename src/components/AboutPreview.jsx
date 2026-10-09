@@ -21,6 +21,16 @@ export default function AboutPreview() {
           organizations, and institutions.
         </p>
 
+        <p className="mt-4 text-sm leading-7 text-[#475569] text-pretty dark:text-[#FAFAFA]/80 sm:text-base sm:leading-8">
+          A growing part of our mission is{" "}
+          <strong className="font-semibold text-[#103759] dark:text-[#93c5fd]">
+            educational software suites
+          </strong>
+          : modern, locally relevant tools that help Ethiopian schools and
+          universities run more efficiently, teach more effectively, and
+          uphold academic integrity for the next generation of learners.
+        </p>
+
         <a
           href="#portfolio"
           className="mt-6 inline-flex min-h-11 w-full items-center justify-center rounded-xl bg-[#103759] px-6 py-3 text-center text-sm font-semibold text-white hover:bg-[#0A3A84] active:bg-[#082F6B] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1976D2] focus-visible:ring-offset-2 sm:mt-8 sm:w-auto sm:min-h-0 sm:text-base dark:bg-[#8B5E3C] dark:hover:bg-[#A0694A]"
@@ -29,14 +39,46 @@ export default function AboutPreview() {
         </a>
       </div>
 
-      <div className="min-w-0 rounded-2xl border border-[#DCE5EF] bg-white p-4 shadow-[0_18px_45px_rgba(15,23,42,0.08)] sm:rounded-3xl sm:p-6 dark:border-transparent dark:bg-[#8B5E3C] dark:shadow-xl">
-        <div className="rounded-xl border-l-4 border-[#103759] bg-[#EEF4FB] p-5 text-[#06243F] sm:rounded-2xl sm:p-8 dark:border-l-0 dark:bg-[#161110] dark:text-white">
-          <h3 className="text-xl font-bold text-[#06243F] sm:text-2xl dark:text-white">
-            Our Core Promise
+      <div className="min-w-0 space-y-5">
+        <div className="min-w-0 rounded-2xl border border-[#DCE5EF] bg-white p-4 shadow-[0_18px_45px_rgba(15,23,42,0.08)] sm:rounded-3xl sm:p-6 dark:border-transparent dark:bg-[#8B5E3C] dark:shadow-xl">
+          <div className="rounded-xl border-l-4 border-[#103759] bg-[#EEF4FB] p-5 text-[#06243F] sm:rounded-2xl sm:p-8 dark:border-l-0 dark:bg-[#161110] dark:text-white">
+            <h3 className="text-xl font-bold text-[#06243F] sm:text-2xl dark:text-white">
+              Our Core Promise
+            </h3>
+            <p className="mt-3 text-sm leading-7 text-[#475569] sm:mt-4 sm:text-base sm:leading-7 dark:text-white/80">
+              We do not only write code. We design systems that are secure,
+              scalable, maintainable, and useful in real business operations.
+            </p>
+          </div>
+        </div>
+
+        <div className="min-w-0 rounded-2xl border border-[#DCE5EF] bg-white p-5 shadow-[0_18px_45px_rgba(15,23,42,0.08)] sm:rounded-3xl sm:p-8 dark:border-white/10 dark:bg-[#161616]">
+          <p className="text-xs font-bold uppercase tracking-widest text-[#8B5E3C] sm:text-sm">
+            Featured Focus: Education
+          </p>
+          <h3 className="mt-2 text-xl font-bold text-[#06243F] sm:text-2xl dark:text-white">
+            <a
+              href="https://schoolbridge.et/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline-offset-4 hover:underline"
+            >
+              SchoolBridge
+            </a>
           </h3>
-          <p className="mt-3 text-sm leading-7 text-[#475569] sm:mt-4 sm:text-base sm:leading-7 dark:text-white/80">
-            We do not only write code. We design systems that are secure,
-            scalable, maintainable, and useful in real business operations.
+          <p className="mt-3 text-sm leading-7 text-[#475569] sm:text-base dark:text-white/80">
+            A multi-tenant SaaS platform that gives Ethiopian schools one
+            integrated ERP and LMS, bringing administration, teaching, and
+            learning together in a single, affordable system.
+          </p>
+          <p className="mt-4 text-sm font-bold text-[#06243F] sm:text-base dark:text-white">
+            In development: Academic Integrity Module
+          </p>
+          <p className="mt-1 text-sm leading-7 text-[#475569] sm:text-base dark:text-white/80">
+            An AI and plagiarism detection engine for higher education, built
+            for Ethiopian languages. It understands Ge'ez script and homophone
+            variations, and detects copied translations across Amharic and
+            English, helping institutions protect the value of every degree.
           </p>
         </div>
       </div>

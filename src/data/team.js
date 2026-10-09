@@ -36,7 +36,8 @@ export const team = [
   {
     name: "Eden",
     role: "AI and Machine Learning Engineer",
-    bio: "Affiliated with the AI/ML team at INSA, working on machine learning models and data-driven systems. [Placeholder — add specific projects, specializations, or research focus here.]",
+    bio: "Affiliated with the AI/ML team at INSA, building machine learning models and data-driven systems. Created NegaritLex, a free resource helping students research Ethiopian legal texts in Amharic and English.",
+    link: { label: "NegaritLex", href: "https://negaritlex.vercel.app/" },
     photo: edenPhoto,
     initial: "E",
     accent: "#5B3A29",
