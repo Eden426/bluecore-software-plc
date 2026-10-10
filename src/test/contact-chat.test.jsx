@@ -37,6 +37,18 @@ describe("contact form", () => {
     fireEvent.click(screen.getByRole("button", { name: /send message/i }));
     await waitFor(() => expect(screen.getByText(/could not send your message/i)).toBeInTheDocument());
     expect(screen.queryByText(/provider detail/i)).not.toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /send via email app/i })).toBeInTheDocument();
+  });
+  it("provides email app link when config is [SENSITIVE] or unconfigured", async () => {
+    vi.stubEnv("VITE_EMAILJS_SERVICE_ID", "[SENSITIVE]");
+    vi.stubEnv("VITE_EMAILJS_TEMPLATE_ID", "[SENSITIVE]");
+    vi.stubEnv("VITE_EMAILJS_PUBLIC_KEY", "[SENSITIVE]");
+    render(<Contact />); fillContact();
+    fireEvent.click(screen.getByRole("button", { name: /send message/i }));
+    await waitFor(() => expect(screen.getByText(/could not send your message/i)).toBeInTheDocument());
+    expect(emailjs.send).not.toHaveBeenCalled();
+    const mailLink = screen.getByRole("link", { name: /send via email app/i });
+    expect(mailLink).toHaveAttribute("href", expect.stringContaining("mailto:team@blue-core.tech"));
   });
 });
 
