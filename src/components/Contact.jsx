@@ -2,12 +2,45 @@ import { useRef, useState } from "react";
 import emailjs from "@emailjs/browser";
 import { Mail, Phone, MapPin, Clock, CheckCircle, AlertCircle, Loader } from "lucide-react";
 
-const getEmailConfig = () => ({
-  serviceId: import.meta.env.VITE_EMAILJS_SERVICE_ID?.trim(),
-  templateId: import.meta.env.VITE_EMAILJS_TEMPLATE_ID?.trim(),
-  publicKey: import.meta.env.VITE_EMAILJS_PUBLIC_KEY?.trim(),
-});
-const contactEmail = import.meta.env.VITE_CONTACT_EMAIL || "team@blue-core.tech";
+const isConfiguredValue = (val) =>
+  Boolean(
+    val &&
+      typeof val === "string" &&
+      val.trim() &&
+      val.trim() !== "[SENSITIVE]" &&
+      !val.trim().startsWith("your_")
+  );
+
+const getEmailConfig = () => {
+  const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID?.trim();
+  const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID?.trim();
+  const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY?.trim();
+  const isConfigured =
+    isConfiguredValue(serviceId) &&
+    isConfiguredValue(templateId) &&
+    isConfiguredValue(publicKey);
+  return { serviceId, templateId, publicKey, isConfigured };
+};
+
+const rawContactEmail = import.meta.env.VITE_CONTACT_EMAIL?.trim();
+const contactEmail =
+  isConfiguredValue(rawContactEmail) && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(rawContactEmail)
+    ? rawContactEmail
+    : "team@blue-core.tech";
+
+const buildMailtoUrl = (data) => {
+  const subject = encodeURIComponent(`Inquiry from ${data.name?.trim() || "Website Visitor"}`);
+  const lines = [
+    `Name: ${data.name?.trim() || ""}`,
+    `Email: ${data.email?.trim() || ""}`,
+    `Company: ${data.company?.trim() || "Not provided"}`,
+    "",
+    "Message:",
+    data.message?.trim() || "",
+  ];
+  return `mailto:${contactEmail}?subject=${subject}&body=${encodeURIComponent(lines.join("\n"))}`;
+};
+
 const initialForm = { name: "", email: "", company: "", message: "", website: "" };
 
 function validate(form) {
@@ -47,9 +80,18 @@ export default function Contact() {
     }
     lastAttempt.current = now;
     const emailConfig = getEmailConfig();
-    if (!emailConfig.serviceId || !emailConfig.templateId || !emailConfig.publicKey) {
-      if (import.meta.env.DEV) console.error("EmailJS environment variables are not configured.");
-      setSendError("Email service is not configured for this build. Add the VITE_EMAILJS variables and restart or redeploy the site.");
+    if (!emailConfig.isConfigured) {
+      if (import.meta.env.DEV) {
+        console.warn("EmailJS environment variables are not configured or contain [SENSITIVE] placeholders.");
+      }
+      try {
+        if (typeof window !== "undefined") {
+          window.location.href = buildMailtoUrl(form);
+        }
+      } catch (err) {
+        if (import.meta.env.DEV) console.error("Navigation to email client failed:", err);
+      }
+      setSendError("Email delivery service is temporarily unconfigured. Please send your message directly via email below.");
       setStatus("error");
       return;
     }
@@ -72,11 +114,11 @@ export default function Contact() {
       const code = Number(error?.status);
       const detail =
         code === 400
-          ? "The EmailJS service or template configuration is invalid."
+          ? "The EmailJS service or template configuration is invalid. Please send your message via the button below or email us directly."
           : code === 401 || code === 403
-            ? "The EmailJS public key or allowed-domain settings rejected this site."
+            ? "The EmailJS public key or allowed-domain settings rejected this site. Please send your message via the button below."
             : code === 412
-              ? "The connected email provider needs to be reconnected in EmailJS."
+              ? "The connected email provider needs to be reconnected in EmailJS. Please send your message via the button below."
               : "Please try again later or email us directly.";
       setSendError(detail);
       setStatus("error");
@@ -107,8 +149,24 @@ export default function Contact() {
             <div><label className="mb-2 block text-sm font-bold" htmlFor="message">Message</label><textarea id="message" name="message" className="input min-h-36" value={form.message} onChange={handleChange} aria-invalid={Boolean(errors.message)} aria-describedby={errors.message ? "message-error" : undefined} />{errors.message && <p id="message-error" className="mt-1 text-sm text-red-700 dark:text-red-400">{errors.message}</p>}</div>
             <div className="honeypot" aria-hidden="true"><label htmlFor="website">Website</label><input id="website" name="website" tabIndex="-1" autoComplete="off" value={form.website} onChange={handleChange} /></div>
             <div aria-live="polite" aria-atomic="true">
-              {status === "success" && <p className="status-success"><CheckCircle className="h-4 w-4" />Message sent successfully. Thank you for contacting Bluecore.</p>}
-              {status === "error" && <p className="status-error"><AlertCircle className="h-4 w-4 shrink-0" /><span>We could not send your message. {sendError}</span></p>}
+              {status === "success" && <p className="status-success"><CheckCircle className="h-4 w-4 shrink-0" />Message sent successfully. Thank you for contacting Bluecore.</p>}
+              {status === "error" && (
+                <div className="status-error flex flex-col gap-2">
+                  <div className="flex items-start gap-2">
+                    <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
+                    <span>We could not send your message. {sendError}</span>
+                  </div>
+                  <div className="mt-1 flex flex-wrap items-center gap-2">
+                    <a
+                      href={buildMailtoUrl(form)}
+                      className="inline-flex items-center gap-1.5 rounded-lg bg-[#8B5E3C] px-3.5 py-1.5 text-xs font-bold text-white shadow-sm hover:bg-[#A0694A] transition-colors"
+                    >
+                      <Mail className="h-3.5 w-3.5" />
+                      Send via Email App ({contactEmail})
+                    </a>
+                  </div>
+                </div>
+              )}
               {status === "validation" && <p className="status-error"><AlertCircle className="h-4 w-4 shrink-0" />Please correct the highlighted fields.</p>}
               {status === "throttled" && <p className="status-error"><AlertCircle className="h-4 w-4 shrink-0" />Please wait a few seconds before trying again.</p>}
               {status === "loading" && <span className="sr-only">Sending your message.</span>}
