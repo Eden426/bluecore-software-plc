@@ -35,11 +35,13 @@ export default function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-[#DCE5EF] bg-white/95 shadow-[0_4px_18px_rgba(15,23,42,0.05)] backdrop-blur-xl dark:border-white/10 dark:bg-[#09090B]/80 dark:shadow-none">
-      <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
+      <nav aria-label="Main navigation" className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-6 px-4 sm:h-20 sm:px-6 lg:px-8">
         {/* Logo */}
         <a
           href="/#home"
-          className="flex items-center rounded-xl border border-transparent bg-white px-2 py-1.5 transition-colors duration-300 hover:border-[#DCE5EF] sm:px-3 sm:py-2 dark:rounded-2xl dark:border-white/15 dark:bg-white/[0.04] dark:shadow-sm dark:backdrop-blur-md dark:hover:border-[#8B5E3C]/60"
+          aria-label="Bluecore Software PLC home"
+          onClick={() => setIsOpen(false)}
+          className="flex shrink-0 items-center rounded-md"
         >
           <img
             src={logo}
@@ -47,7 +49,7 @@ export default function Navbar() {
             width="600"
             height="200"
             decoding="async"
-            className="block h-9 w-auto dark:hidden sm:h-16"
+            className="block h-10 w-auto dark:hidden sm:h-12"
           />
 
           <img
@@ -56,17 +58,17 @@ export default function Navbar() {
             width="600"
             height="200"
             decoding="async"
-            className="hidden h-9 w-auto dark:block sm:h-16"
+            className="hidden h-10 w-auto dark:block sm:h-12"
           />
         </a>
 
         {/* Desktop links */}
-        <div className="hidden items-center gap-6 lg:flex xl:gap-8">
+        <div className="ml-auto hidden items-center gap-5 xl:flex">
           {navLinks.map((link) => (
             <a
               key={link.label}
               href={link.href}
-              className="text-[17px] font-extrabold tracking-[0.01em] text-[#06243F] transition-colors duration-300 hover:text-[#103759] xl:text-lg dark:text-white/85 dark:hover:text-[#F4D7B2]"
+              className="whitespace-nowrap rounded-sm py-2 text-sm font-medium text-[#06243F] transition-colors duration-200 hover:text-[#1976D2] dark:text-white/85 dark:hover:text-[#F4D7B2]"
             >
               {link.label}
             </a>
@@ -74,35 +76,35 @@ export default function Navbar() {
         </div>
 
         {/* Desktop actions */}
-        <div className="hidden items-center gap-4 lg:flex">
+        <div className="hidden shrink-0 items-center gap-3 xl:flex">
           <button
             type="button"
             onClick={toggleTheme}
-            className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-[#DCE5EF] bg-white text-[#06243F] shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-[#103759]/35 hover:bg-[#EAF3FF] hover:text-[#103759] dark:border-white/10 dark:bg-white/[0.06] dark:text-white dark:hover:text-[#F4D7B2]"
+            className="inline-flex h-11 w-11 items-center justify-center rounded-lg text-[#06243F] transition-colors duration-200 hover:bg-[#EAF3FF] dark:text-white dark:hover:bg-white/[0.06] dark:hover:text-[#F4D7B2]"
             aria-label={`Switch to ${isDark ? "light" : "dark"} mode`}
             aria-pressed={isDark}
           >
             {isDark ? (
-              <Sun aria-hidden="true" className="h-6 w-6" />
+              <Sun aria-hidden="true" className="h-5 w-5" />
             ) : (
-              <Moon aria-hidden="true" className="h-6 w-6" />
+              <Moon aria-hidden="true" className="h-5 w-5" />
             )}
           </button>
 
           <a
             href="/#contact"
-            className="inline-flex min-h-11 items-center justify-center rounded-xl bg-[#103759] px-6 py-2.5 text-base font-bold text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#0A3A84] active:bg-[#082F6B] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1976D2] focus-visible:ring-offset-2 dark:bg-[#8B5E3C] dark:hover:bg-[#A0694A]"
+            className="inline-flex min-h-11 items-center justify-center whitespace-nowrap rounded-lg bg-[#103759] px-5 py-2.5 text-sm font-semibold text-white transition-colors duration-200 hover:bg-[#0A3A84] active:bg-[#082F6B] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1976D2] focus-visible:ring-offset-2 dark:bg-[#8B5E3C] dark:hover:bg-[#A0694A]"
           >
             Get Started
           </a>
         </div>
 
         {/* Mobile actions */}
-        <div className="flex items-center gap-2 lg:hidden">
+        <div className="flex shrink-0 items-center gap-2 xl:hidden">
           <a
             href="/#contact"
             onClick={() => setIsOpen(false)}
-            className="hidden h-10 items-center justify-center rounded-xl bg-[#103759] px-3 text-xs font-bold text-white transition-all duration-300 hover:bg-[#0A3A84] active:bg-[#082F6B] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1976D2] focus-visible:ring-offset-2 sm:inline-flex sm:h-11 sm:px-4 sm:text-sm dark:bg-[#8B5E3C] dark:hover:bg-[#A0694A]"
+            className="hidden h-11 items-center justify-center whitespace-nowrap rounded-lg bg-[#103759] px-4 text-sm font-semibold text-white transition-colors duration-200 hover:bg-[#0A3A84] active:bg-[#082F6B] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1976D2] focus-visible:ring-offset-2 sm:inline-flex dark:bg-[#8B5E3C] dark:hover:bg-[#A0694A]"
           >
             Get Started
           </a>
@@ -141,18 +143,21 @@ export default function Navbar() {
 
       {/* Mobile menu */}
       {isOpen && (
-        <div id="mobile-navigation" className="border-t border-[#DCE5EF] bg-white/98 px-4 py-4 backdrop-blur-xl lg:hidden dark:border-white/10 dark:bg-[#09090B]/95">
-          <div className="mx-auto flex max-w-7xl flex-col gap-3">
+        <div id="mobile-navigation" className="absolute inset-x-0 top-full max-h-[calc(100dvh-5rem)] overflow-y-auto border-b border-t border-[#DCE5EF] bg-white px-4 py-3 shadow-lg sm:px-6 lg:px-8 xl:hidden dark:border-white/10 dark:bg-[#09090B]">
+          <div className="mx-auto flex max-w-7xl flex-col gap-1">
             {navLinks.map((link) => (
               <a
                 key={link.label}
                 href={link.href}
                 onClick={() => setIsOpen(false)}
-                className="rounded-xl px-3 py-3 text-lg font-extrabold text-[#06243F] transition-colors duration-300 hover:bg-[#EAF3FF] hover:text-[#103759] dark:text-white/85 dark:hover:bg-white/[0.06] dark:hover:text-[#F4D7B2]"
+                className="rounded-lg px-3 py-3 text-base font-medium text-[#06243F] transition-colors duration-200 hover:bg-[#EAF3FF] hover:text-[#103759] dark:text-white/85 dark:hover:bg-white/[0.06] dark:hover:text-[#F4D7B2]"
               >
                 {link.label}
               </a>
             ))}
+            <a href="/#contact" onClick={() => setIsOpen(false)} className="mt-2 inline-flex min-h-11 items-center justify-center rounded-lg bg-[#103759] px-4 text-sm font-semibold text-white hover:bg-[#0A3A84] sm:hidden dark:bg-[#8B5E3C] dark:hover:bg-[#A0694A]">
+              Get Started
+            </a>
           </div>
         </div>
       )}
