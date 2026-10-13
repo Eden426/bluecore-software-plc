@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Menu, Moon, Sun, X } from "lucide-react";
 import logo from "../assets/logo.webp";
-import blackLogo from "../assets/black.webp";
+import blackLogo from "../assets/logo-dark.svg";
 import { useTheme } from "../context/useTheme";
 
 const navLinks = [
