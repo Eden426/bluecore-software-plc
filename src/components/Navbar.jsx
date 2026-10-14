@@ -1,9 +1,9 @@
 // Navbar.jsx
 import { useEffect, useRef, useState } from "react";
-import { Menu, Moon, Sun, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import logo from "../assets/logo.webp";
 import blackLogo from "../assets/logo-dark.svg";
-import { useTheme } from "../context/useTheme";
+import ThemeToggle from "./ThemeToggle";
 
 const navLinks = [
   { label: "Home", href: "/#home" },
@@ -17,9 +17,7 @@ const navLinks = [
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const { theme, toggleTheme } = useTheme();
   const menuButtonRef = useRef(null);
-  const isDark = theme === "dark";
 
   useEffect(() => {
     if (!isOpen) return undefined;
@@ -77,19 +75,7 @@ export default function Navbar() {
 
         {/* Desktop actions */}
         <div className="hidden shrink-0 items-center gap-3 xl:flex">
-          <button
-            type="button"
-            onClick={toggleTheme}
-            className="inline-flex h-11 w-11 items-center justify-center rounded-lg text-[#06243F] transition-colors duration-200 hover:bg-[#EAF3FF] dark:text-white dark:hover:bg-white/[0.06] dark:hover:text-[#F4D7B2]"
-            aria-label={`Switch to ${isDark ? "light" : "dark"} mode`}
-            aria-pressed={isDark}
-          >
-            {isDark ? (
-              <Sun aria-hidden="true" className="h-5 w-5" />
-            ) : (
-              <Moon aria-hidden="true" className="h-5 w-5" />
-            )}
-          </button>
+          <ThemeToggle />
 
           <a
             href="/#contact"
@@ -109,19 +95,7 @@ export default function Navbar() {
             Get Started
           </a>
 
-          <button
-            type="button"
-            onClick={toggleTheme}
-            className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[#DCE5EF] bg-white text-[#06243F] shadow-sm transition-all duration-300 hover:border-[#103759]/35 hover:bg-[#EAF3FF] hover:text-[#103759] sm:h-11 sm:w-11 dark:border-white/10 dark:bg-white/[0.06] dark:text-white dark:hover:text-[#F4D7B2]"
-            aria-label={`Switch to ${isDark ? "light" : "dark"} mode`}
-            aria-pressed={isDark}
-          >
-            {isDark ? (
-              <Sun aria-hidden="true" className="h-5 w-5 sm:h-6 sm:w-6" />
-            ) : (
-              <Moon aria-hidden="true" className="h-5 w-5 sm:h-6 sm:w-6" />
-            )}
-          </button>
+          <ThemeToggle />
 
           <button
             ref={menuButtonRef}
