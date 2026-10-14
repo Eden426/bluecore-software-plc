@@ -5,13 +5,13 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:vercel": "vercel dev --listen 3000",
     "build": "node scripts/generate-sitemap.mjs && vite build && node scripts/prerender.mjs",
     "lint": "eslint .",
-    "test": "vitest",
+    "test": "vitest run",
     "preview": "vite preview"
   },
   "dependencies": {
-    "@emailjs/browser": "^4.4.1",
     "@vercel/analytics": "^2.0.1",
     "@vercel/speed-insights": "^2.0.0",
     "framer-motion": "^12.38.0",
