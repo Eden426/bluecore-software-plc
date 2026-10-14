@@ -9,7 +9,7 @@ A single-page site built with React 19, Vite, and Tailwind CSS v4. It's prerende
 - **React 19 + Vite** — client-rendered SPA, no router (single page, anchor navigation)
 - **Tailwind CSS v4** — utility styling, dark mode via a `.dark` class
 - **Framer Motion** — scroll/interaction animations
-- **EmailJS** — contact form submission (no backend server)
+- **Resend + Vercel Function** — server-side contact form submission ([setup checklist](docs/contact-setup.md))
 - **Vitest + Testing Library** — unit/component tests
 - **Vercel Analytics & Speed Insights** — traffic and Core Web Vitals
 

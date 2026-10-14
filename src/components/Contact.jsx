@@ -1,131 +1,61 @@
 import { useRef, useState } from "react";
-import emailjs from "@emailjs/browser";
+import { CONTACT_LIMITS, validateContact } from "../lib/contactValidation";
 import { Mail, Phone, MapPin, Clock, CheckCircle, AlertCircle, Loader } from "lucide-react";
 
-const isConfiguredValue = (val) =>
-  Boolean(
-    val &&
-      typeof val === "string" &&
-      val.trim() &&
-      val.trim() !== "[SENSITIVE]" &&
-      !val.trim().startsWith("your_")
-  );
-
-const getEmailConfig = () => {
-  const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID?.trim();
-  const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID?.trim();
-  const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY?.trim();
-  const isConfigured =
-    isConfiguredValue(serviceId) &&
-    isConfiguredValue(templateId) &&
-    isConfiguredValue(publicKey);
-  return { serviceId, templateId, publicKey, isConfigured };
-};
-
-const rawContactEmail = import.meta.env.VITE_CONTACT_EMAIL?.trim();
-const contactEmail =
-  isConfiguredValue(rawContactEmail) && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(rawContactEmail)
-    ? rawContactEmail
-    : "team@blue-core.tech";
-
-const buildMailtoUrl = (data) => {
-  const subject = encodeURIComponent(`Inquiry from ${data.name?.trim() || "Website Visitor"}`);
-  const lines = [
-    `Name: ${data.name?.trim() || ""}`,
-    `Email: ${data.email?.trim() || ""}`,
-    `Company: ${data.company?.trim() || "Not provided"}`,
-    "",
-    "Message:",
-    data.message?.trim() || "",
-  ];
-  return `mailto:${contactEmail}?subject=${subject}&body=${encodeURIComponent(lines.join("\n"))}`;
-};
-
 const initialForm = { name: "", email: "", company: "", message: "", website: "" };
-
-function validate(form) {
-  const errors = {};
-  if (form.name.trim().length < 2) errors.name = "Please enter your name.";
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) errors.email = "Please enter a valid email address.";
-  if (form.message.trim().length < 10) errors.message = "Please enter a message of at least 10 characters.";
-  return errors;
-}
 
 export default function Contact() {
   const [form, setForm] = useState(initialForm);
   const [status, setStatus] = useState("idle");
   const [sendError, setSendError] = useState("");
   const [errors, setErrors] = useState({});
-  const lastAttempt = useRef(0);
+  const submitting = useRef(false);
+  const submission = useRef(null);
 
   const handleChange = ({ target }) => {
     setForm((current) => ({ ...current, [target.name]: target.value }));
     setErrors((current) => ({ ...current, [target.name]: undefined }));
+    if (status === "success") setStatus("idle");
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setSendError("");
-    if (status === "loading" || form.website) return;
-    const validationErrors = validate(form);
+    if (submitting.current || form.website) return;
+    const validationErrors = validateContact(form);
     if (Object.keys(validationErrors).length) {
       setErrors(validationErrors);
       setStatus("validation");
       return;
     }
-    const now = Date.now();
-    if (now - lastAttempt.current < 5000) {
-      setStatus("throttled");
-      return;
-    }
-    lastAttempt.current = now;
-    const emailConfig = getEmailConfig();
-    if (!emailConfig.isConfigured) {
-      if (import.meta.env.DEV) {
-        console.warn("EmailJS environment variables are not configured or contain [SENSITIVE] placeholders.");
-      }
-      try {
-        if (typeof window !== "undefined") {
-          window.location.href = buildMailtoUrl(form);
-        }
-      } catch (err) {
-        if (import.meta.env.DEV) console.error("Navigation to email client failed:", err);
-      }
-      setSendError("Email delivery service is temporarily unconfigured. Please send your message directly via email below.");
-      setStatus("error");
-      return;
-    }
+    submitting.current = true;
     setStatus("loading");
+    const controller = new AbortController();
+    const timeout = window.setTimeout(() => controller.abort(), 20_000);
     try {
-      await emailjs.send(emailConfig.serviceId, emailConfig.templateId, {
-        name: form.name.trim(),
-        from_name: form.name.trim(),
-        email: form.email.trim(),
-        reply_to: form.email.trim(),
-        to_email: contactEmail,
-        company: form.company.trim() || "Not provided",
-        time: new Date().toLocaleString(),
-        message: form.message.trim(),
-      }, emailConfig.publicKey);
+      const fingerprint = JSON.stringify(form);
+      if (submission.current?.fingerprint !== fingerprint) submission.current = { fingerprint, requestId: crypto.randomUUID() };
+      const response = await fetch("/api/contact", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        signal: controller.signal,
+        body: JSON.stringify({ ...form, requestId: submission.current.requestId }),
+      });
+      if (response.status === 429) { setStatus("throttled"); return; }
+      const result = await response.json();
+      if (response.status !== 202 || result.accepted !== true) throw new Error("Submission not accepted");
       setStatus("success");
       setForm(initialForm);
-    } catch (error) {
-      if (import.meta.env.DEV) console.error("EmailJS submission failed:", error);
-      const code = Number(error?.status);
-      const detail =
-        code === 400
-          ? "The EmailJS service or template configuration is invalid. Please send your message via the button below or email us directly."
-          : code === 401 || code === 403
-            ? "The EmailJS public key or allowed-domain settings rejected this site. Please send your message via the button below."
-            : code === 412
-              ? "The connected email provider needs to be reconnected in EmailJS. Please send your message via the button below."
-              : "Please try again later or email us directly.";
-      setSendError(detail);
+      submission.current = null;
+    } catch {
+      setSendError("Please try again later. Your entries have been kept.");
       setStatus("error");
+    } finally {
+      window.clearTimeout(timeout);
+      submitting.current = false;
     }
   };
 
-  const field = (id, label, props) => <div><label className="mb-2 block text-sm font-bold" htmlFor={id}>{label}</label><input id={id} className="input" aria-invalid={Boolean(errors[id])} aria-describedby={errors[id] ? `${id}-error` : undefined} {...props} value={form[id]} onChange={handleChange} />{errors[id] && <p id={`${id}-error`} className="mt-1 text-sm text-red-700 dark:text-red-400">{errors[id]}</p>}</div>;
+  const field = (id, label, props) => <div><label className="mb-2 block text-sm font-bold" htmlFor={id}>{label}</label><input id={id} className="input" maxLength={CONTACT_LIMITS[id]} required={id !== "company"} disabled={status === "loading"} aria-invalid={Boolean(errors[id])} aria-describedby={errors[id] ? `${id}-error` : undefined} {...props} value={form[id]} onChange={handleChange} />{errors[id] && <p id={`${id}-error`} className="mt-1 text-sm text-red-700 dark:text-red-400">{errors[id]}</p>}</div>;
 
   return (
     <section id="contact" className="bg-white py-12 text-[#06243F] dark:bg-[#09090B] dark:text-[#FAFAFA] sm:py-16 lg:py-20">
@@ -141,38 +71,22 @@ export default function Contact() {
             <ContactItem icon={Clock} title="Working Hours" text="Monday–Friday, 9:00 AM–5:00 PM" />
           </div>
         </div>
-        <form onSubmit={handleSubmit} noValidate className="min-w-0 rounded-2xl border border-slate-200 bg-white p-4 shadow-xl sm:rounded-3xl sm:p-7 dark:border-white/10 dark:bg-[#161616]">
+        <form onSubmit={handleSubmit} noValidate aria-busy={status === "loading"} className="min-w-0 rounded-2xl border border-slate-200 bg-white p-4 shadow-xl sm:rounded-3xl sm:p-7 dark:border-white/10 dark:bg-[#161616]">
           <div className="grid gap-4 sm:gap-5">
             {field("name", "Full name", { name: "name", autoComplete: "name" })}
             {field("email", "Email address", { name: "email", type: "email", autoComplete: "email" })}
             {field("company", "Company or organization (optional)", { name: "company", autoComplete: "organization" })}
-            <div><label className="mb-2 block text-sm font-bold" htmlFor="message">Message</label><textarea id="message" name="message" className="input min-h-36" value={form.message} onChange={handleChange} aria-invalid={Boolean(errors.message)} aria-describedby={errors.message ? "message-error" : undefined} />{errors.message && <p id="message-error" className="mt-1 text-sm text-red-700 dark:text-red-400">{errors.message}</p>}</div>
+            <div><label className="mb-2 block text-sm font-bold" htmlFor="message">Message</label><textarea id="message" name="message" required maxLength={CONTACT_LIMITS.message} disabled={status === "loading"} className="input min-h-36" value={form.message} onChange={handleChange} aria-invalid={Boolean(errors.message)} aria-describedby={errors.message ? "message-error" : undefined} />{errors.message && <p id="message-error" className="mt-1 text-sm text-red-700 dark:text-red-400">{errors.message}</p>}</div>
             <div className="honeypot" aria-hidden="true"><label htmlFor="website">Website</label><input id="website" name="website" tabIndex="-1" autoComplete="off" value={form.website} onChange={handleChange} /></div>
             <div aria-live="polite" aria-atomic="true">
-              {status === "success" && <p className="status-success"><CheckCircle className="h-4 w-4 shrink-0" />Message sent successfully. Thank you for contacting Bluecore.</p>}
-              {status === "error" && (
-                <div className="status-error flex flex-col gap-2">
-                  <div className="flex items-start gap-2">
-                    <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
-                    <span>We could not send your message. {sendError}</span>
-                  </div>
-                  <div className="mt-1 flex flex-wrap items-center gap-2">
-                    <a
-                      href={buildMailtoUrl(form)}
-                      className="inline-flex items-center gap-1.5 rounded-lg bg-[#8B5E3C] px-3.5 py-1.5 text-xs font-bold text-white shadow-sm hover:bg-[#A0694A] transition-colors"
-                    >
-                      <Mail className="h-3.5 w-3.5" />
-                      Send via Email App ({contactEmail})
-                    </a>
-                  </div>
-                </div>
-              )}
+              {status === "success" && <p className="status-success"><CheckCircle aria-hidden="true" className="h-4 w-4" />Your inquiry was accepted for sending. Thank you for contacting Bluecore.</p>}
+              {status === "error" && <p className="status-error"><AlertCircle className="h-4 w-4 shrink-0" /><span>We could not send your message. {sendError}</span></p>}
               {status === "validation" && <p className="status-error"><AlertCircle className="h-4 w-4 shrink-0" />Please correct the highlighted fields.</p>}
-              {status === "throttled" && <p className="status-error"><AlertCircle className="h-4 w-4 shrink-0" />Please wait a few seconds before trying again.</p>}
+              {status === "throttled" && <p className="status-error"><AlertCircle className="h-4 w-4 shrink-0" />Too many requests. Please wait at least a minute before trying again.</p>}
               {status === "loading" && <span className="sr-only">Sending your message.</span>}
             </div>
             <p className="text-sm leading-6 text-slate-600 dark:text-white/70">By submitting, you acknowledge that Bluecore may use the information you provide to respond to your enquiry. See our <a href="/privacy" className="font-bold underline">Privacy Policy</a>.</p>
-            <button type="submit" disabled={status === "loading" || status === "success"} className="flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-[#8B5E3C] py-3 text-sm font-bold text-white hover:bg-[#A0694A] disabled:cursor-not-allowed disabled:opacity-60 sm:text-base">{status === "loading" ? <><Loader className="h-4 w-4 animate-spin" />Sending…</> : status === "success" ? "Message sent" : "Send Message"}</button>
+            <button type="submit" disabled={status === "loading" || status === "success"} className="flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-[#8B5E3C] py-3 text-sm font-bold text-white hover:bg-[#A0694A] disabled:cursor-not-allowed disabled:opacity-60 sm:text-base">{status === "loading" ? <><Loader className="h-4 w-4 animate-spin" />Sending…</> : status === "success" ? "Inquiry accepted" : "Send Message"}</button>
           </div>
         </form>
       </div>

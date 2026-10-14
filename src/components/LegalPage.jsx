@@ -4,7 +4,7 @@ const content = {
     paragraphs: [
       "This website provides information about Bluecore Software PLC and a way to contact the company.",
       "When you submit the contact form, Bluecore may process the name, contact details, company name, and message you provide voluntarily so the team can respond to your enquiry.",
-      "Form submissions are delivered using EmailJS, a third-party email delivery provider. Information you submit may therefore be processed by that provider as part of delivering your message.",
+        "Form submissions are processed through our server-side contact endpoint using Resend, a third-party email provider. Information you submit may therefore be processed by that provider as part of sending your message.",
       "You may contact Bluecore to ask about information you previously submitted. Avoid including sensitive or confidential information in the contact form.",
     ],
   },
