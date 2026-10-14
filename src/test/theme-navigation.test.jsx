@@ -21,16 +21,18 @@ describe("theme and navigation", () => {
     localStorage.setItem("bluecore-theme", "light");
     renderNavbar();
     expect(document.documentElement).not.toHaveClass("dark");
-    expect(screen.getAllByRole("button", { name: /switch to dark mode/i })).toHaveLength(2);
+    expect(screen.getAllByRole("switch", { name: /switch to dark mode/i })).toHaveLength(2);
     expect(localStorage.getItem("bluecore-theme")).toBe("light");
   });
 
   it("restores and toggles the persisted theme", () => {
     localStorage.setItem("bluecore-theme", "dark");
     renderNavbar();
-    const toggles = screen.getAllByRole("button", { name: /switch to light mode/i });
+    const toggles = screen.getAllByRole("switch", { name: /switch to light mode/i });
+    expect(toggles[0]).toHaveAttribute("aria-checked", "true");
     expect(document.documentElement).toHaveClass("dark");
     fireEvent.click(toggles[0]);
+    expect(toggles[0]).toHaveAttribute("aria-checked", "false");
     expect(document.documentElement).not.toHaveClass("dark");
     expect(localStorage.getItem("bluecore-theme")).toBe("light");
   });

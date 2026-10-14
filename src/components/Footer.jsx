@@ -1,6 +1,6 @@
 import { Mail, MapPin, Phone } from "lucide-react";
 import logo from "../assets/logo.webp";
-import blackLogo from "../assets/black.webp";
+import blackLogo from "../assets/logo-dark.svg";
 
 // ── Social icons (SVG inline — lucide-react doesn't ship WhatsApp/Telegram/Facebook) ──
 function WhatsAppIcon({ className }) {
