@@ -96,11 +96,19 @@ describe("contact endpoint", () => {
     fetch.mockResolvedValue(Response.json({}));
     expect((await handler.fetch(request())).status).toBe(502);
   });
-  it("keeps API paths outside the SPA rewrite", () => {
+  it("keeps APIs and Vite development modules outside the SPA rewrite", () => {
     const rewrite = new RegExp(`^${vercel.rewrites[0].source}$`);
     expect(rewrite.test("/api/contact")).toBe(false);
     expect(rewrite.test("/api/unknown")).toBe(false);
+    expect(rewrite.test("/@vite/client")).toBe(false);
+    expect(rewrite.test("/@react-refresh")).toBe(false);
+    expect(rewrite.test("/@id/virtual-module")).toBe(false);
+    expect(rewrite.test("/@fs/C:/project/module")).toBe(false);
+    expect(rewrite.test("/src/main.jsx")).toBe(false);
+    expect(rewrite.test("/src/virtual-module")).toBe(false);
+    expect(rewrite.test("/node_modules/.vite/deps/react.js")).toBe(false);
     expect(rewrite.test("/privacy")).toBe(true);
+    expect(rewrite.test("/services/custom-software-development")).toBe(true);
     expect(rewrite.test("/")).toBe(true);
   });
 });
