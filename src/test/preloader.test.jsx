@@ -15,18 +15,35 @@ describe("boot preloader", () => {
     document.getElementById("site-preloader")?.remove();
     vi.useRealTimers(); vi.restoreAllMocks(); vi.unstubAllGlobals();
   });
-  it("fades and removes the existing overlay once under StrictMode", () => {
+  it("fades and removes the existing overlay once under StrictMode", async () => {
     const overlay = document.getElementById("site-preloader");
     render(<StrictMode><Preloader /></StrictMode>);
-    vi.advanceTimersByTime(632);
+    await Promise.resolve();
+    vi.advanceTimersByTime(2582);
     expect(overlay).toHaveAttribute("data-state", "leaving");
     vi.advanceTimersByTime(240);
     expect(document.getElementById("site-preloader")).toBeNull();
   });
-  it("skips the intro delay for reduced motion", () => {
+  it("skips the intro delay for reduced motion", async () => {
     vi.mocked(window.matchMedia).mockReturnValueOnce({ matches: true });
     render(<Preloader />);
+    await Promise.resolve();
     vi.advanceTimersByTime(40);
+    expect(document.getElementById("site-preloader")).toBeNull();
+  });
+  it("waits for the font before timing the intro", async () => {
+    const overlay = document.getElementById("site-preloader");
+    let ready;
+    overlay.fontReady = new Promise(resolve => { ready = resolve; });
+    render(<Preloader />);
+    vi.advanceTimersByTime(4000);
+    expect(overlay).not.toHaveAttribute("data-state");
+    overlay.dataset.startedAt = "100";
+    ready();
+    await Promise.resolve();
+    vi.advanceTimersByTime(2682);
+    expect(overlay).toHaveAttribute("data-state", "leaving");
+    vi.advanceTimersByTime(240);
     expect(document.getElementById("site-preloader")).toBeNull();
   });
   it("cleans up scheduled work when unmounted", () => {

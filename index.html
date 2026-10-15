@@ -8,19 +8,33 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png" />
     <link rel="manifest" href="/site.webmanifest" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preload" href="/fonts/lobster-two/LobsterTwo-Regular.ttf" as="font" type="font/ttf" crossorigin />
     <style>
-      #site-preloader { position:fixed; inset:0; z-index:99999; display:grid; place-items:center; background:#fff; opacity:1; transition:opacity 220ms ease; }
+      @font-face { font-family:"Lobster Two"; src:url("/fonts/lobster-two/LobsterTwo-Regular.ttf") format("truetype"); font-weight:400; font-style:normal; font-display:optional; }
+      #site-preloader { position:fixed; inset:0; z-index:99999; display:grid; place-items:center; overflow:hidden; background:#fff; opacity:1; transition:opacity 240ms ease; }
       .dark #site-preloader { background:#09090b; }
       #site-preloader[data-state="leaving"] { opacity:0; pointer-events:none; }
-      .boot-brand { width:min(240px,65vw); text-align:center; }
-      .boot-logo { display:block; width:100%; height:auto; aspect-ratio:3/1; }
-      .boot-logo-dark, .dark .boot-logo-light { display:none; }
-      .dark .boot-logo-dark { display:block; }
-      .boot-track { display:block; position:relative; height:2px; overflow:hidden; margin:24px 0 0; border-radius:2px; background:#dce5ef; }
-      .dark .boot-track { background:#302821; }
-      .boot-track::after { content:""; position:absolute; inset:0; background:linear-gradient(90deg,#1976d2,#8b5e3c); transform-origin:left; animation:boot-progress 900ms ease-out both; }
-      @keyframes boot-progress { from { transform:scaleX(.08); } to { transform:scaleX(1); } }
-      @media(prefers-reduced-motion:reduce) { #site-preloader { transition:none; } .boot-track::after { animation:none; } }
+      .boot-brand { position:relative; display:flex; min-height:430px; flex-direction:column; align-items:center; justify-content:center; padding:0 24px; text-align:center; visibility:hidden; }
+      #site-preloader[data-ready] .boot-brand { visibility:visible; }
+      .boot-ring { position:absolute; left:50%; top:42%; width:256px; height:256px; box-sizing:border-box; border:5px solid #875131cc; border-right-color:#06243f; border-top-color:#382517; border-radius:50%; animation:boot-ring 2.6s ease-in-out both; }
+      .dark .boot-ring { border-top-color:#ffffffd9; }
+      .boot-word { position:relative; z-index:1; display:flex; align-items:flex-end; justify-content:center; margin:24px 0 0; font:400 72px/1 "Lobster Two",cursive; letter-spacing:-.13em; transform:scaleX(1.38); }
+      .boot-word span { display:inline-block; transform-origin:bottom; color:#01213f; --base-scale:1; --stretch-scale:1.78; animation:boot-letter 1.1s ease-out both; animation-delay:calc(var(--i) * .13s); }
+      .boot-word .boot-tall { --base-scale:1.42; --stretch-scale:2.45; }
+      .boot-word span:nth-child(n+5) { color:#875131; }
+      .boot-line { position:relative; z-index:1; margin-top:48px; height:2px; width:256px; border-radius:2px; background:#875131; animation:boot-line 1.4s ease-out 1.25s both; }
+      .boot-slogan { position:relative; z-index:1; margin:32px 0 0; font:600 10px/1.5 Inter,system-ui,sans-serif; text-transform:uppercase; letter-spacing:.32em; color:#06243f99; animation:boot-slogan 1s ease-out 1.55s both; }
+      .dark .boot-slogan { color:#fff9; }
+      #site-preloader:not([data-ready]) .boot-brand * { animation-play-state:paused; }
+      @keyframes boot-ring { 0% { transform:translate(-50%,-50%) rotate(0deg) scale(.9); opacity:0; } 30% { opacity:1; } 100% { transform:translate(-50%,-50%) rotate(360deg) scale(1); opacity:1; } }
+      @keyframes boot-letter { 0% { opacity:0; transform:scaleY(var(--base-scale)); } 25% { opacity:1; transform:scaleY(var(--base-scale)); } 58% { transform:scaleY(var(--stretch-scale)); } 82%,100% { opacity:1; transform:scaleY(var(--base-scale)); } }
+      @keyframes boot-line { from { transform:scaleX(0); opacity:0; } 35% { opacity:1; } to { transform:scaleX(1); opacity:1; } }
+      @keyframes boot-slogan { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+      @media(max-width:639px) { .boot-word { font-size:clamp(48px,16vw,72px); } }
+      @media(min-width:640px) { .boot-ring { width:320px; height:320px; } .boot-word { margin-top:32px; font-size:128px; } .boot-line { width:384px; } .boot-slogan { font-size:14px; } }
+      @media(min-width:768px) { .boot-word { font-size:160px; } }
+      @media(min-width:1024px) { .boot-word { font-size:176px; } }
+      @media(prefers-reduced-motion:reduce) { #site-preloader { transition:none; } .boot-brand * { animation:none!important; } .boot-ring { transform:translate(-50%,-50%); } .boot-word span { transform:scaleY(var(--base-scale)); } }
       @media print { #site-preloader { display:none; } }
     </style>
     <noscript><style>#site-preloader{display:none!important}</style></noscript>
@@ -85,16 +99,28 @@
   <body>
     <template id="site-preloader-template">
       <div id="site-preloader" role="status" aria-label="Loading Bluecore website">
-        <div class="boot-brand">
-          <img class="boot-logo boot-logo-light" src="/src/assets/logo.webp" alt="" width="600" height="200" fetchpriority="high" />
-          <img class="boot-logo boot-logo-dark" src="/src/assets/logo-dark.svg" alt="" width="600" height="200" fetchpriority="high" />
-          <span class="boot-track" aria-hidden="true"></span>
+        <div class="boot-brand" aria-hidden="true">
+          <div class="boot-ring"></div>
+          <div class="boot-word">
+            <span class="boot-tall" style="--i:0">B</span><span style="--i:1">L</span><span style="--i:2">U</span><span style="--i:3">E</span><span class="boot-tall" style="--i:4">C</span><span style="--i:5">O</span><span style="--i:6">R</span><span style="--i:7">E</span>
+          </div>
+          <div class="boot-line"></div>
+          <p class="boot-slogan">Smart Software. Solid Core.</p>
         </div>
       </div>
     </template>
     <script>
       if (!document.getElementById("site-preloader")) {
         document.body.prepend(document.getElementById("site-preloader-template").content.cloneNode(true));
+        const overlay = document.getElementById("site-preloader");
+        // Start once the original font is ready, without a late typeface swap.
+        overlay.fontReady = Promise.race([
+          document.fonts.load('400 72px "Lobster Two"').catch(() => {}),
+          new Promise(resolve => window.setTimeout(resolve, 1000)),
+        ]).then(() => {
+          overlay.dataset.ready = "";
+          overlay.dataset.startedAt = String(performance.now());
+        });
         // Release the page even if the app bundle cannot load.
         window.setTimeout(() => document.getElementById("site-preloader")?.remove(), 6000);
       }
