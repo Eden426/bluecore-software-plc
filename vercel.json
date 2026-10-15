@@ -20,5 +20,5 @@
     }
   ],
   "functions": { "api/contact.js": { "maxDuration": 15 } },
-  "rewrites": [{ "source": "/((?!api(?:/|$))(?!.*\\.).*)", "destination": "/index.html" }]
+  "rewrites": [{ "source": "/((?!api(?:/|$)|@|src(?:/|$)|node_modules(?:/|$))(?!.*\\.).*)", "destination": "/index.html" }]
 }
