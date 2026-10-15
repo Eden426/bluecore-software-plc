@@ -112,11 +112,16 @@ async function renderRoute(page, route) {
   await page.goto(`http://localhost:${PORT}${route}`, { waitUntil: "networkidle0" });
   await page.waitForFunction(() => (document.querySelector("#root")?.childElementCount ?? 0) > 0, {
     timeout: 15000,
+    polling: 100,
   });
-  // Keep the reusable template, never a live or half-faded overlay.
-  await page.waitForFunction(() => !document.getElementById("site-preloader"), { timeout: 7000 });
-
-  const html = await page.evaluate(() => `<!doctype html>\n${document.documentElement.outerHTML}`);
+  // The boot animation is decorative, not a signal that route content is ready.
+  // Serverless Chromium can pause animation frames; serialize a clean copy
+  // instead of waiting for the overlay's browser animation/timers to finish.
+  const html = await page.evaluate(() => {
+    const snapshot = document.documentElement.cloneNode(true);
+    snapshot.querySelector("#site-preloader")?.remove();
+    return `<!doctype html>\n${snapshot.outerHTML}`;
+  });
   const outPath = route === "/" ? join(DIST_DIR, "index.html") : join(DIST_DIR, route.slice(1), "index.html");
   await mkdir(dirname(outPath), { recursive: true });
   await writeFile(outPath, html);
