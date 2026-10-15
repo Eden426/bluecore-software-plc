@@ -30,6 +30,8 @@ Per-route static files only work in production because of how `vercel.json`'s SP
 
 `scripts/prerender.mjs` launches its browser two different ways depending on environment (see `launchBrowser()`): on CI/Vercel (`process.env.CI` or `process.env.VERCEL` set) it uses `puppeteer-core` + `@sparticuz/chromium`, a Chromium build statically compiled for restricted serverless/CI Linux containers — plain `puppeteer`'s bundled Chromium fails there with missing shared libraries (`libnspr4.so` etc.). Locally it falls back to full `puppeteer`, which downloads a Chromium that runs on the host OS (`@sparticuz/chromium`'s binary is Linux-only and can't launch on macOS). Both packages are devDependencies for this reason — don't remove either without checking which environments still need it.
 
+The branded boot overlay is created from `#site-preloader-template` in `index.html`, outside React's `#root`, so mounting over prerendered content cannot restart its animation. `Preloader.jsx` dismisses the existing overlay after the first painted app frames; the inline fallback also releases it if the app bundle fails. Prerendering waits for dismissal before serializing, preserving the template and boot script but never a half-animated overlay. Linux CI/Vercel uses serverless Chromium; Windows/macOS builds use the host-compatible Puppeteer browser, including local `vercel build`.
+
 ### Deployment
 
 `.github/workflows/deploy.yml` runs on every push and PR to `main` with two jobs:

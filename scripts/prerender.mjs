@@ -36,7 +36,7 @@ const ROUTES = [
 // (e.g. macOS dev machines) that binary can't run at all, so we fall back to
 // full `puppeteer`, which downloads a Chromium that works on the host OS.
 async function launchBrowser() {
-  if (process.env.CI || process.env.VERCEL) {
+  if (process.platform === "linux" && (process.env.CI || process.env.VERCEL)) {
     const [{ default: chromium }, { default: puppeteer }] = await Promise.all([
       import("@sparticuz/chromium"),
       import("puppeteer-core"),
@@ -113,6 +113,8 @@ async function renderRoute(page, route) {
   await page.waitForFunction(() => (document.querySelector("#root")?.childElementCount ?? 0) > 0, {
     timeout: 15000,
   });
+  // Keep the reusable template, never a live or half-faded overlay.
+  await page.waitForFunction(() => !document.getElementById("site-preloader"), { timeout: 7000 });
 
   const html = await page.evaluate(() => `<!doctype html>\n${document.documentElement.outerHTML}`);
   const outPath = route === "/" ? join(DIST_DIR, "index.html") : join(DIST_DIR, route.slice(1), "index.html");

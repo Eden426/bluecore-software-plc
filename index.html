@@ -8,12 +8,22 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png" />
     <link rel="manifest" href="/site.webmanifest" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Lobster+Two:wght@400&display=swap"
-      rel="stylesheet"
-    />
+    <style>
+      #site-preloader { position:fixed; inset:0; z-index:99999; display:grid; place-items:center; background:#fff; opacity:1; transition:opacity 220ms ease; }
+      .dark #site-preloader { background:#09090b; }
+      #site-preloader[data-state="leaving"] { opacity:0; pointer-events:none; }
+      .boot-brand { width:min(240px,65vw); text-align:center; }
+      .boot-logo { display:block; width:100%; height:auto; aspect-ratio:3/1; }
+      .boot-logo-dark, .dark .boot-logo-light { display:none; }
+      .dark .boot-logo-dark { display:block; }
+      .boot-track { display:block; position:relative; height:2px; overflow:hidden; margin:24px 0 0; border-radius:2px; background:#dce5ef; }
+      .dark .boot-track { background:#302821; }
+      .boot-track::after { content:""; position:absolute; inset:0; background:linear-gradient(90deg,#1976d2,#8b5e3c); transform-origin:left; animation:boot-progress 900ms ease-out both; }
+      @keyframes boot-progress { from { transform:scaleX(.08); } to { transform:scaleX(1); } }
+      @media(prefers-reduced-motion:reduce) { #site-preloader { transition:none; } .boot-track::after { animation:none; } }
+      @media print { #site-preloader { display:none; } }
+    </style>
+    <noscript><style>#site-preloader{display:none!important}</style></noscript>
     <meta name="theme-color" content="#09090b" />
 
     <title>Bluecore Software PLC | Custom Software, AI &amp; Digital Transformation</title>
@@ -73,6 +83,22 @@
     </script>
   </head>
   <body>
+    <template id="site-preloader-template">
+      <div id="site-preloader" role="status" aria-label="Loading Bluecore website">
+        <div class="boot-brand">
+          <img class="boot-logo boot-logo-light" src="/src/assets/logo.webp" alt="" width="600" height="200" fetchpriority="high" />
+          <img class="boot-logo boot-logo-dark" src="/src/assets/logo-dark.svg" alt="" width="600" height="200" fetchpriority="high" />
+          <span class="boot-track" aria-hidden="true"></span>
+        </div>
+      </div>
+    </template>
+    <script>
+      if (!document.getElementById("site-preloader")) {
+        document.body.prepend(document.getElementById("site-preloader-template").content.cloneNode(true));
+        // Release the page even if the app bundle cannot load.
+        window.setTimeout(() => document.getElementById("site-preloader")?.remove(), 6000);
+      }
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
