@@ -1,6 +1,7 @@
 import { Mail, MapPin, Phone } from "lucide-react";
 import logo from "../assets/logo.webp";
 import blackLogo from "../assets/logo-dark.svg";
+import { trackCTA, trackDirectContact, trackNavigation, trackOutboundLink } from "../lib/analytics";
 
 // ── Social icons (SVG inline — lucide-react doesn't ship WhatsApp/Telegram/Facebook) ──
 function WhatsAppIcon({ className }) {
@@ -132,6 +133,7 @@ export default function Footer() {
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={() => trackOutboundLink(label, href)}
                   aria-label={label}
                   className={`flex h-8 w-8 items-center justify-center rounded-md border border-white/15 text-slate-300 transition-colors ${color} hover:border-white/30 sm:h-9 sm:w-9 sm:rounded-lg dark:border-white/10`}
                 >
@@ -153,7 +155,11 @@ export default function Footer() {
             <ul className="mt-3 space-y-2 text-xs sm:mt-4 sm:space-y-2.5 sm:text-sm">
               {footerNav.map(({ href, label }) => (
                 <li key={href}>
-                  <a href={href} className={linkClass}>
+                  <a
+                    href={href}
+                    onClick={() => trackNavigation(label, href, "footer")}
+                    className={linkClass}
+                  >
                     {label}
                   </a>
                 </li>
@@ -170,7 +176,11 @@ export default function Footer() {
             <ul className="mt-3 space-y-2 text-xs sm:mt-4 sm:space-y-2.5 sm:text-sm">
               {footerServices.map((item) => (
                 <li key={item}>
-                  <a href="/#services" className={linkClass}>
+                  <a
+                    href="/#services"
+                    onClick={() => trackNavigation(item, "/#services", "footer_service")}
+                    className={linkClass}
+                  >
                     {item}
                   </a>
                 </li>
@@ -188,6 +198,7 @@ export default function Footer() {
               <li>
                 <a
                   href="https://maps.google.com/?q=Addis+Ababa+Ethiopia"
+                  onClick={() => trackDirectContact("map", "Addis Ababa")}
                   className={`flex items-start gap-1.5 sm:gap-3 ${linkClass}`}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -203,6 +214,7 @@ export default function Footer() {
               <li>
                 <a
                   href="tel:+251978939312"
+                  onClick={() => trackDirectContact("phone", "+251978939312")}
                   className={`flex items-start gap-1.5 sm:gap-3 ${linkClass}`}
                 >
                   <Phone
@@ -216,6 +228,7 @@ export default function Footer() {
               <li>
                 <a
                   href="https://whatsapp.com/channel/0029Vb85HmjEFeXqcitfFW0K"
+                  onClick={() => trackDirectContact("whatsapp", "WhatsApp")}
                   target="_blank"
                   rel="noopener noreferrer"
                   className={`flex items-start gap-1.5 sm:gap-3 ${linkClass}`}
@@ -228,6 +241,7 @@ export default function Footer() {
               <li>
                 <a
                   href="https://t.me/bluecore_software_plc"
+                  onClick={() => trackDirectContact("telegram", "Telegram")}
                   target="_blank"
                   rel="noopener noreferrer"
                   className={`flex items-start gap-1.5 sm:gap-3 ${linkClass}`}
@@ -240,6 +254,7 @@ export default function Footer() {
               <li>
                 <a
                   href="mailto:team@blue-core.tech"
+                  onClick={() => trackDirectContact("email", "team@blue-core.tech")}
                   className={`flex items-start gap-1.5 sm:gap-3 ${linkClass}`}
                 >
                   <Mail
@@ -253,6 +268,7 @@ export default function Footer() {
 
             <a
               href="/#contact"
+              onClick={() => trackCTA("Get in touch", "footer", { target: "#contact" })}
               className="mt-4 inline-flex rounded-md bg-[#8B5E3C] px-2 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-[#A0694A] sm:mt-6 sm:rounded-xl sm:px-4 sm:py-2.5 sm:text-sm"
             >
               Get in touch
@@ -271,13 +287,25 @@ export default function Footer() {
             className="flex flex-wrap items-center gap-x-6 gap-y-2"
             aria-label="Legal"
           >
-            <a href="/privacy" className={linkClass}>
+            <a
+              href="/privacy"
+              onClick={() => trackNavigation("Privacy", "/privacy", "footer_legal")}
+              className={linkClass}
+            >
               Privacy
             </a>
-            <a href="/terms" className={linkClass}>
+            <a
+              href="/terms"
+              onClick={() => trackNavigation("Terms", "/terms", "footer_legal")}
+              className={linkClass}
+            >
               Terms
             </a>
-            <a href="/support" className={linkClass}>
+            <a
+              href="/support"
+              onClick={() => trackNavigation("Support", "/support", "footer_legal")}
+              className={linkClass}
+            >
               Support
             </a>
           </nav>

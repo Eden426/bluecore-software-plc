@@ -1,6 +1,7 @@
 import { CheckCircle2 } from "lucide-react";
 import JsonLd from "./JsonLd";
 import { serviceIcons } from "../data/serviceIcons";
+import { trackCTA } from "../lib/analytics";
 import {
   SITE_URL,
   buildBreadcrumb,
@@ -63,6 +64,7 @@ export default function ServiceDetail({ service }) {
       <div className="mt-10 flex flex-wrap items-center gap-4">
         <a
           href="/#contact"
+          onClick={() => trackCTA("Discuss This Service", "service_detail", { service: title, slug: service.slug })}
           className="inline-flex min-h-12 items-center justify-center rounded-xl bg-[#8B5E3C] px-6 py-3 font-bold text-white transition-colors hover:bg-[#70492F]"
         >
           Discuss This Service

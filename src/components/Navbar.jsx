@@ -4,6 +4,7 @@ import { Menu, X } from "lucide-react";
 import logo from "../assets/logo.webp";
 import blackLogo from "../assets/logo-dark.svg";
 import ThemeToggle from "./ThemeToggle";
+import { trackCTA, trackNavigation } from "../lib/analytics";
 
 const navLinks = [
   { label: "Home", href: "/#home" },
@@ -67,6 +68,7 @@ export default function Navbar() {
             <a
               key={link.label}
               href={link.href}
+              onClick={() => trackNavigation(link.label, link.href, "navbar_desktop")}
               className="navbar-text-link"
             >
               {link.label}
@@ -80,6 +82,7 @@ export default function Navbar() {
 
           <a
             href="/#contact"
+            onClick={() => trackCTA("Get Started", "navbar_desktop", { target: "#contact" })}
             className="inline-flex min-h-11 items-center justify-center whitespace-nowrap rounded-lg bg-[#103759] px-5 py-2.5 text-sm font-semibold text-white transition-colors duration-200 hover:bg-[#0A3A84] active:bg-[#082F6B] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1976D2] focus-visible:ring-offset-2 dark:bg-[#8B5E3C] dark:hover:bg-[#A0694A]"
           >
             Get Started
@@ -90,7 +93,10 @@ export default function Navbar() {
         <div className="flex shrink-0 items-center gap-2 xl:hidden">
           <a
             href="/#contact"
-            onClick={() => setIsOpen(false)}
+            onClick={() => {
+              setIsOpen(false);
+              trackCTA("Get Started", "navbar_mobile_header", { target: "#contact" });
+            }}
             className="hidden h-11 items-center justify-center whitespace-nowrap rounded-lg bg-[#103759] px-4 text-sm font-semibold text-white transition-colors duration-200 hover:bg-[#0A3A84] active:bg-[#082F6B] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1976D2] focus-visible:ring-offset-2 sm:inline-flex dark:bg-[#8B5E3C] dark:hover:bg-[#A0694A]"
           >
             Get Started
@@ -101,7 +107,11 @@ export default function Navbar() {
           <button
             ref={menuButtonRef}
             type="button"
-            onClick={() => setIsOpen((current) => !current)}
+            onClick={() => {
+              const next = !isOpen;
+              setIsOpen(next);
+              trackNavigation("Mobile Menu", next ? "open" : "close", "menu_toggle");
+            }}
             className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[#DCE5EF] bg-white text-[#06243F] hover:bg-[#EAF3FF] hover:text-[#103759] sm:h-11 sm:w-11 dark:border-white/10 dark:bg-white/[0.06] dark:text-white"
             aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
             aria-expanded={isOpen}
@@ -124,13 +134,23 @@ export default function Navbar() {
               <a
                 key={link.label}
                 href={link.href}
-                onClick={() => setIsOpen(false)}
+                onClick={() => {
+                  setIsOpen(false);
+                  trackNavigation(link.label, link.href, "navbar_mobile");
+                }}
                 className="navbar-text-link navbar-text-link-mobile"
               >
                 {link.label}
               </a>
             ))}
-            <a href="/#contact" onClick={() => setIsOpen(false)} className="mt-2 inline-flex min-h-11 items-center justify-center rounded-lg bg-[#103759] px-4 text-sm font-semibold text-white hover:bg-[#0A3A84] sm:hidden dark:bg-[#8B5E3C] dark:hover:bg-[#A0694A]">
+            <a
+              href="/#contact"
+              onClick={() => {
+                setIsOpen(false);
+                trackCTA("Get Started", "navbar_mobile_drawer", { target: "#contact" });
+              }}
+              className="mt-2 inline-flex min-h-11 items-center justify-center rounded-lg bg-[#103759] px-4 text-sm font-semibold text-white hover:bg-[#0A3A84] sm:hidden dark:bg-[#8B5E3C] dark:hover:bg-[#A0694A]"
+            >
               Get Started
             </a>
           </div>

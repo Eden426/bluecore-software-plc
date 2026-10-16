@@ -2,6 +2,7 @@ import { ArrowUpRight } from "lucide-react";
 import { blog } from "../data/blog";
 import JsonLd from "./JsonLd";
 import { SITE_URL, buildBlogListGraph, buildBreadcrumb, buildGraph } from "../lib/structuredData";
+import { trackNavigation } from "../lib/analytics";
 
 const dateFormatter = new Intl.DateTimeFormat("en-US", { year: "numeric", month: "long", day: "numeric", timeZone: "UTC" });
 
@@ -33,6 +34,7 @@ export default function BlogIndex() {
           <a
             key={post.slug}
             href={`/blog/${post.slug}`}
+            onClick={() => trackNavigation(post.title, `/blog/${post.slug}`, "blog_index")}
             className="group block rounded-2xl border border-[#DCE5EF] bg-white p-5 transition-colors hover:border-[#103759]/30 dark:border-white/10 dark:bg-[#161616] dark:hover:border-[#8B5E3C]/40 sm:p-6"
           >
             <p className="text-xs font-bold uppercase tracking-widest text-[#103759] dark:text-[#93C5FD]">

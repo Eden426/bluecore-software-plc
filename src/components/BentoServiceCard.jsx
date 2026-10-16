@@ -1,6 +1,7 @@
 import { motion, useReducedMotion, useSpring } from "framer-motion";
 import { useCallback, useRef, useState } from "react";
 import { serviceIcons } from "../data/serviceIcons";
+import { trackServiceEngagement } from "../lib/analytics";
 
 const bentoItemReducedVariants = {
   hidden: { opacity: 0, y: 10 },
@@ -158,6 +159,7 @@ export default function BentoServiceCard({ service, gridClass, index }) {
         {slug ? (
           <a
             href={`/services/${slug}`}
+            onClick={() => trackServiceEngagement(title, slug, "bento_card")}
             className="relative z-[2] mt-4 inline-flex w-fit items-center gap-1 text-sm font-bold text-[#103759] underline decoration-transparent underline-offset-4 transition-colors hover:decoration-current dark:text-[#93C5FD]"
           >
             Learn more

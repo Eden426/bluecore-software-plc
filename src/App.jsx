@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
+import { initAnalytics, trackPageView } from "./lib/analytics";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import Stats from "./components/Stats";
@@ -129,6 +130,7 @@ function useRouteMetadata(path, metadata) {
     setMeta('meta[property="og:url"]', canonicalUrl);
     setMeta('meta[name="twitter:title"]', title);
     setMeta('meta[name="twitter:description"]', description);
+    trackPageView(canonicalPath, title);
   }, [path, metadata]);
 }
 
@@ -163,6 +165,10 @@ function useHashScroll(isHomePage) {
 }
 
 export default function App() {
+  useEffect(() => {
+    initAnalytics();
+  }, []);
+
   const path = window.location.pathname.replace(/\/$/, "") || "/";
   const route = resolveRoute(path);
   useRouteMetadata(path, route.metadata);

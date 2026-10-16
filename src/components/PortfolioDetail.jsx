@@ -1,5 +1,6 @@
 import { CheckCircle2 } from "lucide-react";
 import JsonLd from "./JsonLd";
+import { trackCTA } from "../lib/analytics";
 import {
   SITE_URL,
   buildBreadcrumb,
@@ -73,6 +74,7 @@ export default function PortfolioDetail({ item, image }) {
       <div className="mt-10 flex flex-wrap items-center gap-4">
         <a
           href="/#contact"
+          onClick={() => trackCTA("Discuss Similar Project", "portfolio_detail", { project: title, slug: item.slug })}
           className="inline-flex min-h-12 items-center justify-center rounded-xl bg-[#8B5E3C] px-6 py-3 font-bold text-white transition-colors hover:bg-[#70492F]"
         >
           Discuss a Similar Project
