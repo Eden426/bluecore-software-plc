@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
+import { initAnalytics, trackPageView } from "./lib/analytics";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import Stats from "./components/Stats";
@@ -12,6 +13,7 @@ import Testimonials from "./components/Testimonials";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 import SupportChat from "./components/SupportChat";
+import CookieBanner from "./components/CookieBanner";
 import LegalPage from "./components/LegalPage";
 import ServiceDetail from "./components/ServiceDetail";
 import PortfolioDetail from "./components/PortfolioDetail";
@@ -41,12 +43,12 @@ const routeMetadata = {
     description: "Bluecore Software PLC designs and supports practical software, web applications, system integrations, AI solutions, and digitization services in Addis Ababa, Ethiopia.",
   },
   "/privacy": {
-    title: "Privacy Policy | Bluecore Software PLC",
-    description: "Learn how Bluecore Software PLC processes information submitted through this website and its contact form.",
+    title: "Privacy Policy & Data Protection | Bluecore Software PLC",
+    description: "Learn how Bluecore Software PLC processes personal data, respects visitor privacy, and manages cookies and website analytics.",
   },
   "/terms": {
-    title: "Terms of Use | Bluecore Software PLC",
-    description: "Read the terms governing use of the Bluecore Software PLC website and its informational content.",
+    title: "Terms of Use & Statutory Disclosures | Bluecore Software PLC",
+    description: "Read the terms of use, legal notices, and mandatory corporate statutory disclosures for Bluecore Software PLC in Addis Ababa, Ethiopia.",
   },
   "/support": {
     title: "Support | Bluecore Software PLC",
@@ -129,6 +131,7 @@ function useRouteMetadata(path, metadata) {
     setMeta('meta[property="og:url"]', canonicalUrl);
     setMeta('meta[name="twitter:title"]', title);
     setMeta('meta[name="twitter:description"]', description);
+    trackPageView(canonicalPath, title);
   }, [path, metadata]);
 }
 
@@ -163,6 +166,10 @@ function useHashScroll(isHomePage) {
 }
 
 export default function App() {
+  useEffect(() => {
+    initAnalytics();
+  }, []);
+
   const path = window.location.pathname.replace(/\/$/, "") || "/";
   const route = resolveRoute(path);
   useRouteMetadata(path, route.metadata);
@@ -205,6 +212,7 @@ export default function App() {
       </main>
       <Footer />
       <SupportChat />
+      <CookieBanner />
       <Analytics />
       <SpeedInsights />
     </>

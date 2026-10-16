@@ -32,11 +32,15 @@ build/
 .vscode/*
 !.vscode/extensions.json
 .idea/
+.claude/
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+
+# Local and private scratch files
+gitignorethis/
 
 # OS files
 .DS_Store

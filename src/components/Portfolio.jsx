@@ -1,7 +1,7 @@
 import { ArrowUpRight } from "lucide-react";
-
 import { portfolio } from "../data/portfolio";
 import { portfolioImages } from "../data/portfolioImages";
+import { trackCTA, trackPortfolioEngagement } from "../lib/analytics";
 
 export default function Portfolio() {
   const slidingPortfolio = [...portfolio, ...portfolio];
@@ -36,6 +36,7 @@ export default function Portfolio() {
           <div className="flex items-center gap-3">
             <a
               href="#contact"
+              onClick={() => trackCTA("Start Your Project", "portfolio_header", { target: "#contact" })}
               className="inline-flex min-h-12 w-fit shrink-0 items-center justify-center gap-2 rounded-xl border border-[#103759]/20 bg-[#EAF3FF] px-5 py-3 text-sm font-bold text-[#103759] transition-all duration-200 hover:border-[#103759]/40 hover:bg-[#103759] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1976D2] focus-visible:ring-offset-2 dark:border-white/15 dark:bg-white/[0.06] dark:text-[#93C5FD] dark:hover:border-[#8B5E3C]/50 dark:hover:bg-[#8B5E3C] dark:hover:text-white sm:text-base"
             >
               Start Your Project
@@ -99,6 +100,11 @@ export default function Portfolio() {
                       <a
                         href={`/portfolio/${item.slug}`}
                         tabIndex={isDuplicate ? -1 : 0}
+                        onClick={() => {
+                          if (!isDuplicate) {
+                            trackPortfolioEngagement(item.title, item.slug, item.type);
+                          }
+                        }}
                         className="inline-flex w-fit items-center gap-1 text-sm font-bold text-[#103759] underline decoration-transparent underline-offset-4 transition-colors hover:decoration-current dark:text-[#93C5FD]"
                       >
                         View Details
@@ -107,6 +113,11 @@ export default function Portfolio() {
                     <a
                       href="#contact"
                       tabIndex={isDuplicate ? -1 : 0}
+                      onClick={() => {
+                        if (!isDuplicate) {
+                          trackCTA("Discuss Similar Project", "portfolio_card", { project: item.title, slug: item.slug });
+                        }
+                      }}
                       aria-label={`Discuss a project similar to ${item.title}`}
                       className="inline-flex w-fit items-center gap-2 rounded-md text-sm font-bold text-[#103759] transition-colors duration-200 hover:text-[#0A3A84] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1976D2] focus-visible:ring-offset-2 dark:text-[#93C5FD] dark:hover:text-[#D6B48D]"
                     >

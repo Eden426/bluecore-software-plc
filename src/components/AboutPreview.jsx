@@ -1,3 +1,5 @@
+import { trackCTA, trackOutboundLink } from "../lib/analytics";
+
 export default function AboutPreview() {
   return (
     <section
@@ -33,6 +35,7 @@ export default function AboutPreview() {
 
         <a
           href="#portfolio"
+          onClick={() => trackCTA("Learn More About Us", "about_preview", { target: "#portfolio" })}
           className="mt-6 inline-flex min-h-11 w-full items-center justify-center rounded-xl bg-[#103759] px-6 py-3 text-center text-sm font-semibold text-white hover:bg-[#0A3A84] active:bg-[#082F6B] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1976D2] focus-visible:ring-offset-2 sm:mt-8 sm:w-auto sm:min-h-0 sm:text-base dark:bg-[#8B5E3C] dark:hover:bg-[#A0694A]"
         >
           Learn More About Us
@@ -61,6 +64,7 @@ export default function AboutPreview() {
               href="https://schoolbridge.et/"
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => trackOutboundLink("SchoolBridge", "https://schoolbridge.et/")}
               className="underline-offset-4 hover:underline"
             >
               SchoolBridge

@@ -9,6 +9,7 @@ import {
   Mail,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { trackSupportChat } from "../lib/analytics";
 
 // ── Predefined responses ──────────────────────────────────────────────────────
 const FAQS = [
@@ -179,6 +180,7 @@ export default function SupportChat() {
 
   const closeChat = () => {
     setOpen(false);
+    trackSupportChat("close");
     window.setTimeout(() => triggerRef.current?.focus(), 0);
   };
 
@@ -223,6 +225,7 @@ export default function SupportChat() {
   const sendMessage = (text) => {
     const trimmed = (text ?? input).trim();
     if (!trimmed || loading) return;
+    trackSupportChat("message_sent", { is_quick_action: Boolean(text) });
     setMessages((prev) => [...prev, { role: "user", content: trimmed }]);
     setInput("");
     setShowQuickActions(false);
@@ -265,7 +268,10 @@ export default function SupportChat() {
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0, opacity: 0 }}
             transition={{ type: "spring", stiffness: 400, damping: 22 }}
-            onClick={() => setOpen(true)}
+            onClick={() => {
+              setOpen(true);
+              trackSupportChat("open");
+            }}
             className="fixed bottom-6 right-4 z-[9999] flex h-14 w-14 items-center justify-center rounded-full bg-[#8B5E3C] text-white shadow-2xl sm:right-6"
             style={{ animation: "chatPulse 2.5s ease-in-out infinite" }}
             aria-label="Open support chat"
@@ -332,7 +338,11 @@ export default function SupportChat() {
                   </p>
                 </div>
                 <button
-                  onClick={() => setMinimized((m) => !m)}
+                  onClick={() => {
+                    const next = !minimized;
+                    setMinimized(next);
+                    trackSupportChat(next ? "minimize" : "expand");
+                  }}
                   className="rounded-lg p-1.5 text-white/60 transition-colors hover:text-white"
                   aria-label={minimized ? "Expand chat" : "Minimize chat"}
                 >
@@ -394,6 +404,9 @@ export default function SupportChat() {
                             <a
                               key={action.label}
                               href={action.href}
+                              onClick={() => {
+                                trackSupportChat("quick_action_click", { label: action.label, destination: action.href });
+                              }}
                               className="inline-flex items-center gap-1.5 rounded-lg border border-[#8B5E3C]/35 bg-[#FDF6EF] px-3 py-1.5 text-xs font-semibold text-[#8B5E3C] transition-colors hover:bg-[#8B5E3C] hover:text-white dark:bg-white/[0.06] dark:text-[#F4D7B2] dark:border-white/20 dark:hover:bg-[#8B5E3C]"
                             >
                               {action.label === "Call Now" && (
@@ -407,7 +420,10 @@ export default function SupportChat() {
                           ) : (
                             <button
                               key={action.label}
-                              onClick={() => sendMessage(action.message)}
+                              onClick={() => {
+                                trackSupportChat("quick_action_click", { label: action.label });
+                                sendMessage(action.message);
+                              }}
                               className="inline-flex items-center rounded-lg border border-[#154187]/30 bg-[#EFF6FF] px-3 py-1.5 text-xs font-semibold text-[#154187] transition-colors hover:bg-[#154187] hover:text-white dark:bg-white/[0.06] dark:text-[#93C5FD] dark:border-white/20 dark:hover:bg-[#154187] dark:hover:text-white"
                             >
                               {action.label}

@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { CONTACT_LIMITS, validateContact } from "../lib/contactValidation";
 import { Mail, Phone, MapPin, Clock, CheckCircle, AlertCircle, Loader } from "lucide-react";
+import { trackContactSubmission, trackDirectContact } from "../lib/analytics";
 
 const initialForm = { name: "", email: "", company: "", message: "", website: "" };
 
@@ -22,10 +23,12 @@ export default function Contact() {
     event.preventDefault();
     setSendError("");
     if (submitting.current || form.website) return;
+    trackContactSubmission("attempt");
     const validationErrors = validateContact(form);
     if (Object.keys(validationErrors).length) {
       setErrors(validationErrors);
       setStatus("validation");
+      trackContactSubmission("validation_error", { errors: Object.keys(validationErrors).join(",") });
       return;
     }
     submitting.current = true;
@@ -40,15 +43,21 @@ export default function Contact() {
         signal: controller.signal,
         body: JSON.stringify({ ...form, requestId: submission.current.requestId }),
       });
-      if (response.status === 429) { setStatus("throttled"); return; }
+      if (response.status === 429) {
+        setStatus("throttled");
+        trackContactSubmission("throttled");
+        return;
+      }
       const result = await response.json();
       if (response.status !== 202 || result.accepted !== true) throw new Error("Submission not accepted");
       setStatus("success");
+      trackContactSubmission("success", { has_company: Boolean(form.company) });
       setForm(initialForm);
       submission.current = null;
     } catch {
       setSendError("Please try again later. Your entries have been kept.");
       setStatus("error");
+      trackContactSubmission("error");
     } finally {
       window.clearTimeout(timeout);
       submitting.current = false;
@@ -95,6 +104,25 @@ export default function Contact() {
 }
 
 function ContactItem({ icon: Icon, title, text, href, external }) {
-  const value = href ? <a className="break-words text-sm text-slate-600 underline-offset-2 hover:underline dark:text-white/80 sm:text-base" href={href} target={external ? "_blank" : undefined} rel={external ? "noopener noreferrer" : undefined}>{text}</a> : <p className="text-sm text-slate-600 dark:text-white/80 sm:text-base">{text}</p>;
+  const handleClick = () => {
+    if (!href) return;
+    if (href.startsWith("mailto:")) trackDirectContact("email", text);
+    else if (href.startsWith("tel:")) trackDirectContact("phone", text);
+    else if (href.includes("maps.google.com")) trackDirectContact("map", text);
+  };
+
+  const value = href ? (
+    <a
+      className="break-words text-sm text-slate-600 underline-offset-2 hover:underline dark:text-white/80 sm:text-base"
+      href={href}
+      onClick={handleClick}
+      target={external ? "_blank" : undefined}
+      rel={external ? "noopener noreferrer" : undefined}
+    >
+      {text}
+    </a>
+  ) : (
+    <p className="text-sm text-slate-600 dark:text-white/80 sm:text-base">{text}</p>
+  );
   return <div className="flex gap-3 sm:gap-4"><div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#06243f]/10 sm:h-12 sm:w-12 dark:bg-white/10"><Icon className="h-5 w-5 text-[#06243f] sm:h-6 sm:w-6 dark:text-white" /></div><div><h3 className="font-black">{title}</h3>{value}</div></div>;
 }

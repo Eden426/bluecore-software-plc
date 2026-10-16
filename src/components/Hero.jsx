@@ -1,4 +1,5 @@
 import heroLogo from "../assets/hero.webp";
+import { trackCTA } from "../lib/analytics";
 import {
   IconAI,
   IconCloudOps,
@@ -71,6 +72,7 @@ export default function Hero() {
             <div className="mt-4 flex pl-1 sm:mt-8 sm:pl-8 md:pl-12">
               <a
                 href="#contact"
+                onClick={() => trackCTA("Contact Us", "hero", { target: "#contact" })}
                 className="inline-flex min-h-8 min-w-[95px] items-center justify-center rounded-lg bg-[#103759] px-4 py-2 text-center text-[10px] font-bold text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#0A3A84] active:bg-[#082F6B] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1976D2] focus-visible:ring-offset-2 sm:min-h-12 sm:min-w-[220px] sm:rounded-xl sm:px-12 sm:py-3 sm:text-sm dark:bg-[#8B5E3C] dark:hover:bg-[#A0694A]"
               >
                 Contact Us

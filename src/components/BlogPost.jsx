@@ -1,5 +1,6 @@
 import JsonLd from "./JsonLd";
 import { SITE_URL, buildBlogPosting, buildBreadcrumb, buildGraph } from "../lib/structuredData";
+import { trackCTA } from "../lib/analytics";
 
 const dateFormatter = new Intl.DateTimeFormat("en-US", { year: "numeric", month: "long", day: "numeric", timeZone: "UTC" });
 
@@ -55,6 +56,7 @@ export default function BlogPost({ post }) {
       <div className="mt-10 flex flex-wrap items-center gap-4">
         <a
           href="/#contact"
+          onClick={() => trackCTA("Talk to Bluecore", "blog_post", { post: post.title, slug: post.slug })}
           className="inline-flex min-h-12 items-center justify-center rounded-xl bg-[#8B5E3C] px-6 py-3 font-bold text-white transition-colors hover:bg-[#70492F]"
         >
           Talk to Bluecore
