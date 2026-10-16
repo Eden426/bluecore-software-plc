@@ -1,19 +1,38 @@
 import { track as vercelTrack } from "@vercel/analytics";
 
 /**
+ * Default Google Analytics 4 Measurement ID for Bluecore.
+ */
+export const DEFAULT_GA_MEASUREMENT_ID = "G-VVMVSLLBVB";
+
+/**
  * Checks whether execution is happening in a client browser environment.
  */
 const isBrowser = typeof window !== "undefined";
+const isHeadlessPrerender = isBrowser && Boolean(window.navigator?.webdriver);
+
+/**
+ * Returns the active GA4 measurement ID.
+ * Defaults to DEFAULT_GA_MEASUREMENT_ID unless in test mode or overridden by env.
+ */
+export function getMeasurementId() {
+  if (import.meta.env.MODE === "test") {
+    return import.meta.env.VITE_GA_MEASUREMENT_ID || "";
+  }
+  return import.meta.env.VITE_GA_MEASUREMENT_ID || DEFAULT_GA_MEASUREMENT_ID;
+}
 
 /**
  * Initialize optional external providers (e.g., Google Analytics 4)
- * if configured via environment variables. Vercel Web Analytics is initialized
- * automatically via the <Analytics /> React component.
+ * if configured via environment variables or default property.
+ * Vercel Web Analytics is initialized automatically via the <Analytics /> React component.
+ *
+ * @param {string} [overrideId] - Optional explicit Measurement ID
  */
-export function initAnalytics() {
-  if (!isBrowser) return;
+export function initAnalytics(overrideId) {
+  if (!isBrowser || isHeadlessPrerender) return;
 
-  const gaId = import.meta.env.VITE_GA_MEASUREMENT_ID;
+  const gaId = overrideId || getMeasurementId();
   if (gaId && !window.__gaInitialized) {
     window.__gaInitialized = true;
     const script = document.createElement("script");
@@ -199,9 +218,10 @@ export function trackOutboundLink(label, url) {
  * @param {string} [title]
  */
 export function trackPageView(path, title) {
-  if (!isBrowser) return;
+  if (!isBrowser || isHeadlessPrerender) return;
 
-  if (typeof window.gtag === "function" && import.meta.env.VITE_GA_MEASUREMENT_ID) {
+  const gaId = getMeasurementId();
+  if (typeof window.gtag === "function" && gaId) {
     window.gtag("event", "page_view", {
       page_path: path,
       page_title: title || document.title,

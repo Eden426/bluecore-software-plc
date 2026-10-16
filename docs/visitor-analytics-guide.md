@@ -108,13 +108,9 @@ All key user interactions and Call-to-Actions (CTAs) are instrumented using sema
 
 ---
 
-## 5. (Optional) Enabling Google Analytics 4 (GA4) at $0 Cost
+## 5. Google Analytics 4 (GA4) Dual-Mirror (Active: `G-VVMVSLLBVB`)
 
-If you also want Google Analytics 4:
-1. Go to [analytics.google.com](https://analytics.google.com) and create a free Property for `blue-core.tech`.
-2. Under **Admin > Data Streams**, copy your **Measurement ID** (format: `G-XXXXXXXXXX`).
-3. In your **Vercel Project Settings > Environment Variables**:
-   - **Key**: `VITE_GA_MEASUREMENT_ID`
-   - **Value**: `G-XXXXXXXXXX`
-   - **Environments**: Production, Preview, Development
-4. Redeploy. The website will automatically mirror all page views and custom CTA events directly into GA4 in real time!
+Google Analytics 4 is wired and active using Measurement ID **`G-VVMVSLLBVB`**:
+- In production, it loads Google's tag asynchronously without blocking page rendering.
+- All client-side route changes (`page_view`) and custom interactions (`cta_click`, `contact_form_submit`, etc.) are dual-dispatched to both Vercel Web Analytics and GA4 in real time!
+- To override the Measurement ID for different environments (e.g. testing), set `VITE_GA_MEASUREMENT_ID` in your Vercel Project Settings > Environment Variables.
