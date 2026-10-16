@@ -1,5 +1,57 @@
 export const blog = [
   {
+    slug: "rag-grounding-and-reducing-ai-hallucinations",
+    title: "RAG, Grounding, and Practical Tips for Stopping AI Hallucinations",
+    description:
+      "Why large language models invent plausible falsehoods, how Retrieval-Augmented Generation anchors answers in factual reality, and five concrete engineering practices to keep enterprise AI reliable.",
+    date: "2026-10-16",
+    tags: ["AI Solutions", "RAG & Grounding"],
+    body: [
+      {
+        heading: "Why language models hallucinate (and why prompt tweaks aren't enough)",
+        paragraphs: [
+          "Autoregressive large language models are fundamentally probability engines designed to predict sequences of tokens that sound statistically likely given a prompt. They do not possess an internal database of verifiable facts or an innate fact-checking mechanism; they generate fluent, coherent language based on patterns learned during pretraining.",
+          "When an enterprise asks an LLM questions about internal company policies, technical specifications, banking guidelines, or regional regulations, the model does what it was trained to do: it predicts what a plausible response looks like. The resulting output sounds articulate, confident, and grammatically immaculate—yet critical facts, dates, or citations may be entirely fabricated.",
+          "Adding prompt directives like 'please do not hallucinate' or 'only reply if you are 100% certain' can slightly reduce reckless speculation, but it cannot solve the core problem: a model cannot reliably verify or recall facts that were never present in its operational context window.",
+        ],
+      },
+      {
+        heading: "Retrieval-Augmented Generation: Giving the model an open book",
+        paragraphs: [
+          "Retrieval-Augmented Generation (RAG) fundamentally transforms the generative task from unconstrained recollection into targeted reading comprehension and synthesis.",
+          "Instead of asking the LLM to search its billions of static parameters (parametric memory) for domain facts, a RAG pipeline connects the model to an external, authoritative knowledge repository (non-parametric storage)—such as vector databases, keyword search indexes, or structured relational databases.",
+          "When a user submits a query, the system first retrieves the most relevant excerpts of verified documentation, injects them directly into the prompt context, and instructs the LLM to formulate an answer strictly using that provided material. The task is transformed from creative guessing into grounded synthesis.",
+        ],
+      },
+      {
+        heading: "The discipline of grounding: turning text into verifiable evidence",
+        paragraphs: [
+          "Merely stuffing retrieved text chunks into a prompt is not enough to ensure enterprise reliability; the response must be rigorously grounded.",
+          "Grounding is the architectural discipline of ensuring that every statement, assertion, and number produced by the model directly maps to an identifiable, verified source in the retrieved context.",
+          "In production systems, grounding typically involves requiring the model to cite chunk identifiers or return structured JSON mapping claims directly to source paragraphs. Furthermore, grounding requires an unequivocal refusal protocol: if the retrieved context does not contain sufficient facts to answer the inquiry, the assistant must state that the information is unavailable rather than improvising from general knowledge.",
+        ],
+      },
+      {
+        heading: "Five engineering patterns that slash hallucinations in production",
+        paragraphs: [
+          "Moving from a weekend prototype to an enterprise-grade AI system requires battle-tested engineering techniques. Five practices consistently yield the biggest reduction in hallucinations:",
+          "1. Hybrid Search (Dense + Sparse): Dense vector embeddings capture semantic intent well, but they frequently stumble on exact product codes, acronyms, and proper nouns. Combining vector embeddings with sparse BM25 keyword search ensures that both conceptual queries and exact identifiers retrieve the right source chunks.",
+          "2. Semantic Chunking over Fixed-Length Slicing: Arbitrarily splitting text every 500 tokens often cuts conditional clauses in half or separates tables from their headers. Parsing documents by natural semantic boundaries—such as headings, sections, or markdown tables—preserves context continuity.",
+          "3. Cross-Encoder Reranking: Dense retrieval algorithms often rank superficially similar but irrelevant chunks near the top. Passing initial candidates through a cross-encoder reranker scores true query-document relevance, filtering out noise before it pollutes the context window.",
+          "4. Low Temperature and Constrained Decoding: For enterprise factual queries, reducing model temperature to 0.0–0.2 dramatically suppresses token randomness. Pairing low temperature with structured JSON schemas or function calling prevents narrative drift.",
+          "5. Automated Post-Generation Verification: Before displaying an answer to the end user, a lightweight validation check or evaluation model inspects the output against the retrieved chunks to ensure that every claim is faithfully supported by the provided text.",
+        ],
+      },
+      {
+        heading: "Treating retrieval as software engineering, not magic",
+        paragraphs: [
+          "The difference between an impressive AI demo and a reliable production deployment is disciplined software engineering. RAG architectures require monitoring, evaluation benchmarks (such as context precision, retrieval recall, and answer faithfulness), and robust access controls.",
+          "At Bluecore Software PLC, we approach enterprise AI systems with the same architectural rigor as transactional business platforms—designing reliable data ingestion pipelines, automated validation gates, and domain-tuned retrieval so institutions can deploy AI assistants they can genuinely trust.",
+        ],
+      },
+    ],
+  },
+  {
     slug: "signs-your-organization-is-ready-to-go-paperless",
     title: "Signs Your Organization Is Ready to Go Paperless",
     description:
