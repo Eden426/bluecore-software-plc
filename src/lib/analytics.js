@@ -1,25 +1,16 @@
 import { track as vercelTrack } from "@vercel/analytics";
 
 /**
- * Default Google Analytics 4 Measurement ID for Bluecore.
- */
-export const DEFAULT_GA_MEASUREMENT_ID = "G-VVMVSLLBVB";
-
-/**
  * Checks whether execution is happening in a client browser environment.
  */
 const isBrowser = typeof window !== "undefined";
 const isHeadlessPrerender = isBrowser && Boolean(window.navigator?.webdriver);
 
 /**
- * Returns the active GA4 measurement ID.
- * Defaults to DEFAULT_GA_MEASUREMENT_ID unless in test mode or overridden by env.
+ * Returns the active GA4 measurement ID from the environment variable.
  */
 export function getMeasurementId() {
-  if (import.meta.env.MODE === "test") {
-    return import.meta.env.VITE_GA_MEASUREMENT_ID || "";
-  }
-  return import.meta.env.VITE_GA_MEASUREMENT_ID || DEFAULT_GA_MEASUREMENT_ID;
+  return import.meta.env.VITE_GA_MEASUREMENT_ID || "";
 }
 
 /**
