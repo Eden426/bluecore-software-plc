@@ -6,6 +6,54 @@ import { track as vercelTrack } from "@vercel/analytics";
 const isBrowser = typeof window !== "undefined";
 const isHeadlessPrerender = isBrowser && Boolean(window.navigator?.webdriver);
 
+export const CONSENT_STORAGE_KEY = "bluecore_cookie_consent";
+
+/**
+ * Get current analytics cookie consent state.
+ * @returns {"accepted" | "declined" | null}
+ */
+export function getConsentState() {
+  if (!isBrowser) return null;
+  try {
+    return localStorage.getItem(CONSENT_STORAGE_KEY);
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Set analytics cookie consent state and synchronize with provider disabling flags.
+ * @param {"accepted" | "declined"} state
+ */
+export function setConsentState(state) {
+  if (!isBrowser) return;
+  try {
+    localStorage.setItem(CONSENT_STORAGE_KEY, state);
+  } catch {
+    // Ignore storage errors (e.g. private browsing restrictions)
+  }
+
+  const gaId = getMeasurementId();
+  if (state === "accepted") {
+    if (gaId) {
+      window[`ga-disable-${gaId}`] = false;
+      initAnalytics();
+    }
+  } else if (state === "declined") {
+    if (gaId) {
+      window[`ga-disable-${gaId}`] = true;
+    }
+  }
+}
+
+/**
+ * Dispatch an event to open the cookie consent preferences banner.
+ */
+export function openCookieBanner() {
+  if (!isBrowser) return;
+  window.dispatchEvent(new CustomEvent("bluecore:open-cookie-banner"));
+}
+
 /**
  * Returns the active GA4 measurement ID from the environment variable.
  */
@@ -15,16 +63,34 @@ export function getMeasurementId() {
 
 /**
  * Initialize optional external providers (e.g., Google Analytics 4)
- * if configured via environment variables or default property.
+ * if configured via environment variables and consented to by the visitor.
  * Vercel Web Analytics is initialized automatically via the <Analytics /> React component.
  *
  * @param {string} [overrideId] - Optional explicit Measurement ID
+ * @param {object} [options] - Options
+ * @param {boolean} [options.forceConsent] - Force initialization regardless of stored consent
  */
-export function initAnalytics(overrideId) {
+export function initAnalytics(overrideId, options = {}) {
   if (!isBrowser || isHeadlessPrerender) return;
 
   const gaId = overrideId || getMeasurementId();
-  if (gaId && !window.__gaInitialized) {
+  if (!gaId) return;
+
+  const consent = getConsentState();
+  if (consent === "declined") {
+    window[`ga-disable-${gaId}`] = true;
+    return;
+  }
+
+  // Require consent in browser unless forced or in test environment without explicit decline
+  const isTest = import.meta.env.MODE === "test";
+  const hasConsent = consent === "accepted" || Boolean(options.forceConsent) || (isTest && consent !== "declined");
+
+  if (!hasConsent) {
+    return;
+  }
+
+  if (!window.__gaInitialized) {
     window.__gaInitialized = true;
     const script = document.createElement("script");
     script.async = true;
