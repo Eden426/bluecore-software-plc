@@ -27,3 +27,7 @@ How email becomes tickets and how agent replies reach customers.
 ## Local development
 
 `npm run dev:support` serves `api/` through a Vite dev middleware. With `SUPPORT_EMAIL_TRANSPORT=log` in `apps/support/.env.local`, replies are recorded and the would-be email is logged instead of sent. Inbound email can't reach localhost; the seeded tickets in `supabase/seed.sql` are ingested through the same `ingest_inbound_email()` function, and `server/test/inbound.integration.test.js` runs the real webhook handler against local Supabase with a real Svix signature.
+
+## Live chat endpoints
+
+`/api/chat/start`, `/api/chat/messages` and `/api/chat/send` are public, like the inbound webhook. Add them to the Vercel WAF rate-limit rule, for example 10 requests a minute per IP for `start` and 60 for the other two. The database also caps each conversation at 500 messages and each message at 4,000 characters.
