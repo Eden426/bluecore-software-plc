@@ -29,6 +29,13 @@ const ROUTES = [
   ...blog.map((post) => `/blog/${post.slug}`),
 ];
 
+// Not a real route - any path here resolves to App.jsx's NotFoundPage branch
+// (noindex robots meta, "Page Not Found" title). Rendered separately, below,
+// to dist/404.html specifically so Vercel's default static-site behavior
+// picks it up as the 404 page for any request that doesn't match a route in
+// ROUTES above - see the vercel.json comment for why that matters.
+const NOT_FOUND_SOURCE_PATH = "/__prerender_404_source__";
+
 // Vercel's and GitHub Actions' Linux build containers are missing the shared
 // libraries (libnspr4, libnss3, ...) that plain `puppeteer`'s bundled Chromium
 // needs, so on CI we launch @sparticuz/chromium instead — a Chromium build
@@ -108,14 +115,13 @@ function startStaticServer() {
 // shell. Every other route gets its own dist/<route>/index.html, which
 // Vercel's filesystem routing serves in preference to that rewrite,
 // matching how vercel.json resolves a static file over a rewrite.
-async function renderRoute(page, route) {
+async function renderRoute(page, route, outPath) {
   await page.goto(`http://localhost:${PORT}${route}`, { waitUntil: "networkidle0" });
   await page.waitForFunction(() => (document.querySelector("#root")?.childElementCount ?? 0) > 0, {
     timeout: 15000,
   });
 
   const html = await page.evaluate(() => `<!doctype html>\n${document.documentElement.outerHTML}`);
-  const outPath = route === "/" ? join(DIST_DIR, "index.html") : join(DIST_DIR, route.slice(1), "index.html");
   await mkdir(dirname(outPath), { recursive: true });
   await writeFile(outPath, html);
 }
@@ -127,9 +133,13 @@ async function main() {
   try {
     const page = await browser.newPage();
     for (const route of ROUTES) {
-      await renderRoute(page, route);
+      const outPath = route === "/" ? join(DIST_DIR, "index.html") : join(DIST_DIR, route.slice(1), "index.html");
+      await renderRoute(page, route, outPath);
       console.log(`Prerendered ${route === "/" ? "dist/index.html" : `dist${route}/index.html`}`);
     }
+
+    await renderRoute(page, NOT_FOUND_SOURCE_PATH, join(DIST_DIR, "404.html"));
+    console.log("Prerendered dist/404.html");
   } finally {
     await browser.close();
     server.close();
