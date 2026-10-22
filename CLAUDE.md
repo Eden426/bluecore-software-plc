@@ -7,7 +7,19 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 This is an npm-workspaces monorepo. Run `npm install` once at the repo root; the single `package-lock.json` lives there.
 
 - `apps/web` (`@bluecore/web`): the marketing site. **Everything in "Project overview", "Commands" and "Architecture" below describes this app, and file paths there (`src/...`, `scripts/...`, `api/...`, `vercel.json`, `docs/...`) are relative to `apps/web/`.**
-- `apps/support` (`@bluecore/support`): the support center and admin console for Bluecore's clients. It's a Vite + React + Tailwind v4 stub for now. The planned scope is a public help center (KB, FAQs, product docs, updates), live chat, ticketing with AI triage, Resend inbound email, and 1:1 booking via Google Calendar, all on Supabase. It's staff-only: there are no client logins, and clients are identified by email domain against a managed client/product list. It's planned for support.blue-core.tech and doesn't deploy anywhere yet.
+- `apps/support` (`@bluecore/support`): the support center and staff admin console (Vite + React 19 + Tailwind v4 + `react-router`, backed by Supabase). The public `/` is a help-center placeholder. `/admin/*` is staff-only: clients (email domains, contacts, deployments), products (shared vs bespoke), and staff roles. Data access goes through `src/lib/api.js`. `src/lib/permissions.js` only hides controls; **the real gate is RLS** in `supabase/migrations`. The auth context, provider and hook are split across `src/auth/` (same Fast Refresh reason as `apps/web`'s theme files). Env: `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` (see `apps/support/.env.example`). Later phases: ticketing with AI triage, Resend inbound email, the help center CMS, live chat, and Google Calendar booking. It doesn't deploy anywhere yet.
+- `supabase/`: the Supabase project for `apps/support`, covering migrations, `seed.sql` (local only), pgTAP tests in `tests/`, and `config.toml`. Access model:
+  - Only Bluecore staff authenticate. Self-signup is off via `[auth] enable_signup = false`. Keep `[auth.email] enable_signup = true`, because setting it false disables password login entirely.
+  - Admins create users in the Supabase dashboard. A trigger gives each new auth user a `staff` row with the `viewer` role.
+  - Roles: `viewer` reads, `agent` also manages contacts, `admin` manages everything including roles. A trigger keeps at least one active admin. The first admin must be promoted with SQL (`update staff set role = 'admin' ...`).
+  - New tables need explicit `grant`s to `authenticated`, because newer Supabase doesn't auto-grant.
+  - Local ports are moved to the 571xx range so they don't collide with other local Supabase projects on this machine.
+  - Local workflow:
+    - Start: `supabase start -x analytics,vector,studio,imgproxy,edge-runtime,storage-api,realtime,postgres-meta,logflare,supavisor`
+    - Reset: `supabase db reset` (it re-applies the migrations and seed, and sometimes hangs on its container restart after it has already finished)
+    - Test: `supabase test db`
+    - Seed logins are listed at the top of `seed.sql`.
+  - CI runs `supabase test db` in the `database` job, and `deploy` also waits on it.
 - `packages/brand` (`@bluecore/brand`): shared brand tokens (`tokens.css`). `apps/support` imports it. `apps/web` still defines its own copy in `src/index.css`, so change brand colors in both places.
 
 Root scripts fan out to every workspace (`npm run build|lint|test` runs `--workspaces --if-present`). `npm run dev` starts the marketing site, and `npm run dev:support` starts the support app. To target one workspace, use `npm run <script> -w @bluecore/web`.
