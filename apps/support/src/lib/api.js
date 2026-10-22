@@ -296,3 +296,59 @@ export async function deleteArticle(id) {
 export async function listFeedbackTotals() {
   return unwrap(await supabase.from("kb_feedback_totals").select("*"));
 }
+
+// --- Live chat (agents) ----------------------------------------------------
+
+const CHAT_COLUMNS =
+  "id, channel_key, visitor_name, visitor_email, status, assignee_id, client_id, ticket_id, page_url, created_at, last_message_at, closed_at, " +
+  "client:clients(id, name), assignee:staff(id, full_name, email), ticket:tickets(id, number)";
+
+export async function listChats(view = "open") {
+  let query = supabase.from("chat_conversations").select(CHAT_COLUMNS).order("last_message_at", { ascending: false }).limit(100);
+  query = view === "closed" ? query.eq("status", "closed") : query.neq("status", "closed");
+  return unwrap(await query);
+}
+
+export async function countWaitingChats() {
+  const { count, error } = await supabase
+    .from("chat_conversations")
+    .select("id", { count: "exact", head: true })
+    .eq("status", "waiting");
+  if (error) throw error;
+  return count ?? 0;
+}
+
+export async function getChat(id) {
+  return unwrap(
+    await supabase
+      .from("chat_conversations")
+      .select(`${CHAT_COLUMNS}, chat_messages(id, sender, author_staff_id, author_name, body, created_at)`)
+      .eq("id", id)
+      .order("id", { referencedTable: "chat_messages" })
+      .single(),
+  );
+}
+
+export async function sendAgentChatMessage(conversationId, staff, body) {
+  return unwrap(
+    await supabase
+      .from("chat_messages")
+      .insert({
+        conversation_id: conversationId,
+        sender: "agent",
+        author_staff_id: staff.id,
+        author_name: staff.full_name || staff.email.split("@")[0],
+        body: body.trim(),
+      })
+      .select()
+      .single(),
+  );
+}
+
+export async function updateChat(id, changes) {
+  return unwrap(await supabase.from("chat_conversations").update(changes).eq("id", id).select("id").single());
+}
+
+export async function convertChatToTicket(conversationId) {
+  return unwrap(await supabase.rpc("convert_chat_to_ticket", { conversation_id: conversationId }).single());
+}
