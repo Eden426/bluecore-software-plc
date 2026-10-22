@@ -16,7 +16,9 @@
     "lucide-react": "^1.61.0",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
+    "react-markdown": "^10.1.0",
     "react-router": "^7.18.4",
+    "remark-gfm": "^4.0.1",
     "svix": "^1.99.1"
   },
   "devDependencies": {
