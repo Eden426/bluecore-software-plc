@@ -201,3 +201,98 @@ export async function listAssignableStaff() {
     await supabase.from("staff").select("id, full_name, email, role").eq("active", true).in("role", ["agent", "admin"]).order("full_name"),
   );
 }
+
+// --- Knowledge base / help center -----------------------------------------
+// Public calls run with the publishable key as `anon`; RLS limits them to
+// published, public content. Staff calls see drafts and internal articles.
+
+const KB_LIST_COLUMNS =
+  "id, type, title, slug, summary, category, tags, status, visibility, position, published_at, updated_at, product_id";
+
+export async function listPublishedArticles(type, { productId, limit } = {}) {
+  let query = supabase
+    .from("kb_articles")
+    .select(KB_LIST_COLUMNS)
+    .eq("type", type)
+    .eq("status", "published")
+    .eq("visibility", "public");
+  query =
+    type === "update"
+      ? query.order("published_at", { ascending: false })
+      : query.order("category").order("position").order("title");
+  if (productId) query = query.eq("product_id", productId);
+  if (limit) query = query.limit(limit);
+  return unwrap(await query);
+}
+
+export async function listFaqs() {
+  return unwrap(
+    await supabase
+      .from("kb_articles")
+      .select("id, title, slug, body, category, position")
+      .eq("type", "faq")
+      .eq("status", "published")
+      .eq("visibility", "public")
+      .order("category")
+      .order("position"),
+  );
+}
+
+export async function getPublishedArticle(slug) {
+  return unwrap(
+    await supabase
+      .from("kb_articles")
+      .select(`${KB_LIST_COLUMNS}, body`)
+      .eq("slug", slug)
+      .eq("status", "published")
+      .eq("visibility", "public")
+      .maybeSingle(),
+  );
+}
+
+// Shared products only (bespoke product names stay private).
+export async function listPublicProducts() {
+  return unwrap(
+    await supabase.from("products").select("id, name, slug, description").eq("kind", "shared").eq("active", true).order("name"),
+  );
+}
+
+export async function searchKb(query, kinds = null) {
+  if (!query.trim()) return [];
+  return unwrap(await supabase.rpc("search_kb", { query, kinds, max_results: 20 }));
+}
+
+export async function sendArticleFeedback(articleId, helpful) {
+  unwrap(await supabase.from("kb_feedback").insert({ article_id: articleId, helpful }));
+}
+
+export async function listAllArticles({ type, status, search } = {}) {
+  let query = supabase
+    .from("kb_articles")
+    .select(`${KB_LIST_COLUMNS}, product:products(name), author:staff(full_name, email)`)
+    .order("updated_at", { ascending: false });
+  if (type) query = query.eq("type", type);
+  if (status) query = query.eq("status", status);
+  const term = search?.trim().replace(/[%,()*\\]/g, " ");
+  if (term) query = query.or(`title.ilike.*${term}*,slug.ilike.*${term}*`);
+  return unwrap(await query);
+}
+
+export async function getArticle(id) {
+  return unwrap(await supabase.from("kb_articles").select("*").eq("id", id).single());
+}
+
+export async function saveArticle(id, values) {
+  if (id) return unwrap(await supabase.from("kb_articles").update(values).eq("id", id).select().single());
+  return unwrap(await supabase.from("kb_articles").insert(values).select().single());
+}
+
+export async function deleteArticle(id) {
+  const { error, count } = await supabase.from("kb_articles").delete({ count: "exact" }).eq("id", id);
+  if (error) throw error;
+  if (!count) throw { code: "PGRST116" };
+}
+
+export async function listFeedbackTotals() {
+  return unwrap(await supabase.from("kb_feedback_totals").select("*"));
+}
