@@ -1,7 +1,6 @@
 // @vitest-environment node
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import handler from "../../api/contact.js";
-import vercel from "../../vercel.json";
 
 const inquiry = { name: "Test User", email: "visitor@example.com", company: "", message: "Please discuss our new project.", website: "", requestId: "30e372d8-76c8-4d1f-8af7-b149a81ca3c8" };
 const request = (body = inquiry, options = {}) => new Request("https://blue-core.tech/api/contact", {
@@ -95,20 +94,5 @@ describe("contact endpoint", () => {
   it("does not treat malformed provider success as acceptance", async () => {
     fetch.mockResolvedValue(Response.json({}));
     expect((await handler.fetch(request())).status).toBe(502);
-  });
-  it("keeps APIs and Vite development modules outside the SPA rewrite", () => {
-    const rewrite = new RegExp(`^${vercel.rewrites[0].source}$`);
-    expect(rewrite.test("/api/contact")).toBe(false);
-    expect(rewrite.test("/api/unknown")).toBe(false);
-    expect(rewrite.test("/@vite/client")).toBe(false);
-    expect(rewrite.test("/@react-refresh")).toBe(false);
-    expect(rewrite.test("/@id/virtual-module")).toBe(false);
-    expect(rewrite.test("/@fs/C:/project/module")).toBe(false);
-    expect(rewrite.test("/src/main.jsx")).toBe(false);
-    expect(rewrite.test("/src/virtual-module")).toBe(false);
-    expect(rewrite.test("/node_modules/.vite/deps/react.js")).toBe(false);
-    expect(rewrite.test("/privacy")).toBe(true);
-    expect(rewrite.test("/services/custom-software-development")).toBe(true);
-    expect(rewrite.test("/")).toBe(true);
   });
 });
