@@ -2,11 +2,23 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Repository layout
+
+This is an npm-workspaces monorepo. Run `npm install` once at the repo root; the single `package-lock.json` lives there.
+
+- `apps/web` (`@bluecore/web`): the marketing site. **Everything in "Project overview", "Commands" and "Architecture" below describes this app, and file paths there (`src/...`, `scripts/...`, `api/...`, `vercel.json`, `docs/...`) are relative to `apps/web/`.**
+- `apps/support` (`@bluecore/support`): the support center and admin console for Bluecore's clients. It's a Vite + React + Tailwind v4 stub for now. The planned scope is a public help center (KB, FAQs, product docs, updates), live chat, ticketing with AI triage, Resend inbound email, and 1:1 booking via Google Calendar, all on Supabase. It's staff-only: there are no client logins, and clients are identified by email domain against a managed client/product list. It's planned for support.blue-core.tech and doesn't deploy anywhere yet.
+- `packages/brand` (`@bluecore/brand`): shared brand tokens (`tokens.css`). `apps/support` imports it. `apps/web` still defines its own copy in `src/index.css`, so change brand colors in both places.
+
+Root scripts fan out to every workspace (`npm run build|lint|test` runs `--workspaces --if-present`). `npm run dev` starts the marketing site, and `npm run dev:support` starts the support app. To target one workspace, use `npm run <script> -w @bluecore/web`.
+
 ## Project overview
 
 A marketing website for Bluecore Software PLC, built with React 19 + Vite + Tailwind CSS v4, live at blue-core.tech. There is no router library — `App.jsx` reads `window.location.pathname` directly (via `resolveRoute()`) and renders one of: the home page (a stack of `<section>` components linked by in-page anchors: `#home`, `#about`, `#services`, `#portfolio`, `#team`, `#contact`), a legal/support page (`/privacy`, `/terms`, `/support`, rendered by `LegalPage`), a service detail page (`/services/:slug`, looked up in `src/data/services.js`), a portfolio detail page (`/portfolio/:slug`, looked up in `src/data/portfolio.js`), the blog index (`/blog`) or a blog post (`/blog/:slug`, looked up in `src/data/blog.js`), or `NotFoundPage` for anything else/unmatched slug.
 
 ## Commands
+
+Run these from the repo root (they target `apps/web`, except `build`/`lint`/`test`, which cover all workspaces), or from `apps/web` itself.
 
 ```bash
 npm run dev       # start Vite dev server
@@ -33,12 +45,12 @@ Test files live in `src/test/` (e.g. `theme-navigation.test.jsx`, `contact-chat.
 ### Deployment
 
 `.github/workflows/deploy.yml` runs on every push and PR to `main` with two jobs:
-- `validate` (runs on PRs and pushes): `npm ci`, `npm run lint`, `npm test`, `npm run build`.
-- `deploy` (runs only on push to `main`, after `validate` passes): `vercel pull` → `vercel build --prod` → `vercel deploy --prebuilt --prod`, i.e. the build (including the prerender step, using the CI/`@sparticuz` path above) happens in the Actions runner, not in Vercel's own build container — Vercel's native build container has the same missing-shared-library problem plain `puppeteer` had, and using `--prebuilt` sidesteps it entirely regardless of which Chromium strategy is in play.
+- `validate` (runs on PRs and pushes): `npm ci`, `npm run lint`, `npm test`, `npm run build` (all workspaces). On same-repo PRs it also runs `vercel pull` + `vercel build --prod` from `apps/web` (no deploy), so a broken deploy path fails the PR instead of the push to `main`.
+- `deploy` (runs only on push to `main`, after `validate` passes; every step runs with `working-directory: apps/web` — the Vercel project's Root Directory setting is deliberately left unset, so don't set it in the dashboard, or the CLI would look for `apps/web/apps/web`): `vercel pull` → `vercel build --prod` → `vercel deploy --prebuilt --prod`, i.e. the build (including the prerender step, using the CI/`@sparticuz` path above) happens in the Actions runner, not in Vercel's own build container — Vercel's native build container has the same missing-shared-library problem plain `puppeteer` had, and using `--prebuilt` sidesteps it entirely regardless of which Chromium strategy is in play.
 
 The workflow needs `VERCEL_TOKEN`, `VERCEL_ORG_ID`, and `VERCEL_PROJECT_ID` configured as repo secrets (values in `.vercel/project.json` for the latter two once linked). Vercel's native GitHub integration (auto-build-on-push via Vercel's own container) is intentionally not used here.
 
-For manual/local deploys: `vercel build --prod` then `vercel deploy --prebuilt --prod` (same reasoning — avoids Vercel's build container running Puppeteer).
+For manual/local deploys, run from `apps/web` (link it with `vercel link` there): `vercel build --prod` then `vercel deploy --prebuilt --prod` (same reasoning — avoids Vercel's build container running Puppeteer).
 
 ## Architecture
 

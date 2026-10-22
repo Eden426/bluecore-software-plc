@@ -26,14 +26,33 @@ jobs:
       - name: Test
         run: npm test
 
-      - name: Build (includes prerender)
+      - name: Build all workspaces (web includes prerender)
         run: npm run build
+
+      # Exercises the same `vercel build` the deploy job runs, from apps/web,
+      # so a broken deploy path fails the PR instead of the push to main.
+      # Skipped where repo secrets aren't available (e.g. fork PRs).
+      - name: Vercel build dry run (apps/web)
+        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+        working-directory: apps/web
+        run: |
+          npm install --global vercel
+          vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+          vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
   deploy:
     needs: validate
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment: production
+    # The marketing site lives in apps/web; the Vercel project's Root Directory
+    # stays unset and the CLI runs from here instead.
+    defaults:
+      run:
+        working-directory: apps/web
     steps:
       - uses: actions/checkout@v5
 
