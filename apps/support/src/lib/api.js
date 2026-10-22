@@ -352,3 +352,77 @@ export async function updateChat(id, changes) {
 export async function convertChatToTicket(conversationId) {
   return unwrap(await supabase.rpc("convert_chat_to_ticket", { conversation_id: conversationId }).single());
 }
+
+// --- Booking -----------------------------------------------------------------
+
+// Server endpoints that need the signed-in agent (they also talk to Google).
+async function staffPost(path, body = {}) {
+  const { data } = await supabase.auth.getSession();
+  const response = await fetch(path, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${data.session?.access_token}` },
+    body: JSON.stringify(body),
+  });
+  const result = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(result.error || "Something went wrong.");
+  return result;
+}
+
+const BOOKING_COLUMNS =
+  "id, starts_at, ends_at, status, meet_url, topic, requester_name, requester_email, cancelled_at, " +
+  "staff:staff_id(id, full_name, email), ticket:tickets(id, number, subject)";
+
+export async function listBookings(view = "upcoming") {
+  const now = new Date().toISOString();
+  let query = supabase.from("bookings").select(BOOKING_COLUMNS).neq("status", "pending").limit(200);
+  if (view === "upcoming") query = query.eq("status", "confirmed").gte("ends_at", now).order("starts_at");
+  else query = query.or(`status.eq.cancelled,ends_at.lt.${now}`).order("starts_at", { ascending: false });
+  return unwrap(await query);
+}
+
+export async function listTicketBookings(ticketId) {
+  return unwrap(
+    await supabase.from("bookings").select(BOOKING_COLUMNS).eq("ticket_id", ticketId).neq("status", "pending").order("starts_at"),
+  );
+}
+
+export async function getBookingSetup(staffId) {
+  const [connection, agent, windows] = await Promise.all([
+    supabase.from("calendar_connections").select("google_email, status, connected_at").eq("staff_id", staffId).maybeSingle(),
+    supabase.from("booking_agents").select("*").eq("staff_id", staffId).maybeSingle(),
+    supabase.from("availability_windows").select("*").eq("staff_id", staffId).order("weekday").order("start_time"),
+  ]);
+  return { connection: unwrap(connection), agent: unwrap(agent), windows: unwrap(windows) };
+}
+
+// Saves an agent's timezone, on/off switch and weekly hours in one go.
+export async function saveBookingSetup(staffId, { timezone, accepts_bookings, windows }) {
+  unwrap(
+    await supabase
+      .from("booking_agents")
+      .upsert({ staff_id: staffId, timezone, accepts_bookings, updated_at: new Date().toISOString() })
+      .select()
+      .single(),
+  );
+  unwrap(await supabase.from("availability_windows").delete().eq("staff_id", staffId));
+  if (windows.length) {
+    unwrap(await supabase.from("availability_windows").insert(windows.map((w) => ({ ...w, staff_id: staffId }))));
+  }
+}
+
+export async function connectGoogleCalendar() {
+  return (await staffPost("/api/google/connect")).url;
+}
+
+export async function disconnectGoogleCalendar() {
+  return staffPost("/api/google/disconnect");
+}
+
+export async function cancelBooking(bookingId) {
+  return staffPost("/api/booking/cancel", { bookingId });
+}
+
+export async function createBookingLink(ticketId) {
+  const token = unwrap(await supabase.rpc("create_ticket_booking_link", { ticket_id: ticketId }));
+  return `${window.location.origin}/book#link=${token}`;
+}

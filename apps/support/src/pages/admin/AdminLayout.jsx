@@ -1,6 +1,6 @@
 import { NavLink, Outlet } from "react-router";
 import { useEffect, useState } from "react";
-import { BookOpen, Building2, Inbox, LogOut, MessagesSquare, Package, Users } from "lucide-react";
+import { BookOpen, Building2, CalendarDays, Inbox, LogOut, MessagesSquare, Package, Users } from "lucide-react";
 import { AgentPresence } from "../../auth/AgentPresence.jsx";
 import { countWaitingChats } from "../../lib/api.js";
 import { supabase } from "../../lib/supabase.js";
@@ -11,6 +11,7 @@ import { Badge } from "../../components/ui.jsx";
 const NAV = [
   { to: "/admin/tickets", label: "Tickets", icon: Inbox },
   { to: "/admin/chats", label: "Live chat", icon: MessagesSquare, badge: "waitingChats" },
+  { to: "/admin/bookings", label: "Calls", icon: CalendarDays },
   { to: "/admin/kb", label: "Help center", icon: BookOpen },
   { to: "/admin/clients", label: "Clients", icon: Building2 },
   { to: "/admin/products", label: "Products", icon: Package },

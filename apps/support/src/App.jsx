@@ -9,6 +9,10 @@ import FaqPage from "./pages/help/FaqPage.jsx";
 import DocsPage from "./pages/help/DocsPage.jsx";
 import UpdatesPage from "./pages/help/UpdatesPage.jsx";
 import ArticlePage from "./pages/help/ArticlePage.jsx";
+import BookPage from "./pages/help/BookPage.jsx";
+import CancelBookingPage from "./pages/help/CancelBookingPage.jsx";
+import BookingsPage from "./pages/admin/BookingsPage.jsx";
+import AvailabilityPage from "./pages/admin/AvailabilityPage.jsx";
 import ChatsPage from "./pages/admin/ChatsPage.jsx";
 import KbListPage from "./pages/admin/KbListPage.jsx";
 import KbEditorPage from "./pages/admin/KbEditorPage.jsx";
@@ -35,6 +39,8 @@ export function AppRoutes() {
         <Route path="/docs/:productSlug" element={<DocsPage />} />
         <Route path="/updates" element={<UpdatesPage />} />
         <Route path="/articles/:slug" element={<ArticlePage />} />
+        <Route path="/book" element={<BookPage />} />
+        <Route path="/book/cancel" element={<CancelBookingPage />} />
       </Route>
       <Route path="/admin/login" element={<LoginPage />} />
       <Route
@@ -53,6 +59,8 @@ export function AppRoutes() {
         <Route path="clients/:clientId" element={<ClientDetailPage />} />
         <Route path="chats" element={<ChatsPage />} />
         <Route path="chats/:chatId" element={<ChatsPage />} />
+        <Route path="bookings" element={<BookingsPage />} />
+        <Route path="availability" element={<AvailabilityPage />} />
         <Route path="kb" element={<KbListPage />} />
         <Route path="kb/new" element={<KbEditorPage />} />
         <Route path="kb/:articleId" element={<KbEditorPage />} />
