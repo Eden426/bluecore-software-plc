@@ -42,7 +42,7 @@ export default function AvailabilityPage() {
         <p role="status" className={`mb-4 text-sm ${outcome[1] ? "text-red-700" : "text-emerald-700"}`}>{outcome[0]}</p>
       )}
       <div className="grid gap-6 lg:grid-cols-[1fr_20rem]">
-        <HoursEditor key={data.agent?.updated_at ?? "new"} staffId={staff.id} setup={data} onSaved={reload} />
+        <HoursEditor staffId={staff.id} setup={data} onSaved={reload} />
         <GoogleCard connection={data.connection} onChanged={reload} />
       </div>
     </>

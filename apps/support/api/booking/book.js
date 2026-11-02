@@ -76,7 +76,7 @@ export async function handleBook(request, { db, config, fetchImpl } = {}) {
       token,
       {
         bookingId: booking.id,
-        summary: `Bluecore support call: ${values.topic.split("\n")[0].slice(0, 80)}`,
+        summary: `Bluecore support call: ${values.topic.split("\n")[0].replace(/^Call:\s*/i, "").slice(0, 80)}`,
         description: `${values.topic}\n\nBooked by ${values.name} via the Bluecore help center.`,
         start: values.start,
         end,

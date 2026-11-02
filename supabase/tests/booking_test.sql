@@ -22,14 +22,14 @@ $$;
 
 -- UK clocks go back on Sunday 2027-10-31.
 select is(
-  (select array_agg(starts_at order by starts_at)::text from public.booking_candidate_slots('2027-10-29', '2027-11-02')),
+  (select array_agg(starts_at order by starts_at)::text from public.booking_candidate_slots('2027-10-29', '2027-11-02') where staff_id = 'c1000000-0000-0000-0000-000000000001'),
   '{"2027-10-29 08:00:00+00","2027-10-29 08:30:00+00","2027-11-01 09:00:00+00","2027-11-01 09:30:00+00"}',
   'slots follow the agent''s wall clock across a DST change');
-select is((select count(*)::int from public.booking_candidate_slots(now(), now() + interval '1 hour')), 0,
+select is((select count(*)::int from public.booking_candidate_slots(now(), now() + interval '1 hour') where staff_id = 'c1000000-0000-0000-0000-000000000001'), 0,
   'nothing is offered inside the two-hour notice period');
 
 update public.calendar_connections set status = 'broken';
-select is((select count(*)::int from public.booking_candidate_slots('2027-10-29', '2027-11-02')), 0,
+select is((select count(*)::int from public.booking_candidate_slots('2027-10-29', '2027-11-02') where staff_id = 'c1000000-0000-0000-0000-000000000001'), 0,
   'agents with a broken Google connection are not offered');
 update public.calendar_connections set status = 'connected';
 
@@ -39,7 +39,7 @@ create temp table b1 as select * from public.booking_create('c1000000-0000-0000-
 grant select on b1 to authenticated;
 select is((select status::text from b1), 'pending', 'a booking starts pending');
 select is((select requester_email from b1), 'dawit@example.test', 'email is lowercased');
-select is((select count(*)::int from public.booking_candidate_slots('2027-11-01', '2027-11-02')), 1,
+select is((select count(*)::int from public.booking_candidate_slots('2027-11-01', '2027-11-02') where staff_id = 'c1000000-0000-0000-0000-000000000001'), 1,
   'a reserved slot is no longer offered');
 select throws_ok($$select public.booking_create('c1000000-0000-0000-0000-000000000001', '2027-11-01 09:00Z',
   'Eve', 'eve@example.test', 'x', repeat('b', 64))$$, '23514', null, 'a taken slot cannot be booked again');
@@ -60,18 +60,18 @@ set local role authenticated;
 select pg_temp.as_user('c1000000-0000-0000-0000-000000000003');
 select throws_ok($$select public.create_ticket_booking_link((select id from b1 limit 0))$$, '42501', null,
   'viewers cannot create booking links');
-select is((select count(*)::int from public.bookings), 1, 'staff can read bookings');
+select is((select count(*)::int from public.bookings where staff_id = 'c1000000-0000-0000-0000-000000000001'), 1, 'staff can read bookings');
 select throws_ok($$select public.booking_create('c1000000-0000-0000-0000-000000000001', '2027-11-01 09:30Z',
   'E', 'e@x.test', 'x', repeat('d', 64))$$, '42501', null, 'staff cannot call booking functions directly');
 select pg_temp.as_user('c1000000-0000-0000-0000-000000000001');
-create temp table link as select public.create_ticket_booking_link((select ticket_id from public.bookings limit 1)) as token;
+create temp table link as select public.create_ticket_booking_link((select ticket_id from public.bookings where id = (select id from b1))) as token;
 reset role;
 select is((public.booking_link_info(encode(extensions.digest((select token from link), 'sha256'), 'hex')) ->> 'name'), 'Dawit',
   'a booking link prefills the requester');
 
 -- Cancelling frees the slot and notes it on the ticket
 select public.booking_cancel((select id from b1), 'the customer');
-select is((select count(*)::int from public.booking_candidate_slots('2027-11-01', '2027-11-02')), 2,
+select is((select count(*)::int from public.booking_candidate_slots('2027-11-01', '2027-11-02') where staff_id = 'c1000000-0000-0000-0000-000000000001'), 2,
   'a cancelled slot is offered again');
 select ok((select body_text from public.ticket_messages where ticket_id = (select id from t1) and kind = 'system'
   order by created_at desc limit 1) like '%cancelled by the customer.', 'cancellation is noted on the ticket');
