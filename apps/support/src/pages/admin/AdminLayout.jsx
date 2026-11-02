@@ -1,6 +1,6 @@
 import { NavLink, Outlet } from "react-router";
 import { useEffect, useState } from "react";
-import { BookOpen, Building2, CalendarDays, Inbox, LogOut, MessagesSquare, Package, Users } from "lucide-react";
+import { BookOpen, Building2, CalendarDays, Inbox, LayoutDashboard, LogOut, MessagesSquare, Package, Users } from "lucide-react";
 import { AgentPresence } from "../../auth/AgentPresence.jsx";
 import { countWaitingChats } from "../../lib/api.js";
 import { supabase } from "../../lib/supabase.js";
@@ -9,6 +9,7 @@ import { canManageStaff } from "../../lib/permissions.js";
 import { Badge } from "../../components/ui.jsx";
 
 const NAV = [
+  { to: "/admin/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { to: "/admin/tickets", label: "Tickets", icon: Inbox },
   { to: "/admin/chats", label: "Live chat", icon: MessagesSquare, badge: "waitingChats" },
   { to: "/admin/bookings", label: "Calls", icon: CalendarDays },

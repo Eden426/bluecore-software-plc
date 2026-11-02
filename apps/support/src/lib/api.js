@@ -426,3 +426,24 @@ export async function createBookingLink(ticketId) {
   const token = unwrap(await supabase.rpc("create_ticket_booking_link", { ticket_id: ticketId }));
   return `${window.location.origin}/book#link=${token}`;
 }
+
+// AI triage: the stored suggestion (or null), rerunning it, and the agent's decision.
+export async function getAiTriage(ticketId) {
+  return unwrap(await supabase.from("ticket_ai_triage").select("*, product:products(name)").eq("ticket_id", ticketId).maybeSingle());
+}
+
+export async function runAiTriage(ticketId) {
+  return (await staffPost("/api/tickets/triage", { ticket_id: ticketId })).triage;
+}
+
+export async function applyAiTriage(ticketId, fields) {
+  return unwrap(await supabase.rpc("apply_ai_triage", { target: ticketId, fields }));
+}
+
+export async function dismissAiTriage(ticketId) {
+  return unwrap(await supabase.rpc("decide_ai_triage", { target: ticketId, decision: "dismissed" }));
+}
+
+export async function getDashboard(days = 30) {
+  return unwrap(await supabase.rpc("support_dashboard", { days }));
+}

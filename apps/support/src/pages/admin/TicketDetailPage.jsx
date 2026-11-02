@@ -1,16 +1,20 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router";
-import { ArrowLeft, Link2, Lock, Mail, Video } from "lucide-react";
+import { ArrowLeft, Link2, Lock, Mail, Sparkles, Video } from "lucide-react";
 import { useAuth } from "../../auth/useAuth.js";
 import {
   addInternalNote,
+  applyAiTriage,
   createBookingLink,
   describeError,
+  dismissAiTriage,
+  getAiTriage,
   getTicket,
   listAssignableStaff,
   listClients,
   listProducts,
   listTicketBookings,
+  runAiTriage,
   sendReply,
   updateTicket,
 } from "../../lib/api.js";
@@ -31,6 +35,7 @@ export default function TicketDetailPage() {
   const { staff } = useAuth();
   const { data: ticket, error, loading, reload } = useAsync(() => getTicket(ticketId), ticketId);
   const { data: people } = useAsync(listAssignableStaff);
+  const [draft, setDraft] = useState(null);
 
   if (loading) return <p className="text-sm text-[var(--bluecore-text-muted)]">Loading…</p>;
   if (error) return <ErrorBanner message={error} />;
@@ -63,9 +68,19 @@ export default function TicketDetailPage() {
       <div className="grid gap-6 lg:grid-cols-[1fr_18rem]">
         <div className="space-y-4">
           <Timeline ticket={ticket} names={names} />
-          {canWork && ticket.status !== "closed" && <Composer ticket={ticket} staff={staff} onSent={reload} />}
+          {canWork && ticket.status !== "closed" && (
+            <Composer key={draft?.n ?? 0} ticket={ticket} staff={staff} initialBody={draft?.text ?? ""} onSent={reload} />
+          )}
         </div>
-        <TriagePanel ticket={ticket} people={people ?? []} editable={canWork} onSaved={reload} />
+        <div className="space-y-4">
+          <AiTriageCard
+            ticket={ticket}
+            editable={canWork}
+            onApplied={reload}
+            onUseDraft={(text) => setDraft((d) => ({ n: (d?.n ?? 0) + 1, text }))}
+          />
+          <TriagePanel ticket={ticket} people={people ?? []} editable={canWork} onSaved={reload} />
+        </div>
       </div>
     </>
   );
@@ -131,9 +146,9 @@ function Message({ message }) {
   );
 }
 
-function Composer({ ticket, staff, onSent }) {
+function Composer({ ticket, staff, initialBody, onSent }) {
   const [mode, setMode] = useState("reply");
-  const [body, setBody] = useState("");
+  const [body, setBody] = useState(initialBody);
   const [nextStatus, setNextStatus] = useState("pending");
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
@@ -363,6 +378,137 @@ function TicketCalls({ ticketId, editable }) {
               className="mt-1 w-full rounded border border-[var(--bluecore-border-strong)] px-2 py-1 text-xs" />
           </div>
         )}
+      </div>
+    </Card>
+  );
+}
+
+const AI_FIELDS = [
+  ["priority", "Priority"],
+  ["product", "Product"],
+  ["tags", "Tags"],
+];
+
+// Claude's read of the ticket. Runs once automatically for agents when a
+// ticket has no suggestion yet (tickets from chat, booking or the admin
+// console; email tickets are triaged on arrival). Nothing changes on the
+// ticket until an agent applies it.
+function AiTriageCard({ ticket, editable, onApplied, onUseDraft }) {
+  const { data: suggestion, loading, reload } = useAsync(() => getAiTriage(ticket.id), ticket.id);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
+  const autoRan = useRef(false);
+
+  async function run(fn, after = reload) {
+    setBusy(true);
+    setError("");
+    try {
+      await fn();
+      await after();
+    } catch (err) {
+      setError(describeError(err));
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  useEffect(() => {
+    if (loading || suggestion || !editable || autoRan.current || ticket.status === "closed") return;
+    autoRan.current = true;
+    run(() => runAiTriage(ticket.id));
+    // run is stable enough for a one-shot effect.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loading, suggestion, editable, ticket.id, ticket.status]);
+
+  const header = (
+    <span className="inline-flex items-center gap-1">
+      <Sparkles size={14} aria-hidden="true" /> AI triage
+    </span>
+  );
+
+  if (loading || (busy && !suggestion)) {
+    return (
+      <Card title={header}>
+        <p className="text-xs text-[var(--bluecore-text-muted)]">{busy ? "Reading the ticket…" : "Loading…"}</p>
+      </Card>
+    );
+  }
+  if (!suggestion) {
+    return (
+      <Card title={header}>
+        <div className="space-y-2 text-xs">
+          <ErrorBanner message={error} />
+          <p className="text-[var(--bluecore-text-muted)]">No suggestion yet.</p>
+          {editable && (
+            <Button variant="secondary" disabled={busy} onClick={() => run(() => runAiTriage(ticket.id))}>Run triage</Button>
+          )}
+        </div>
+      </Card>
+    );
+  }
+
+  const differs = {
+    priority: suggestion.priority !== ticket.priority,
+    product: suggestion.product_id && suggestion.product_id !== ticket.product_id,
+    tags: suggestion.tags.some((t) => !ticket.tags.includes(t)),
+  };
+  const pending = AI_FIELDS.filter(([key]) => differs[key]).map(([key]) => key);
+  const open = suggestion.status === "suggested";
+
+  return (
+    <Card title={header}>
+      <div className="space-y-3 text-sm">
+        <ErrorBanner message={error} />
+        <p className="text-[var(--bluecore-text)]">{suggestion.summary}</p>
+        <dl className="space-y-1 text-xs">
+          <div className="flex items-center gap-2">
+            <dt className="w-16 text-[var(--bluecore-text-muted)]">Priority</dt>
+            <dd><Badge tone={PRIORITY_TONE[suggestion.priority]}>{suggestion.priority}</Badge></dd>
+          </div>
+          {suggestion.category && (
+            <div className="flex gap-2">
+              <dt className="w-16 text-[var(--bluecore-text-muted)]">Category</dt>
+              <dd>{suggestion.category}</dd>
+            </div>
+          )}
+          {suggestion.product && (
+            <div className="flex gap-2">
+              <dt className="w-16 text-[var(--bluecore-text-muted)]">Product</dt>
+              <dd>{suggestion.product.name}</dd>
+            </div>
+          )}
+          {suggestion.tags.length > 0 && (
+            <div className="flex gap-2">
+              <dt className="w-16 text-[var(--bluecore-text-muted)]">Tags</dt>
+              <dd className="break-words">{suggestion.tags.join(", ")}</dd>
+            </div>
+          )}
+        </dl>
+        {suggestion.reasoning && <p className="text-xs text-[var(--bluecore-text-secondary)]">{suggestion.reasoning}</p>}
+        {!open && (
+          <p className="text-xs text-[var(--bluecore-text-muted)]">
+            {suggestion.status === "applied" ? "Applied" : "Dismissed"} {formatDateTime(suggestion.decided_at)}
+          </p>
+        )}
+        {editable && (
+          <div className="flex flex-wrap gap-2">
+            {open && pending.length > 0 && (
+              <Button disabled={busy} onClick={() => run(() => applyAiTriage(ticket.id, pending), async () => { await reload(); await onApplied(); })}>
+                Apply {pending.map((key) => AI_FIELDS.find(([k]) => k === key)[1].toLowerCase()).join(", ")}
+              </Button>
+            )}
+            {open && (
+              <Button variant="secondary" disabled={busy} onClick={() => run(() => dismissAiTriage(ticket.id))}>Dismiss</Button>
+            )}
+            {suggestion.suggested_reply && ticket.status !== "closed" && (
+              <Button variant="secondary" disabled={busy} onClick={() => onUseDraft(suggestion.suggested_reply)}>Use draft reply</Button>
+            )}
+            <Button variant="secondary" disabled={busy} onClick={() => run(() => runAiTriage(ticket.id))}>
+              {busy ? "Reading…" : "Rerun"}
+            </Button>
+          </div>
+        )}
+        <p className="text-[10px] text-[var(--bluecore-text-muted)]">Suggested by {suggestion.model}. Check before applying.</p>
       </div>
     </Card>
   );

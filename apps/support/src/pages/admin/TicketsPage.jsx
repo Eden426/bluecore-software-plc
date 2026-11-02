@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router";
+import { Link, useSearchParams } from "react-router";
 import { Plus } from "lucide-react";
 import { useAuth } from "../../auth/useAuth.js";
 import { listClients, listTickets } from "../../lib/api.js";
@@ -17,7 +17,8 @@ const VIEWS = [
 
 export default function TicketsPage() {
   const { staff } = useAuth();
-  const [view, setView] = useState("open");
+  const [params] = useSearchParams();
+  const [view, setView] = useState(() => (VIEWS.some((v) => v.id === params.get("view")) ? params.get("view") : "open"));
   const [priority, setPriority] = useState("");
   const [clientId, setClientId] = useState("");
   const [search, setSearch] = useState("");
