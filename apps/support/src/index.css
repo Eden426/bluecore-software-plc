@@ -1,0 +1,8 @@
+@import "tailwindcss";
+@import "@bluecore/brand/tokens.css";
+
+body {
+  margin: 0;
+  color: var(--bluecore-text);
+  background: #ffffff;
+}

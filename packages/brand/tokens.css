@@ -1,0 +1,21 @@
+/*
+ * Bluecore brand tokens shared across apps. Values mirror the :root block in
+ * apps/web/src/index.css; the marketing site doesn't consume this file yet, so
+ * change brand colors in both places until it does.
+ */
+:root {
+  --bluecore-blue: #06243f;
+  --bluecore-primary: #103759;
+  --bluecore-primary-hover: #0a3a84;
+  --bluecore-accent-blue: #0b3b63;
+  --bluecore-brown: #5b3a29;
+  --bluecore-accent-brown: #8b5e3c;
+  --bluecore-brown-soft: #f4eee8;
+  --bluecore-heading: #06243f;
+  --bluecore-text: #0f172a;
+  --bluecore-text-secondary: #475569;
+  --bluecore-text-muted: #64748b;
+  --bluecore-border: #dce5ef;
+  --bluecore-border-strong: #c8d5e3;
+  --bluecore-focus: #1976d2;
+}
