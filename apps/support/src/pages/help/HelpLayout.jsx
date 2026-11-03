@@ -3,6 +3,7 @@ import { Link, NavLink, Outlet, useNavigate } from "react-router";
 import { Mail, Search } from "lucide-react";
 import { SUPPORT_EMAIL } from "../../lib/config.js";
 import { KB_TYPES } from "../../lib/kb.js";
+import ChatWidget from "../../components/ChatWidget.jsx";
 
 export function SearchBox({ initial = "", large = false }) {
   const navigate = useNavigate();
@@ -78,6 +79,7 @@ export default function HelpLayout() {
           </span>
         </div>
       </footer>
+      <ChatWidget />
     </div>
   );
 }

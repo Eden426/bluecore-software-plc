@@ -8,6 +8,7 @@ This is an npm-workspaces monorepo. Run `npm install` once at the repo root; the
 
 - `apps/web` (`@bluecore/web`): the marketing site. **Everything in "Project overview", "Commands" and "Architecture" below describes this app, and file paths there (`src/...`, `scripts/...`, `api/...`, `vercel.json`, `docs/...`) are relative to `apps/web/`.**
 - `apps/support` (`@bluecore/support`): the support center and staff admin console (Vite + React 19 + Tailwind v4 + `react-router`, backed by Supabase). The public side (`src/pages/help/`) is the help center: home with search, `/kb`, `/faq`, `/docs` and `/docs/:productSlug`, `/updates`, `/articles/:slug` and `/search`. It reads published public `kb_articles` as `anon`. Markdown goes through `src/components/Markdown.jsx` (react-markdown, which doesn't render raw HTML). `VITE_SUPPORT_EMAIL` sets the contact address shown and defaults to `team@blue-core.tech`. `/admin/*` is staff-only and covers:
+  - live chat: a two-pane console (`/admin/chats`) with live updates via Realtime postgres changes, take/end/reopen, convert-to-ticket, visitor typing indicators, and a waiting-count nav badge. While the console is open, agents count as "online" via Realtime presence on the `support-agents` channel (`src/auth/AgentPresence.jsx`)
   - help center content: a CMS for articles, FAQs, docs and updates, with draft/published/archived status, public/internal visibility, a markdown preview and helpful-vote totals
   - tickets: a queue with My/Unassigned/All/Done views and SLA badges, plus a detail page with the threaded conversation, replies, internal notes, a triage panel and the audit trail
   - clients: email domains, contacts and deployments
@@ -17,6 +18,7 @@ This is an npm-workspaces monorepo. Run `npm install` once at the repo root; the
   Server functions live in `api/` (Vercel-style `export default { fetch }`), with pure helpers in `server/`:
   - `api/inbound-email.js` is the Resend `email.received` webhook.
   - `api/tickets/reply.js` sends agent replies by email.
+  - `api/chat/{start,messages,send}.js` are the visitor side of live chat (`src/components/ChatWidget.jsx`, mounted in the help center layout).
 
   `npm run dev` serves `api/` through a Vite dev middleware (`vite.config.js`), and `SUPPORT_EMAIL_TRANSPORT=log` logs replies instead of emailing. See `apps/support/docs/email-setup.md`. Data access goes through `src/lib/api.js`. `src/lib/permissions.js` only hides controls; **the real gate is RLS** in `supabase/migrations`. The auth context, provider and hook are split across `src/auth/` (same Fast Refresh reason as `apps/web`'s theme files). Env: `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` (see `apps/support/.env.example`). Later phases: ticketing with AI triage, Resend inbound email, the help center CMS, live chat, and Google Calendar booking. It doesn't deploy anywhere yet.
 - `supabase/`: the Supabase project for `apps/support`, covering migrations, `seed.sql` (local only), pgTAP tests in `tests/`, and `config.toml`. Access model:
@@ -25,10 +27,15 @@ This is an npm-workspaces monorepo. Run `npm install` once at the repo root; the
   - Roles: `viewer` reads, `agent` also manages contacts, `admin` manages everything including roles. A trigger keeps at least one active admin. The first admin must be promoted with SQL (`update staff set role = 'admin' ...`).
   - New tables need explicit `grant`s to `authenticated` **and** `service_role`, because newer Supabase doesn't auto-grant (see `20261022130100_service_role_grants.sql`).
   - Help center: `kb_articles` are readable by `anon` only when published and public. `search_kb()` is public-only by default even for staff, and staff tools pass `include_internal => true`. Anyone can insert a `kb_feedback` vote, but only staff can read votes. `anon` can read only shared, active products (and only the columns `id, name, slug, description, kind, active`), because bespoke product names identify clients.
+  - Live chat visitors **never authenticate with Supabase**. Anonymous sign-ins count as sign-ups, which are disabled, and enabling sign-ups would reopen staff login. Instead:
+    - `api/chat/start` issues a random visitor token, the browser keeps it in localStorage, and it's sent as the `X-Chat-Token` header. Postgres stores only its SHA-256.
+    - The service-role-only `chat_visitor_*` functions do all visitor reads and writes. `anon` has no access to the chat tables.
+    - Visitors get live updates from content-free broadcast pings on the public channel `chat-visitor:<channel_key>`, then refetch through the API, with a 15s poll as fallback. Agents' clients send those pings after each change.
+    - `convert_chat_to_ticket()` copies the transcript: visitor lines become customer messages and agent lines become notes. It also counts the first live reply as the ticket's first response.
   - Customer and system messages are only written server-side, through `ingest_inbound_email()` (service role only) or `create_staff_ticket()` (agent-checked). RLS lets agents insert only `agent`/`note` messages as themselves.
   - Local ports are moved to the 571xx range so they don't collide with other local Supabase projects on this machine.
   - Local workflow:
-    - Start: `supabase start -x analytics,vector,studio,imgproxy,edge-runtime,storage-api,realtime,postgres-meta,logflare,supavisor`
+    - Start: `supabase start -x analytics,vector,studio,imgproxy,edge-runtime,storage-api,postgres-meta,logflare,supavisor` (Realtime is needed for chat; add `--ignore-health-check` if its health check times out on a loaded machine)
     - Reset: `supabase db reset` (it re-applies the migrations and seed, and sometimes hangs on its container restart after it has already finished)
     - Test: `supabase test db`
     - Seed logins are listed at the top of `seed.sql`.
