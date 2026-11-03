@@ -1,14 +1,16 @@
 import { useState } from "react";
 import { Link, useParams } from "react-router";
-import { ArrowLeft, Lock, Mail } from "lucide-react";
+import { ArrowLeft, Link2, Lock, Mail, Video } from "lucide-react";
 import { useAuth } from "../../auth/useAuth.js";
 import {
   addInternalNote,
+  createBookingLink,
   describeError,
   getTicket,
   listAssignableStaff,
   listClients,
   listProducts,
+  listTicketBookings,
   sendReply,
   updateTicket,
 } from "../../lib/api.js";
@@ -300,6 +302,7 @@ function TriagePanel({ ticket, people, editable, onSaved }) {
           )}
         </dl>
       </Card>
+      <TicketCalls ticketId={ticket.id} editable={editable} />
       <Card title="SLA">
         <dl className="space-y-1 text-xs text-[var(--bluecore-text-secondary)]">
           <div>First reply due: {formatDateTime(ticket.first_response_due_at)}</div>
@@ -310,5 +313,57 @@ function TriagePanel({ ticket, people, editable, onSaved }) {
         </dl>
       </Card>
     </aside>
+  );
+}
+
+// Calls booked about this ticket, and a link the agent can send so the
+// customer books one themselves.
+function TicketCalls({ ticketId, editable }) {
+  const { data: bookings } = useAsync(() => listTicketBookings(ticketId), ticketId);
+  const [link, setLink] = useState("");
+  const [error, setError] = useState("");
+
+  async function makeLink() {
+    setError("");
+    try {
+      const url = await createBookingLink(ticketId);
+      setLink(url);
+      await navigator.clipboard?.writeText(url).catch(() => {});
+    } catch (err) {
+      setError(describeError(err));
+    }
+  }
+
+  return (
+    <Card title="Calls">
+      <div className="space-y-2 text-sm">
+        <ErrorBanner message={error} />
+        {(bookings ?? []).length === 0 && <p className="text-xs text-[var(--bluecore-text-muted)]">No calls booked.</p>}
+        {(bookings ?? []).map((b) => (
+          <div key={b.id} className="text-xs">
+            <div className={b.status === "cancelled" ? "line-through text-[var(--bluecore-text-muted)]" : ""}>
+              {formatDateTime(b.starts_at)} · {b.staff?.full_name || b.staff?.email}
+            </div>
+            {b.status === "confirmed" && b.meet_url && (
+              <a href={b.meet_url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-[var(--bluecore-primary)] hover:underline">
+                <Video size={12} aria-hidden="true" /> Join Meet
+              </a>
+            )}
+          </div>
+        ))}
+        {editable && (
+          <Button variant="secondary" onClick={makeLink}>
+            <Link2 size={14} aria-hidden="true" /> Booking link
+          </Button>
+        )}
+        {link && (
+          <div>
+            <p className="text-xs text-[var(--bluecore-text-secondary)]">Copied. Send it to the customer (valid 30 days):</p>
+            <input readOnly aria-label="Booking link" value={link} onFocus={(e) => e.target.select()}
+              className="mt-1 w-full rounded border border-[var(--bluecore-border-strong)] px-2 py-1 text-xs" />
+          </div>
+        )}
+      </div>
+    </Card>
   );
 }

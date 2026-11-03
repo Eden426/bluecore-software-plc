@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, NavLink, Outlet, useNavigate } from "react-router";
-import { Mail, Search } from "lucide-react";
+import { CalendarDays, Mail, Search } from "lucide-react";
 import { SUPPORT_EMAIL } from "../../lib/config.js";
 import { KB_TYPES } from "../../lib/kb.js";
 import ChatWidget from "../../components/ChatWidget.jsx";
@@ -59,9 +59,15 @@ export default function HelpLayout() {
               </NavLink>
             ))}
           </nav>
+          <Link
+            to="/book"
+            className="ml-auto inline-flex items-center gap-1.5 rounded-md border border-[var(--bluecore-border-strong)] px-3 py-1.5 text-sm font-medium text-[var(--bluecore-text)] hover:bg-slate-50"
+          >
+            <CalendarDays size={14} aria-hidden="true" /> Book a call
+          </Link>
           <a
             href={`mailto:${SUPPORT_EMAIL}`}
-            className="ml-auto inline-flex items-center gap-1.5 rounded-md bg-[var(--bluecore-primary)] px-3 py-1.5 text-sm font-medium text-white hover:bg-[var(--bluecore-primary-hover)]"
+            className=" inline-flex items-center gap-1.5 rounded-md bg-[var(--bluecore-primary)] px-3 py-1.5 text-sm font-medium text-white hover:bg-[var(--bluecore-primary-hover)]"
           >
             <Mail size={14} aria-hidden="true" /> Contact support
           </a>
