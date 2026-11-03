@@ -45,3 +45,18 @@ insert into public.products (id, name, slug, kind, owner_client_id, description)
 insert into public.client_products (client_id, product_id, environment, url, version) values
   ('aaaaaaaa-0000-0000-0000-000000000001', 'bbbbbbbb-0000-0000-0000-000000000001', 'production', 'https://garage.addislogistics.example', '2.4.1'),
   ('aaaaaaaa-0000-0000-0000-000000000002', 'bbbbbbbb-0000-0000-0000-000000000003', 'production', 'https://portal.abayhealth.example', '1.0.0');
+
+-- Sample tickets, ingested the same way real inbound email is.
+select public.ingest_inbound_email(jsonb_build_object(
+  'resend_email_id', 'seed-1', 'from_email', 'sara@addislogistics.example', 'from_name', 'Sara Tesfaye',
+  'to', jsonb_build_array('support@blue-core.tech'), 'subject', 'Garage OS invoices not printing',
+  'text', E'Hi,\n\nSince this morning none of our branches can print invoices from Garage OS.\n\nSara', 'message_id', '<seed-1@addislogistics.example>'));
+select public.ingest_inbound_email(jsonb_build_object(
+  'resend_email_id', 'seed-2', 'from_email', 'dawit@abayhealth.example', 'from_name', 'Dawit Bekele',
+  'to', jsonb_build_array('support@blue-core.tech'), 'subject', 'Patient portal login loop',
+  'text', 'Patients get sent back to the login page after entering their OTP.', 'message_id', '<seed-2@abayhealth.example>'));
+select public.ingest_inbound_email(jsonb_build_object(
+  'resend_email_id', 'seed-3', 'from_email', 'hello@newprospect.example', 'from_name', 'Meron',
+  'to', jsonb_build_array('support@blue-core.tech'), 'subject', 'Question about ERP pricing',
+  'text', 'Do you offer ERP for a 40-person company?', 'message_id', '<seed-3@newprospect.example>'));
+update public.tickets set priority = 'urgent' where subject = 'Patient portal login loop';

@@ -113,3 +113,91 @@ export function describeError(error) {
   if (error.code === "42501" || error.code === "PGRST116") return "You don't have permission to do that.";
   return error.message || "Something went wrong.";
 }
+
+// --- Tickets ---------------------------------------------------------------
+
+const TICKET_LIST_COLUMNS =
+  "id, number, subject, status, priority, channel, requester_email, requester_name, tags, " +
+  "first_response_due_at, resolution_due_at, first_responded_at, solved_at, updated_at, created_at, " +
+  "client:clients(id, name), assignee:staff(id, full_name, email)";
+
+export async function listTickets({ view = "open", assigneeId, priority, clientId, search } = {}) {
+  let query = supabase.from("tickets").select(TICKET_LIST_COLUMNS).order("updated_at", { ascending: false }).limit(200);
+  if (view === "mine") query = query.eq("assignee_id", assigneeId).not("status", "in", "(solved,closed)");
+  if (view === "unassigned") query = query.is("assignee_id", null).not("status", "in", "(solved,closed)");
+  if (view === "open") query = query.not("status", "in", "(solved,closed)");
+  if (view === "done") query = query.in("status", ["solved", "closed"]);
+  if (priority) query = query.eq("priority", priority);
+  if (clientId) query = query.eq("client_id", clientId);
+  const term = search?.trim();
+  if (term) {
+    const number = term.replace(/^bc-/i, "");
+    // Escape PostgREST filter syntax characters in free text.
+    const safe = term.replace(/[%,()*\\]/g, " ");
+    query = /^\d+$/.test(number)
+      ? query.eq("number", Number(number))
+      : query.or(`subject.ilike.*${safe}*,requester_email.ilike.*${safe}*`);
+  }
+  return unwrap(await query);
+}
+
+export async function getTicket(id) {
+  return unwrap(
+    await supabase
+      .from("tickets")
+      .select(
+        `${TICKET_LIST_COLUMNS}, client_id, product_id, assignee_id, reply_token, last_customer_message_at, ` +
+          "product:products(id, name), " +
+          "ticket_messages(id, kind, author_staff_id, author_email, author_name, body_text, created_at, email_message_id), " +
+          "ticket_events(id, event, from_value, to_value, actor_id, created_at)",
+      )
+      .eq("id", id)
+      .order("created_at", { referencedTable: "ticket_messages" })
+      .order("created_at", { referencedTable: "ticket_events" })
+      .single(),
+  );
+}
+
+export async function updateTicket(id, changes) {
+  return unwrap(await supabase.from("tickets").update(changes).eq("id", id).select("id").single());
+}
+
+export async function createStaffTicket(values) {
+  return unwrap(await supabase.rpc("create_staff_ticket", values).single());
+}
+
+export async function addInternalNote(ticketId, staff, body) {
+  return unwrap(
+    await supabase
+      .from("ticket_messages")
+      .insert({
+        ticket_id: ticketId,
+        kind: "note",
+        author_staff_id: staff.id,
+        author_email: staff.email,
+        author_name: staff.full_name,
+        body_text: body.trim(),
+      })
+      .select()
+      .single(),
+  );
+}
+
+// Customer-facing replies go through the server so they can be emailed.
+export async function sendReply(ticketId, body) {
+  const { data } = await supabase.auth.getSession();
+  const response = await fetch("/api/tickets/reply", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${data.session?.access_token}` },
+    body: JSON.stringify({ ticket_id: ticketId, body }),
+  });
+  const result = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(result.error || "The reply couldn't be sent.");
+  return result.message;
+}
+
+export async function listAssignableStaff() {
+  return unwrap(
+    await supabase.from("staff").select("id, full_name, email, role").eq("active", true).in("role", ["agent", "admin"]).order("full_name"),
+  );
+}

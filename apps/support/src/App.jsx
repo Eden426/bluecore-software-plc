@@ -8,6 +8,9 @@ import ClientsPage from "./pages/admin/ClientsPage.jsx";
 import ClientDetailPage from "./pages/admin/ClientDetailPage.jsx";
 import ProductsPage from "./pages/admin/ProductsPage.jsx";
 import StaffPage from "./pages/admin/StaffPage.jsx";
+import TicketsPage from "./pages/admin/TicketsPage.jsx";
+import TicketDetailPage from "./pages/admin/TicketDetailPage.jsx";
+import NewTicketPage from "./pages/admin/NewTicketPage.jsx";
 import { CenteredMessage } from "./components/CenteredMessage.jsx";
 
 export function AppRoutes() {
@@ -23,7 +26,10 @@ export function AppRoutes() {
           </RequireStaff>
         }
       >
-        <Route index element={<Navigate to="clients" replace />} />
+        <Route index element={<Navigate to="tickets" replace />} />
+        <Route path="tickets" element={<TicketsPage />} />
+        <Route path="tickets/new" element={<NewTicketPage />} />
+        <Route path="tickets/:ticketId" element={<TicketDetailPage />} />
         <Route path="clients" element={<ClientsPage />} />
         <Route path="clients/:clientId" element={<ClientDetailPage />} />
         <Route path="products" element={<ProductsPage />} />

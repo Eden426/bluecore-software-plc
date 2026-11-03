@@ -7,12 +7,23 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 This is an npm-workspaces monorepo. Run `npm install` once at the repo root; the single `package-lock.json` lives there.
 
 - `apps/web` (`@bluecore/web`): the marketing site. **Everything in "Project overview", "Commands" and "Architecture" below describes this app, and file paths there (`src/...`, `scripts/...`, `api/...`, `vercel.json`, `docs/...`) are relative to `apps/web/`.**
-- `apps/support` (`@bluecore/support`): the support center and staff admin console (Vite + React 19 + Tailwind v4 + `react-router`, backed by Supabase). The public `/` is a help-center placeholder. `/admin/*` is staff-only: clients (email domains, contacts, deployments), products (shared vs bespoke), and staff roles. Data access goes through `src/lib/api.js`. `src/lib/permissions.js` only hides controls; **the real gate is RLS** in `supabase/migrations`. The auth context, provider and hook are split across `src/auth/` (same Fast Refresh reason as `apps/web`'s theme files). Env: `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` (see `apps/support/.env.example`). Later phases: ticketing with AI triage, Resend inbound email, the help center CMS, live chat, and Google Calendar booking. It doesn't deploy anywhere yet.
+- `apps/support` (`@bluecore/support`): the support center and staff admin console (Vite + React 19 + Tailwind v4 + `react-router`, backed by Supabase). The public `/` is a help-center placeholder. `/admin/*` is staff-only and covers:
+  - tickets: a queue with My/Unassigned/All/Done views and SLA badges, plus a detail page with the threaded conversation, replies, internal notes, a triage panel and the audit trail
+  - clients: email domains, contacts and deployments
+  - products: shared vs bespoke
+  - staff roles
+
+  Server functions live in `api/` (Vercel-style `export default { fetch }`), with pure helpers in `server/`:
+  - `api/inbound-email.js` is the Resend `email.received` webhook.
+  - `api/tickets/reply.js` sends agent replies by email.
+
+  `npm run dev` serves `api/` through a Vite dev middleware (`vite.config.js`), and `SUPPORT_EMAIL_TRANSPORT=log` logs replies instead of emailing. See `apps/support/docs/email-setup.md`. Data access goes through `src/lib/api.js`. `src/lib/permissions.js` only hides controls; **the real gate is RLS** in `supabase/migrations`. The auth context, provider and hook are split across `src/auth/` (same Fast Refresh reason as `apps/web`'s theme files). Env: `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` (see `apps/support/.env.example`). Later phases: ticketing with AI triage, Resend inbound email, the help center CMS, live chat, and Google Calendar booking. It doesn't deploy anywhere yet.
 - `supabase/`: the Supabase project for `apps/support`, covering migrations, `seed.sql` (local only), pgTAP tests in `tests/`, and `config.toml`. Access model:
   - Only Bluecore staff authenticate. Self-signup is off via `[auth] enable_signup = false`. Keep `[auth.email] enable_signup = true`, because setting it false disables password login entirely.
   - Admins create users in the Supabase dashboard. A trigger gives each new auth user a `staff` row with the `viewer` role.
   - Roles: `viewer` reads, `agent` also manages contacts, `admin` manages everything including roles. A trigger keeps at least one active admin. The first admin must be promoted with SQL (`update staff set role = 'admin' ...`).
-  - New tables need explicit `grant`s to `authenticated`, because newer Supabase doesn't auto-grant.
+  - New tables need explicit `grant`s to `authenticated` **and** `service_role`, because newer Supabase doesn't auto-grant (see `20261022130100_service_role_grants.sql`).
+  - Customer and system messages are only written server-side, through `ingest_inbound_email()` (service role only) or `create_staff_ticket()` (agent-checked). RLS lets agents insert only `agent`/`note` messages as themselves.
   - Local ports are moved to the 571xx range so they don't collide with other local Supabase projects on this machine.
   - Local workflow:
     - Start: `supabase start -x analytics,vector,studio,imgproxy,edge-runtime,storage-api,realtime,postgres-meta,logflare,supavisor`

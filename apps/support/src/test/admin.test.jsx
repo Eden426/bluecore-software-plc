@@ -90,7 +90,7 @@ describe("admin routes", () => {
   });
 
   it("lists clients and filters by domain", async () => {
-    renderAt("/admin", { staff: staffOf("viewer") });
+    renderAt("/admin/clients", { staff: staffOf("viewer") });
     expect(await screen.findByRole("link", { name: "Addis Logistics" })).toBeInTheDocument();
     await userEvent.type(screen.getByRole("searchbox", { name: "Search clients" }), "abayhealth");
     expect(screen.queryByRole("link", { name: "Addis Logistics" })).not.toBeInTheDocument();
