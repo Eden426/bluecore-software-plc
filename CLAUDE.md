@@ -7,7 +7,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 This is an npm-workspaces monorepo. Run `npm install` once at the repo root; the single `package-lock.json` lives there.
 
 - `apps/web` (`@bluecore/web`): the marketing site. **Everything in "Project overview", "Commands" and "Architecture" below describes this app, and file paths there (`src/...`, `scripts/...`, `api/...`, `vercel.json`, `docs/...`) are relative to `apps/web/`.**
-- `apps/support` (`@bluecore/support`): the support center and staff admin console (Vite + React 19 + Tailwind v4 + `react-router`, backed by Supabase). The public `/` is a help-center placeholder. `/admin/*` is staff-only and covers:
+- `apps/support` (`@bluecore/support`): the support center and staff admin console (Vite + React 19 + Tailwind v4 + `react-router`, backed by Supabase). The public side (`src/pages/help/`) is the help center: home with search, `/kb`, `/faq`, `/docs` and `/docs/:productSlug`, `/updates`, `/articles/:slug` and `/search`. It reads published public `kb_articles` as `anon`. Markdown goes through `src/components/Markdown.jsx` (react-markdown, which doesn't render raw HTML). `VITE_SUPPORT_EMAIL` sets the contact address shown and defaults to `team@blue-core.tech`. `/admin/*` is staff-only and covers:
+  - help center content: a CMS for articles, FAQs, docs and updates, with draft/published/archived status, public/internal visibility, a markdown preview and helpful-vote totals
   - tickets: a queue with My/Unassigned/All/Done views and SLA badges, plus a detail page with the threaded conversation, replies, internal notes, a triage panel and the audit trail
   - clients: email domains, contacts and deployments
   - products: shared vs bespoke
@@ -23,6 +24,7 @@ This is an npm-workspaces monorepo. Run `npm install` once at the repo root; the
   - Admins create users in the Supabase dashboard. A trigger gives each new auth user a `staff` row with the `viewer` role.
   - Roles: `viewer` reads, `agent` also manages contacts, `admin` manages everything including roles. A trigger keeps at least one active admin. The first admin must be promoted with SQL (`update staff set role = 'admin' ...`).
   - New tables need explicit `grant`s to `authenticated` **and** `service_role`, because newer Supabase doesn't auto-grant (see `20261022130100_service_role_grants.sql`).
+  - Help center: `kb_articles` are readable by `anon` only when published and public. `search_kb()` is public-only by default even for staff, and staff tools pass `include_internal => true`. Anyone can insert a `kb_feedback` vote, but only staff can read votes. `anon` can read only shared, active products (and only the columns `id, name, slug, description, kind, active`), because bespoke product names identify clients.
   - Customer and system messages are only written server-side, through `ingest_inbound_email()` (service role only) or `create_staff_ticket()` (agent-checked). RLS lets agents insert only `agent`/`note` messages as themselves.
   - Local ports are moved to the 571xx range so they don't collide with other local Supabase projects on this machine.
   - Local workflow:

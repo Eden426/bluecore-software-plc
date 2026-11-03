@@ -1,11 +1,12 @@
 import { NavLink, Outlet } from "react-router";
-import { Building2, Inbox, LogOut, Package, Users } from "lucide-react";
+import { BookOpen, Building2, Inbox, LogOut, Package, Users } from "lucide-react";
 import { useAuth } from "../../auth/useAuth.js";
 import { canManageStaff } from "../../lib/permissions.js";
 import { Badge } from "../../components/ui.jsx";
 
 const NAV = [
   { to: "/admin/tickets", label: "Tickets", icon: Inbox },
+  { to: "/admin/kb", label: "Help center", icon: BookOpen },
   { to: "/admin/clients", label: "Clients", icon: Building2 },
   { to: "/admin/products", label: "Products", icon: Package },
   { to: "/admin/staff", label: "Staff", icon: Users, adminOnly: true },
