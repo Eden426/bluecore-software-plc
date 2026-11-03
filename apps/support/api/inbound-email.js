@@ -2,6 +2,7 @@ import { createClient } from "@supabase/supabase-js";
 import { Webhook } from "svix";
 import { toIngestPayload } from "../server/email.js";
 import { env, json } from "../server/http.js";
+import { triageConfig, triageTicket } from "../server/triage.js";
 
 const MAX_BYTES = 256 * 1024;
 
@@ -59,6 +60,16 @@ export async function handleInboundEmail(request, { fetchImpl = fetch, supabase 
     // Never log email content or addresses.
     console.error("Inbound email ingestion failed", { code: error.code });
     return json(error.code === "23514" ? 422 : 500, { error: "Could not record email." });
+  }
+  // New tickets get an AI triage suggestion. Best effort: a failure here must
+  // not make Resend retry an email that was already recorded.
+  const triage = triageConfig();
+  if (data.created && data.ticket_id && triage) {
+    try {
+      await triageTicket(db, triage, data.ticket_id);
+    } catch (err) {
+      console.error("AI triage after inbound email failed", { message: err.message });
+    }
   }
   return json(200, { ticket: data.number, created: data.created });
 }

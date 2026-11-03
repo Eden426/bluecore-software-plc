@@ -14,6 +14,7 @@ import CancelBookingPage from "./pages/help/CancelBookingPage.jsx";
 import BookingsPage from "./pages/admin/BookingsPage.jsx";
 import AvailabilityPage from "./pages/admin/AvailabilityPage.jsx";
 import ChatsPage from "./pages/admin/ChatsPage.jsx";
+import DashboardPage from "./pages/admin/DashboardPage.jsx";
 import KbListPage from "./pages/admin/KbListPage.jsx";
 import KbEditorPage from "./pages/admin/KbEditorPage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
@@ -52,6 +53,7 @@ export function AppRoutes() {
         }
       >
         <Route index element={<Navigate to="tickets" replace />} />
+        <Route path="dashboard" element={<DashboardPage />} />
         <Route path="tickets" element={<TicketsPage />} />
         <Route path="tickets/new" element={<NewTicketPage />} />
         <Route path="tickets/:ticketId" element={<TicketDetailPage />} />
