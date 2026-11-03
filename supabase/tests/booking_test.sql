@@ -73,8 +73,10 @@ select is((public.booking_link_info(encode(extensions.digest((select token from 
 select public.booking_cancel((select id from b1), 'the customer');
 select is((select count(*)::int from public.booking_candidate_slots('2027-11-01', '2027-11-02') where staff_id = 'c1000000-0000-0000-0000-000000000001'), 2,
   'a cancelled slot is offered again');
-select ok((select body_text from public.ticket_messages where ticket_id = (select id from t1) and kind = 'system'
-  order by created_at desc limit 1) like '%cancelled by the customer.', 'cancellation is noted on the ticket');
+-- Every row in this transaction shares now(), so match the note rather than
+-- picking the newest message.
+select ok(exists(select 1 from public.ticket_messages where ticket_id = (select id from t1) and kind = 'system'
+  and body_text like '%cancelled by the customer.'), 'cancellation is noted on the ticket');
 
 select * from finish();
 rollback;
