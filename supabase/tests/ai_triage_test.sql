@@ -1,5 +1,5 @@
 begin;
-select plan(11);
+select plan(12);
 
 insert into auth.users (id, email) values
   ('d1000000-0000-0000-0000-000000000001', 'agent@ai.test'),
@@ -48,6 +48,10 @@ select throws_ok($$select public.apply_ai_triage(gen_random_uuid(), '{priority}'
 
 reset role;
 select is((public.support_dashboard(7) -> 'ai_triage' ->> 'applied')::int >= 1, true, 'the dashboard counts applied suggestions');
+
+insert into public.tickets (subject, requester_email, created_at)
+values ('Older ticket', 'old@example.test', now() - interval '10 days');
+select ok((public.support_dashboard(7) -> 'previous' ->> 'created')::int >= 1, 'the preceding period is counted separately');
 
 set local role anon;
 select throws_ok($$select public.support_dashboard(7)$$, '42501', null, 'the public cannot load the dashboard');

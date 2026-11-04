@@ -1,13 +1,24 @@
 import { useState } from "react";
 import { Link } from "react-router";
+import { Download } from "lucide-react";
 import { describeError, getDashboard } from "../../lib/api.js";
+import { dailyCsv, trendLabel } from "../../lib/dashboard.js";
 import { PRIORITY_TONE, STATUS_LABEL } from "../../lib/tickets.js";
 import { useAsync } from "../../lib/useAsync.js";
-import { Badge, Card, ErrorBanner, PageHeader, Select } from "../../components/ui.jsx";
+import { Badge, Button, Card, ErrorBanner, PageHeader, Select } from "../../components/ui.jsx";
 
 const RANGES = [7, 30, 90];
 const PRIORITIES = ["urgent", "high", "normal", "low"];
 const CHANNEL_LABEL = { email: "Email", web: "Web", chat: "Live chat", phone: "Phone", booking: "Call booking" };
+
+function downloadCsv(data) {
+  const url = URL.createObjectURL(new Blob([dailyCsv(data.daily)], { type: "text/csv" }));
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `support-tickets-${data.days}-days.csv`;
+  link.click();
+  URL.revokeObjectURL(url);
+}
 
 function formatMinutes(minutes) {
   if (minutes == null) return "–";
@@ -28,12 +39,17 @@ export default function DashboardPage() {
         title="Dashboard"
         description="How the support queue is doing."
         actions={
-          <div className="w-40">
+          <div className="flex items-center gap-2">
+            <Button variant="secondary" disabled={!data} onClick={() => downloadCsv(data)}>
+              <Download size={14} aria-hidden="true" /> Export CSV
+            </Button>
+            <div className="w-40">
             <Select aria-label="Period" value={days} onChange={(e) => setDays(Number(e.target.value))}>
               {RANGES.map((d) => (
                 <option key={d} value={d}>Last {d} days</option>
               ))}
             </Select>
+            </div>
           </div>
         }
       />
@@ -50,13 +66,13 @@ function Dashboard({ data }) {
       <section aria-label="Queue now" className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         <Stat label="Open tickets" value={data.open} to="/admin/tickets?view=open" />
         <Stat label="Unassigned" value={data.unassigned} to="/admin/tickets?view=unassigned" warn={data.unassigned > 0} />
-        <Stat label="First reply overdue" value={data.first_response_overdue} warn={data.first_response_overdue > 0} />
-        <Stat label="Resolution overdue" value={data.resolution_overdue} warn={data.resolution_overdue > 0} />
+        <Stat label="First reply overdue" value={data.first_response_overdue} to="/admin/tickets?view=overdue" warn={data.first_response_overdue > 0} />
+        <Stat label="Resolution overdue" value={data.resolution_overdue} to="/admin/tickets?view=overdue" warn={data.resolution_overdue > 0} />
       </section>
 
       <section aria-label={`Last ${data.days} days`} className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-        <Stat label="Created" value={data.created} />
-        <Stat label="Solved" value={data.solved} />
+        <Stat label="Created" value={data.created} note={trendLabel(data.created, data.previous.created, data.days)} />
+        <Stat label="Solved" value={data.solved} note={trendLabel(data.solved, data.previous.solved, data.days)} />
         <Stat label="Median first reply" value={formatMinutes(data.median_first_response_minutes)} />
         <Stat
           label="First reply on time"
@@ -72,7 +88,7 @@ function Dashboard({ data }) {
         <Card title="Open by priority">
           <Breakdown
             rows={PRIORITIES.map((p) => [p, data.open_by_priority[p] ?? 0])}
-            label={(p) => <Badge tone={PRIORITY_TONE[p]}>{p}</Badge>}
+            label={(p) => <Link to={`/admin/tickets?priority=${p}`}><Badge tone={PRIORITY_TONE[p]}>{p}</Badge></Link>}
           />
         </Card>
         <Card title="Open by status">
@@ -97,7 +113,7 @@ function Dashboard({ data }) {
               rows={data.top_clients.map((c) => [c.id, c.tickets])}
               label={(id) => {
                 const c = data.top_clients.find((x) => x.id === id);
-                return <Link to={`/admin/clients/${id}`} className="hover:underline">{c.name}</Link>;
+                return <Link to={`/admin/tickets?client=${id}`} className="hover:underline">{c.name}</Link>;
               }}
             />
           )}
@@ -134,13 +150,14 @@ function Dashboard({ data }) {
   );
 }
 
-function Stat({ label, value, to, warn = false }) {
+function Stat({ label, value, to, note, warn = false }) {
   const body = (
     <>
       <div className="text-xs text-[var(--bluecore-text-muted)]">{label}</div>
       <div className={`mt-1 text-2xl font-semibold tabular-nums ${warn ? "text-red-700" : "text-[var(--bluecore-heading)]"}`}>
         {value}
       </div>
+      {note && <div className="mt-1 text-xs text-[var(--bluecore-text-muted)]">{note}</div>}
     </>
   );
   const className = "block rounded-lg border border-[var(--bluecore-border)] bg-white p-4";

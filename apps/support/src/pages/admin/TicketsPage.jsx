@@ -12,6 +12,7 @@ const VIEWS = [
   { id: "mine", label: "My open" },
   { id: "unassigned", label: "Unassigned" },
   { id: "open", label: "All open" },
+  { id: "overdue", label: "Overdue" },
   { id: "done", label: "Solved & closed" },
 ];
 
@@ -19,8 +20,8 @@ export default function TicketsPage() {
   const { staff } = useAuth();
   const [params] = useSearchParams();
   const [view, setView] = useState(() => (VIEWS.some((v) => v.id === params.get("view")) ? params.get("view") : "open"));
-  const [priority, setPriority] = useState("");
-  const [clientId, setClientId] = useState("");
+  const [priority, setPriority] = useState(params.get("priority") ?? "");
+  const [clientId, setClientId] = useState(params.get("client") ?? "");
   const [search, setSearch] = useState("");
   const filters = { view, assigneeId: staff.id, priority, clientId, search };
   const { data: tickets, error, loading } = useAsync(() => listTickets(filters), JSON.stringify(filters));

@@ -127,6 +127,12 @@ export async function listTickets({ view = "open", assigneeId, priority, clientI
   if (view === "unassigned") query = query.is("assignee_id", null).not("status", "in", "(solved,closed)");
   if (view === "open") query = query.not("status", "in", "(solved,closed)");
   if (view === "done") query = query.in("status", ["solved", "closed"]);
+  if (view === "overdue") {
+    const now = new Date().toISOString();
+    query = query
+      .not("status", "in", "(solved,closed)")
+      .or(`and(first_responded_at.is.null,first_response_due_at.lt.${now}),resolution_due_at.lt.${now}`);
+  }
   if (priority) query = query.eq("priority", priority);
   if (clientId) query = query.eq("client_id", clientId);
   const term = search?.trim();
