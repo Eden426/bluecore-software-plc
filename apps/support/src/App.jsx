@@ -9,6 +9,7 @@ import FaqPage from "./pages/help/FaqPage.jsx";
 import DocsPage from "./pages/help/DocsPage.jsx";
 import UpdatesPage from "./pages/help/UpdatesPage.jsx";
 import ArticlePage from "./pages/help/ArticlePage.jsx";
+import NotFoundPage from "./pages/help/NotFoundPage.jsx";
 import BookPage from "./pages/help/BookPage.jsx";
 import CancelBookingPage from "./pages/help/CancelBookingPage.jsx";
 import BookingsPage from "./pages/admin/BookingsPage.jsx";
@@ -26,7 +27,6 @@ import StaffPage from "./pages/admin/StaffPage.jsx";
 import TicketsPage from "./pages/admin/TicketsPage.jsx";
 import TicketDetailPage from "./pages/admin/TicketDetailPage.jsx";
 import NewTicketPage from "./pages/admin/NewTicketPage.jsx";
-import { CenteredMessage } from "./components/CenteredMessage.jsx";
 
 export function AppRoutes() {
   return (
@@ -69,7 +69,9 @@ export function AppRoutes() {
         <Route path="products" element={<ProductsPage />} />
         <Route path="staff" element={<StaffPage />} />
       </Route>
-      <Route path="*" element={<CenteredMessage title="Page not found" />} />
+      <Route element={<HelpLayout />}>
+        <Route path="*" element={<NotFoundPage />} />
+      </Route>
     </Routes>
   );
 }

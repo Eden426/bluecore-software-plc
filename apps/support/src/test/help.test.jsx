@@ -91,6 +91,13 @@ describe("kb helpers", () => {
 });
 
 describe("public help center", () => {
+  it("gives lost visitors a way forward on unknown pages", async () => {
+    renderAt("/no-such-page");
+    expect(await screen.findByRole("heading", { name: "Page not found" })).toBeInTheDocument();
+    expect(screen.getByRole("searchbox", { name: /search the help center/i })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /book a call with an engineer/i })).toHaveAttribute("href", "/book");
+  });
+
   it("searches from the home page and highlights matches", async () => {
     renderAt("/");
     await userEvent.type(screen.getByRole("searchbox", { name: "Search the help center" }), "reset password{Enter}");

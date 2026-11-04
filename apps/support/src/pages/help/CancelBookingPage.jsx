@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router";
 import { cancelOwnBooking, formatWhen, lookupBooking, readFragment } from "../../lib/booking.js";
+import { SUPPORT_EMAIL } from "../../lib/config.js";
 import { usePageTitle } from "../../lib/usePageTitle.js";
 import { Button, ErrorBanner } from "../../components/ui.jsx";
 
@@ -37,6 +38,13 @@ export default function CancelBookingPage() {
       <div className="mt-4 text-left">
         <ErrorBanner message={error} />
       </div>
+      {error && !booking && (
+        <p className="mt-4 text-sm text-[var(--bluecore-text-secondary)]">
+          Email{" "}
+          <a href={`mailto:${SUPPORT_EMAIL}`} className="text-[var(--bluecore-primary)] hover:underline">{SUPPORT_EMAIL}</a>{" "}
+          and we'll cancel it for you.
+        </p>
+      )}
       {booking && (
         <>
           <p className="mt-2 text-[var(--bluecore-text-secondary)]">
