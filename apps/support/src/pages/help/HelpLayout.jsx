@@ -121,6 +121,7 @@ export function StillNeedHelp() {
         Email <a className="underline" href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a> and we'll open a
         ticket for you. Include your product and what you've tried.
       </p>
+      <Link to="/book" className="mt-3 inline-block text-sm font-medium underline">Book a call with an engineer</Link>
     </aside>
   );
 }
