@@ -10,7 +10,7 @@ This is an npm-workspaces monorepo. Run `npm install` once at the repo root; the
 - `apps/support` (`@bluecore/support`): the support center and staff admin console (Vite + React 19 + Tailwind v4 + `react-router`, backed by Supabase). The public side (`src/pages/help/`) is the help center: home with search, `/kb`, `/faq`, `/docs` and `/docs/:productSlug`, `/updates`, `/articles/:slug` and `/search`. It reads published public `kb_articles` as `anon`. Markdown goes through `src/components/Markdown.jsx` (react-markdown, which doesn't render raw HTML). `VITE_SUPPORT_EMAIL` sets the contact address shown and defaults to `team@blue-core.tech`. `/admin/*` is staff-only and covers:
   - live chat: a two-pane console (`/admin/chats`) with live updates via Realtime postgres changes, take/end/reopen, convert-to-ticket, visitor typing indicators, and a waiting-count nav badge. While the console is open, agents count as "online" via Realtime presence on the `support-agents` channel (`src/auth/AgentPresence.jsx`)
   - help center content: a CMS for articles, FAQs, docs and updates, with draft/published/archived status, public/internal visibility, a markdown preview and helpful-vote totals
-  - tickets: a queue with My/Unassigned/All/Done views and SLA badges, plus a detail page with the threaded conversation, replies, internal notes, a triage panel and the audit trail
+  - tickets: a queue with My/Unassigned/All/Overdue/Done views and SLA badges, plus a detail page with the threaded conversation, replies, internal notes, a triage panel and the audit trail
   - clients: email domains, contacts and deployments
   - products: shared vs bespoke
   - staff roles
