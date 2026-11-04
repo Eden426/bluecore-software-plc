@@ -10,8 +10,9 @@ suggestion in `ticket_ai_triage`:
 - a category and up to four tags
 - a one-sentence summary and a draft first reply
 
-Tickets from live chat, call booking or the admin console get their suggestion
-the first time an agent opens them. Agents can rerun it at any time.
+Email and call booking tickets are triaged on arrival; a booking is triaged just
+after the customer gets their confirmation. Tickets created in the admin console,
+including converted chats, are triaged when they open. Agents can rerun it at any time.
 
 **Nothing changes on the ticket automatically.** The AI triage card on the
 ticket page lets an agent apply the priority, product and tags (only the ones

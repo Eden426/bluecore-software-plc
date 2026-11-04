@@ -14,6 +14,7 @@
     "@anthropic-ai/sdk": "^1.4.0",
     "@bluecore/brand": "*",
     "@supabase/supabase-js": "^2.118.0",
+    "@vercel/functions": "^3.10.6",
     "lucide-react": "^1.61.0",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
