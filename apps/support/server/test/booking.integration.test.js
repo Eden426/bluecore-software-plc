@@ -6,6 +6,7 @@ import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { handleBook } from "../../api/booking/book.js";
 import { handleCancel } from "../../api/booking/cancel.js";
 import { handleSlots } from "../../api/booking/slots.js";
+import { triageBookingTicket } from "../triage.js";
 import { encryptToken } from "../google.js";
 
 const url = process.env.SUPABASE_URL;
@@ -95,5 +96,21 @@ run("booking API (local Supabase)", { timeout: 30_000 }, () => {
     );
     expect(await cancel.json()).toEqual({ cancelled: true, calendarUpdated: true });
     expect(fetchImpl.mock.calls.some(([u, i]) => i?.method === "DELETE" && u.includes("/events/evt_int"))).toBe(true);
+  });
+
+  it("triages a new booking's ticket after responding, and only once", async () => {
+    const work = [];
+    const triage = { fake: true, model: "fake" };
+    const res = await handleBook(book("2027-11-01T10:00:00.000Z"), { db, config, fetchImpl: google(), triage, later: (p) => work.push(p) });
+    expect(res.status).toBe(201);
+    expect(work).toHaveLength(1);
+    await work[0];
+    const { data: booking } = await db.from("bookings").select("id, ticket_id").eq("staff_id", staffId).eq("starts_at", "2027-11-01T10:00:00.000Z").single();
+    const { data: first } = await db.from("ticket_ai_triage").select("created_at, status").eq("ticket_id", booking.ticket_id).single();
+    expect(first.status).toBe("suggested");
+
+    await triageBookingTicket(db, triage, booking.id);
+    const { data: second } = await db.from("ticket_ai_triage").select("created_at").eq("ticket_id", booking.ticket_id).single();
+    expect(second.created_at).toBe(first.created_at);
   });
 });

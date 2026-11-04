@@ -1,3 +1,4 @@
+import { waitUntil } from "@vercel/functions";
 import {
   agentAccessToken,
   bookingError,
@@ -11,6 +12,7 @@ import {
 } from "../../server/booking.js";
 import { createEvent, googleConfig, googleFetch } from "../../server/google.js";
 import { json } from "../../server/http.js";
+import { triageBookingTicket, triageConfig } from "../../server/triage.js";
 
 const SLOT = 30 * 60_000;
 
@@ -19,7 +21,7 @@ const SLOT = 30 * 60_000;
 // database, creates the Google event with a Meet link (Google emails the
 // invite), then confirms it onto a ticket. If Google fails, the reservation is
 // removed. Needs a WAF rate limit.
-export async function handleBook(request, { db, config, fetchImpl } = {}) {
+export async function handleBook(request, { db, config, fetchImpl, triage = triageConfig(), later = waitUntil } = {}) {
   if (request.method !== "POST") return json(405, { error: "Method not allowed." }, { Allow: "POST" });
   let input;
   try {
@@ -96,6 +98,10 @@ export async function handleBook(request, { db, config, fetchImpl } = {}) {
     meet_url: event.meetUrl,
   });
   if (confirmError) return bookingError(confirmError);
+
+  // Nobody opens a booking's ticket until later, so triage it now, after
+  // responding: the customer shouldn't wait on Claude to see their booking.
+  if (triage) later(triageBookingTicket(client, triage, booking.id));
 
   return json(201, {
     cancelToken,

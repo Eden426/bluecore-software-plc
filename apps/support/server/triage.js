@@ -164,3 +164,16 @@ export async function triageTicket(db, config, ticketId, { anthropic } = {}) {
   if (saveError) throw saveError;
   return row;
 }
+
+// Best effort, for work that runs after the response: failures are logged, and
+// a ticket that already has a suggestion (a ticket booking link) is left alone.
+export async function triageBookingTicket(db, config, bookingId) {
+  try {
+    const { data: booking } = await db.from("bookings").select("ticket_id").eq("id", bookingId).single();
+    if (!booking?.ticket_id) return;
+    const { data: existing } = await db.from("ticket_ai_triage").select("ticket_id").eq("ticket_id", booking.ticket_id).maybeSingle();
+    if (!existing) await triageTicket(db, config, booking.ticket_id);
+  } catch (err) {
+    console.error("AI triage after booking failed", { message: err.message });
+  }
+}
